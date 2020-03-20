@@ -31,20 +31,23 @@
   "author": "Cory House",
   "license": "MIT",
   "dependencies": {
+    "@fortawesome/fontawesome-free": "5.12.1",
     "@hot-loader/react-dom": "16.10.2",
     "bootstrap": "4.4.1",
+    "classnames": "2.2.6",
     "connected-react-router": "6.5.2",
     "jquery": "3.4.1",
     "object-assign": "4.1.1",
     "popper.js": "1.16.1",
     "react": "16.11.0",
     "react-dom": "16.11.0",
+    "react-floating-action-button": "1.0.5",
     "react-google-maps": "9.4.5",
     "react-redux": "7.1.1",
     "react-router-dom": "5.1.2",
+    "recompose": "latest",
     "redux": "4.0.4",
-    "redux-thunk": "2.3.0",
-    "recompose": "latest"
+    "redux-thunk": "2.3.0"
   },
   "devDependencies": {
     "@babel/cli": "7.6.4",
