@@ -1,6 +1,83 @@
 @import "../../node_modules/bootstrap/scss/bootstrap";
+@import "../../node_modules/@fortawesome/fontawesome-free/scss/fontawesome";
 
 /* Variables */
 $vin-blue: #5bb7db;
 $vin-green: #60b044;
 $vin-red: #ff0000;
+
+
+
+.pac-card {
+  margin: 10px 10px 0 0;
+  border-radius: 2px 0 0 2px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  outline: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  background-color: #fff;
+  font-family: Roboto;
+}
+
+#pac-container {
+  padding-bottom: 12px;
+  margin-right: 12px;
+
+  max-width: 400px;
+
+  position: absolute !important;
+  left: 50% !important;
+  top: 0px !important;
+  margin-left: -200px !important;
+  margin-top: 10px !important;
+}
+
+.pac-controls {
+  display: inline-block;
+  padding: 5px 11px;
+}
+
+.pac-controls label {
+  font-family: Roboto;
+  font-size: 13px;
+  font-weight: 300;
+}
+
+#pac-input {
+  background-color: #fff;
+  font-family: Roboto;
+  font-size: 15px;
+  font-weight: 300;
+  margin-left: 12px;
+  padding: 5px 11px 5px 13px;
+  text-overflow: ellipsis;
+  width: 400px;
+}
+
+#pac-input:focus {
+  border-color: #4d90fe;
+}
+
+#btn-plus-container {
+  margin-bottom: 10px;
+  position: absolute !important;
+  right: 10px !important;
+
+  .fab-container {
+    bottom: 6vh;
+    margin: 1em;
+    right: 2vw;
+  }
+}
+
+#btn-extras-container {
+  margin-top: 5px;
+  position: absolute !important;
+  right: 10px !important;
+}
+
+#btn-select-container {
+  margin-top: 5px;
+  position: absolute !important;
+  left: 10px !important;
+}

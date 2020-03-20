@@ -17,7 +17,7 @@ export default {
     './src/webpack-public-path',
     'react-hot-loader/patch',
     'webpack-hot-middleware/client?reload=true',
-    path.resolve(__dirname, 'src/cfg.js') // Defining path seems necessary for this to work consistently on Windows machines.
+    path.resolve(__dirname, 'src/') // Defining path seems necessary for this to work consistently on Windows machines.
   ],
   target: 'web',
   mode: 'development',
