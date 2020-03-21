@@ -1,6 +1,5 @@
 import React, {Fragment} from 'react';
 import PropTypes from 'prop-types';
-import Stats from './Stats';
 
 /**
  * @todo: add image to css file and then load the image from there
@@ -38,7 +37,6 @@ const Step2 = (props) => (
       </div>
       <button className='btn btn-primary btn-block' onClick={props.nextStep}>Continue</button>
       <button className='btn btn-primary btn-block' onClick={props.previousStep}>Go Back</button>
-      <Stats step={1} {...props}></Stats>
     </Fragment>
 );
 
