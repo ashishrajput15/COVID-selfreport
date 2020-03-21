@@ -2,19 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { Container, Button, Link } from 'react-floating-action-button';
-import { STATE_HELPLINE_NUMBERS } from "../../../tools/constants";
-import Fuse from "fuse.js";
+import { InfoCard } from "./InfoCard";
 
-function noop() {
-}
-
-
+function noop() { }
 class MapControls extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       stateName: '',
       showStateHelplineNumber: false,
+      showKeyInfo: false
     }
   }
 
@@ -59,41 +56,31 @@ class MapControls extends React.Component {
       }
     );
   }
-
-  parsedHelplineNum = state => {
-    //const stateNames = Object.keys(STATE_HELPLINE_NUMBERS);
-    const options = {
-      shouldSort: true,
-      threshold: 0.8,
-      location: 0,
-      distance: 600,
-      minMatchCharLength: 1,
-      keys: ["stateName"]
-    };
-    const fuseS = new Fuse(STATE_HELPLINE_NUMBERS, options);
-    return fuseS.search(state)[0].item.phoneNo;
-  }
-
-  toggleHelplineBar = () => {
-    console.log('clicked on helpline bar');
+  toggleHelplineBar = () =>
     this.setState({
       showStateHelplineNumber: !this.state.showStateHelplineNumber,
+      showKeyInfo: this.state.showKeyInfo && false
     });
-  }
+
+  toggleKeyInfoBar = () =>
+    this.setState({
+      showKeyInfo: !this.state.showKeyInfo,
+      showStateHelplineNumber: this.state.showStateHelplineNumber && false
+    })
+
 
   render() {
     const { isMapLoaded } = this.props;
-    const { stateName, showStateHelplineNumber } = this.state;
-
+    const { stateName, showStateHelplineNumber, showKeyInfo } = this.state;
     return (
       <div>
         <div id="pac-container" className={classnames({ 'input-group mb-3': true, 'd-none': !isMapLoaded })}>
           <input type="text" className="form-control controls" id="pac-input" placeholder="Search"
-                 aria-label="Search" />
+            aria-label="Search" />
           <div className="input-group-append">
-              <span className="input-group-text">
-                <i className="fas fa-times" />
-              </span>
+            <span className="input-group-text">
+              <i className="fas fa-times" />
+            </span>
           </div>
         </div>
 
@@ -130,39 +117,19 @@ class MapControls extends React.Component {
         </div>
 
         <div id="btn-extras-container" className={classnames({ 'd-none': !isMapLoaded })}>
-          <button className="btn btn-primary">
+          <button className="btn btn-primary" onClick={this.toggleKeyInfoBar}>
             Key Info
           </button>
-
           <button className="btn btn-primary ml-3" onClick={stateName ? this.toggleHelplineBar : noop}>
             Helpline Nos
           </button>
-
+          {showKeyInfo &&
+            <InfoCard cardType={InfoCard.cardTypes.KEY_INFO} />
+          }
           {stateName && showStateHelplineNumber &&
-          <div className="card" style={{ width: '18rem' }}>
-            <div className="card-body">
-              <h5 className="card-title">Helpline number</h5>
-              <h6 className="card-subtitle mb-2 text-muted">{stateName}</h6>
-              <p className="card-text">
-                {this.parsedHelplineNum(stateName)}
-              </p>
-            </div>
-            <div className="card-body">
-              <h6 className="card-subtitle mb-2 text-muted">National Helpline Number</h6>
-              <p className="card-text">1075 | 1800-112-545</p>
-            </div>
-            <div className="card-body">
-              <h6 className="card-subtitle mb-2 text-muted">Central Helpline Number</h6>
-              <p className="card-text">+91-11-23978043 | +91-11-23978046</p>
-            </div>
-            <div className="card-body">
-              <h6 className="card-subtitle mb-2 text-muted">Central Helpline Email</h6>
-              <p className="card-text">ncov2019@gmail.com</p>
-            </div>
-          </div>
+            <InfoCard stateName={stateName} cardType={InfoCard.cardTypes.HELPLINE} />
           }
         </div>
-
         <div id="btn-select-container" className={classnames({ 'd-none': !isMapLoaded })}>
           <div className="form-group">
             <select defaultValue="confirmed" className="form-control" id="exampleFormControlSelect1">
