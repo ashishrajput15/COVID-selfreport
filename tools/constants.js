@@ -26,5 +26,13 @@ export const STATE_HELPLINE_NUMBERS = [
   { stateName: "Tripura", phoneNo: `0381-2315879` },
   { stateName: "Uttarakhand", phoneNo: `104` },
   { stateName: "Uttar Pradesh", phoneNo: `18001805145` },
-  { stateName: "West Bengal", phoneNo: `3323412600` }
+  { stateName: "West Bengal", phoneNo: `3323412600` },
+  { stateName: "Andaman and Nicobar Islands", phoneNo: `03192-232102` },
+  { stateName: `Chandigarh`, phoneNo: `9779558282` },
+  { stateName: "Dadra and Nagar Haveli and Daman & Diu", phoneNo: `104` },
+  { stateName: "Delhi", phoneNo: `011-22307145` },
+  { stateName: "Jammu & Kashmir", phoneNo: `01912520982|0194-2440283` },
+  { stateName: "Ladakh", phoneNo: "01982256462" },
+  { stateName: "Lakshadweep", phoneNo: `104` },
+  { stateName: `Puducherry`, phoneNo: `104` }
 ];

@@ -1,9 +1,10 @@
 export default {
-  coronaData: {
-    cases: {},
+  patientsData: {
+    loading: false,
+    loaded: false,
+    error: null,
 
-    deaths: {},
-
-    countries: {},
+    ids: [],
+    map: {},
   },
 };

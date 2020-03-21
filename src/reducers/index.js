@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
-import coronaData from './coronaDataReducer';
+import patientsData from './patientsDataReducer';
 import { connectRouter } from 'connected-react-router'
 
 const rootReducer = history => combineReducers({
   router: connectRouter(history),
-  coronaData,
+  patientsData,
 });
 
 export default rootReducer;
