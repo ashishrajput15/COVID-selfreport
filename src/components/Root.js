@@ -161,7 +161,7 @@ class Root extends React.Component {
   getstateFromCordinates = ({ latitude, longitude }) =>
     new google.maps.Geocoder().geocode(
       {
-        location: { lat: 19.076090, lng: 72.877426 }
+        location: { lat: latitude, lng: longitude }
       },
       (result, status) => {
         if (status == google.maps.GeocoderStatus.OK) {
