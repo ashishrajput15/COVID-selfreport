@@ -36,3 +36,40 @@ export const STATE_HELPLINE_NUMBERS = [
   { stateName: "Lakshadweep", phoneNo: `104` },
   { stateName: `Puducherry`, phoneNo: `104` }
 ];
+
+export const HELPLINE_CONTENT = [
+  {
+    heading: `National Helpline Number`,
+    subHeading: `1075 | 1800-112-545`
+  },
+  {
+    heading: `Central Helpline Number`,
+    subHeading: `+91-11-23978043 | +91-11-23978046`
+  }, {
+    heading: `Central Helpline Email`,
+    subHeading: `ncov2019@gmail.com`
+  }
+];
+
+export const KEY_INFO_CONTENT = [
+  {
+    heading: `HELPLINE NUMBERS (by State)`,
+    subHeading: `https://www.mohfw.gov.in/coronvavirushelplinenumber.pdf`
+  },
+  {
+    heading: `Ministry of Health and Family Welfare, Gov. of India`,
+    subHeading: `https://www.mohfw.gov.in/`
+  },
+  {
+    heading: `WHO : COVID-19 Home Page`,
+    subHeading: `https://www.who.int/emergencies/diseases/novel-coronavirus-2019`
+  },
+  {
+    heading: `CDC`,
+    subHeading: `https://www.cdc.gov/coronavirus/2019-ncov/faq.html`
+  },
+  {
+    heading: `COVID-19 Global Tracker`,
+    subHeading: `https://coronavirus.thebaselab.com/`
+  }
+]

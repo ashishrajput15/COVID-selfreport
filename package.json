@@ -31,11 +31,11 @@
   "author": "Cory House",
   "license": "MIT",
   "dependencies": {
-    "@fortawesome/fontawesome-free": "5.12.1",
     "@hot-loader/react-dom": "16.10.2",
     "bootstrap": "4.4.1",
     "classnames": "2.2.6",
     "connected-react-router": "6.5.2",
+    "font-awesome": "4.7.0",
     "fuse.js": "5.0.7-beta",
     "jquery": "3.4.1",
     "object-assign": "4.1.1",
