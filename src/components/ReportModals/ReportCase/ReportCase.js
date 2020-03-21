@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import StepWizard from 'react-step-wizard';
@@ -8,11 +8,7 @@ import Step2 from './Steps/Step2';
 import Step4 from './Steps/Step4';
 
 import transitions from './transitionStyles.scss';
-/* eslint react/prop-types: 0 */
 
-/**
- * A basic demonstration of how to use the step wizard
- */
 const Wizard = (props) => {
     const [state, updateState] = useState({
         form: {},
@@ -24,10 +20,9 @@ const Wizard = (props) => {
             intro: `${transitions.reportersAnimated} ${transitions.reporterIntro}`,
         },
         myself: true,
-        // demo: true, // uncomment to see more
     });
 
-    // Do something on step change
+    // @todo: Do something on step change
     const onStepChange = (stats) => {
         // console.log(stats);
     };
@@ -47,7 +42,6 @@ const Wizard = (props) => {
         SW,
     });
 
-    const { SW, demo } = state;
 
     return (
         <div className='container'>
@@ -68,8 +62,9 @@ const Wizard = (props) => {
                               }}
                               hashKey={'FirstStep'}
                             />
-                            {/* <Second form={state.form} /> */}
-                            <Step2 hashKey={'StepTwo'}></Step2>
+                            <Step2
+                              hashKey={'StepTwo'}
+                            />
                             <Progress />
                             <Step4
                               myself={state.myself}
@@ -80,58 +75,11 @@ const Wizard = (props) => {
                     </div>
                 </div>
             </div>
-            { (demo && SW) && <InstanceDemo SW={SW} /> }
         </div>
     );
 };
 
 export default Wizard;
-
-/** Demo of using instance */
-const InstanceDemo = ({ SW }) => (
-    <Fragment>
-        <h4>Control from outside component</h4>
-        <button className={'btn btn-secondary'} onClick={SW.previousStep}>Previous Step</button>
-        &nbsp;
-        <button className={'btn btn-secondary'} onClick={SW.nextStep}>Next Step</button>
-    </Fragment>
-);
-
-/**
- * Stats Component - to illustrate the possible functions
- * Could be used for nav buttons or overview
- */
-const Stats = ({
-    currentStep,
-    firstStep,
-    goToStep,
-    lastStep,
-    nextStep,
-    previousStep,
-    totalSteps,
-    step,
-}) => (
-    <div>
-        <hr />
-        { step > 1 &&
-            <button className='btn btn-default btn-block' onClick={previousStep}>Go Back</button>
-        }
-        { step < totalSteps ?
-            <button className='btn btn-primary btn-block' onClick={nextStep}>Continue</button>
-            :
-            <button className='btn btn-success btn-block' onClick={nextStep}>Finish</button>
-        }
-        <hr />
-        <div style={{ fontSize: '21px', fontWeight: '200' }}>
-            <h4>Other Functions</h4>
-            <div>Current Step: {currentStep}</div>
-            <div>Total Steps: {totalSteps}</div>
-            <button className='btn btn-block btn-default' onClick={firstStep}>First Step</button>
-            <button className='btn btn-block btn-default' onClick={lastStep}>Last Step</button>
-            <button className='btn btn-block btn-default' onClick={() => goToStep(2)}>Go to Step 2</button>
-        </div>
-    </div>
-);
 
 /** Steps */
 

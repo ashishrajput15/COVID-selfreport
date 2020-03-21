@@ -1,6 +1,5 @@
 import React, {Fragment} from 'react';
 import PropTypes from 'prop-types';
-import Stats from './Stats';
 
 const Step4 = (props) => {
   const update = (e) => {
