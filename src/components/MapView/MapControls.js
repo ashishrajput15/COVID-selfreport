@@ -88,21 +88,18 @@ class MapControls extends React.Component {
 
         <div id="btn-plus-container" className={classnames({ 'd-none': !isMapLoaded })}>
           <Container>
-            <Link
-              href="#"
-              onClick={() => console.log('Clicked on Report case')}
+            <Button
+              onClick={() => this.props.toggleModal.reportCase()}
               tooltip="Report a Case"
               icon="fa fa-sticky-note"
             />
-            <Link
-              href="#"
-              onClick={() => console.log('Clicked on Report Symptoms')}
+            <Button
+              onClick={() => this.props.toggleModal.reportCase()}
               tooltip="Report Symptoms"
               icon="fa fa-sticky-note"
             />
-            <Link
-              href="#"
-              onClick={() => console.log('Clicked on Request Help')}
+            <Button
+              onClick={() => this.props.toggleModal.requestHelp()}
               tooltip="Request Help"
               icon="fa fa-sticky-note"
             />
@@ -150,6 +147,7 @@ MapControls.propTypes = {
   clearSearchBox: PropTypes.func.isRequired,
   isMapLoaded: PropTypes.bool.isRequired,
   mapCenter: PropTypes.object.isRequired,
+  toggleModal: PropTypes.object.isRequired,
 };
 
 export default MapControls;
