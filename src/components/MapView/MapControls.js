@@ -70,16 +70,18 @@ class MapControls extends React.Component {
 
 
   render() {
-    const { isMapLoaded } = this.props;
+    const { isMapLoaded, clearSearchBox } = this.props;
     const { stateName, showStateHelplineNumber, showKeyInfo } = this.state;
+
     return (
       <div>
         <div id="pac-container" className={classnames({ 'input-group mb-3': true, 'd-none': !isMapLoaded })}>
           <input type="text" className="form-control controls" id="pac-input" placeholder="Search"
             aria-label="Search" />
-          <div className="input-group-append">
+
+          <div className="input-group-append pointer link" onClick={clearSearchBox}>
             <span className="input-group-text">
-              <i className="fas fa-times" />
+              <i className="fa fa-times" />
             </span>
           </div>
         </div>
@@ -90,24 +92,24 @@ class MapControls extends React.Component {
               href="#"
               onClick={() => console.log('Clicked on Report case')}
               tooltip="Report a Case"
-              icon="far fa-sticky-note"
+              icon="fa fa-sticky-note"
             />
             <Link
               href="#"
               onClick={() => console.log('Clicked on Report Symptoms')}
               tooltip="Report Symptoms"
-              icon="far fa-sticky-note"
+              icon="fa fa-sticky-note"
             />
             <Link
               href="#"
               onClick={() => console.log('Clicked on Request Help')}
               tooltip="Request Help"
-              icon="fas fa-sticky-note"
+              icon="fa fa-sticky-note"
             />
             <Button
               className="fab-item btn btn-success btn-link btn-lg text-white"
               tooltip="Add"
-              icon="fas fa-plus"
+              icon="fa fa-plus"
               rotate={false}
               styles={{ backgroundColor: '#368435', color: '#ffffff' }}
               onClick={() => {
@@ -145,6 +147,7 @@ class MapControls extends React.Component {
 }
 
 MapControls.propTypes = {
+  clearSearchBox: PropTypes.func.isRequired,
   isMapLoaded: PropTypes.bool.isRequired,
   mapCenter: PropTypes.object.isRequired,
 };
