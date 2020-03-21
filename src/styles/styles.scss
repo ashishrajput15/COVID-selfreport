@@ -1,5 +1,6 @@
 @import "../../node_modules/bootstrap/scss/bootstrap";
 @import "../../node_modules/@fortawesome/fontawesome-free/scss/fontawesome";
+@import "./report_form";
 
 /* Variables */
 $vin-blue: #5bb7db;
@@ -81,3 +82,11 @@ $vin-red: #ff0000;
   position: absolute !important;
   left: 10px !important;
 }
+
+// .reportModal {
+//   background: white !important;
+//   outline: 0 !important;
+//   min-width: 250px !important;
+//   max-width: 500px !important;
+//   border-radius: 4px !important;
+// }

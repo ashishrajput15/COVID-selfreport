@@ -5,8 +5,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
+
 import * as patientsActions from '../../actions/patients';
+import * as reportActions from '../../actions/report';
 import MapControls from './MapControls';
+import ReportCase from '../ReportModals/ReportCase';
 
 const mapContainerHeight = `${window.innerHeight - 1}px`;
 
@@ -35,6 +38,9 @@ class MapView extends React.Component {
 
     this.onGeolocationSuccess = this.onGeolocationSuccess.bind(this);
     this.onGeolocationError = this.onGeolocationError.bind(this);
+
+    // This marker is to get the application node to set up the modals
+    this.getApplicationNode = this.getApplicationNode.bind(this);
   }
 
   componentDidMount() {
@@ -53,6 +59,11 @@ class MapView extends React.Component {
       }
     }
   }
+
+  // This function is to get the node of the application to host the modal
+  getApplicationNode = () => {
+    return document.getElementById('map');
+  };
 
   onGeolocationSuccess(pos) {
     try {
@@ -231,6 +242,16 @@ class MapView extends React.Component {
 
   render() {
     const { showMap, isMapLoaded, mapCenter } = this.state;
+    const toggleModal = {
+      reportCase: this.props.actions.toggleReportCase,
+      reportSymptoms: this.props.actions.toggleReportSymptoms,
+      requestHelp: this.props.actions.toggleRequestHelp,
+    };
+    const reporterActions = {
+      reporterState: this.props.actions.setReporterState,
+      reporterSymptoms: this.props.actions.setReporterSymptoms,
+      reporterDetails: this.props.actions.setReporterDetails,
+    }
 
     return (
       <div>
@@ -257,7 +278,18 @@ class MapView extends React.Component {
         <MapControls
           isMapLoaded={isMapLoaded}
           mapCenter={mapCenter}
+          toggleModal={toggleModal}
         />
+
+        { this.props.reportModals.reportCaseModal &&
+        <ReportCase
+          reporterActions={reporterActions}
+          toggleModal={this.props.actions.toggleReportCase}
+          />
+        }
+        {this.props.reportModals.reportSymptoms && <ReportCase toggleModal={this.props.actions.toggleReportSymptoms}/>}
+        {this.props.reportModals.requestHelp && <ReportCase toggleModal={this.props.actions.toggleRequestHelp}/>}
+
       </div>
     );
   }
@@ -271,19 +303,21 @@ MapView.defaultProps = {
 MapView.propTypes = {
   actions: PropTypes.object,
   patientsData: PropTypes.object,
+  reportModals: PropTypes.object,
   history: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state => ({
   patientsData: state.patientsData,
+  reportModals: state.reportModal,
 }));
 
 const mapDispatchToProps = (dispatch => ({
   actions: bindActionCreators(
-    Object.assign({}, patientsActions),
+    Object.assign({}, patientsActions, reportActions),
     dispatch,
-  ),
-}));
+    ),
+  }));
 
 export default connect(mapStateToProps, mapDispatchToProps)(MapView);
