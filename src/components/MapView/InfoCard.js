@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import Fuse from "fuse.js";
 import { STATE_HELPLINE_NUMBERS, HELPLINE_CONTENT, KEY_INFO_CONTENT } from "../../../tools/constants";
 
-
 export class InfoCard extends React.PureComponent {
   static cardTypes = {
     HELPLINE: `HELPLINE`,
@@ -11,42 +10,70 @@ export class InfoCard extends React.PureComponent {
   }
 
   render() {
-    const { cardType, ...restProps } = this.props;
+    const { cardType, toggle, ...restProps } = this.props;
     return (
-      cardType === InfoCard.cardTypes.HELPLINE ? <HelplineInfoCard {...restProps} /> : <KeyInfoCard />
+      cardType === InfoCard.cardTypes.HELPLINE ? <HelplineInfoCard toggle={toggle} {...restProps} /> : <KeyInfoCard toggle={toggle} />
     )
   }
 }
 
-const HelplineInfoCard = ({ stateName }) =>
+const HelplineInfoCard = ({ stateName, toggle }) =>
   <div className="card info-card helpline-info-card">
-    <CardHeading heading={`Helpline Numbers`} />
-    <CardRow heading={stateName} subHeading={parsedHelplineNum(stateName)} />
+    <CardHeading onClose={toggle} heading={`Helpline Numbers`} />
+
+    {stateName && (
+      <CardRow heading={stateName} subHeading={parsedHelplineNum(stateName)} />
+    )}
+
     {HELPLINE_CONTENT.map(({ heading, subHeading }) =>
       <CardRow heading={heading} subHeading={subHeading} key={subHeading} />
     )}
   </div>
 
-HelplineInfoCard.propTypes = {
-  stateName: PropTypes.string.isRequired,
+HelplineInfoCard.defaultProps = {
+  stateName: '',
 };
 
-const KeyInfoCard = () => (
+HelplineInfoCard.propTypes = {
+  stateName: PropTypes.string,
+  toggle: PropTypes.func.isRequired,
+};
+
+const KeyInfoCard = ({ toggle }) => (
   <div className="card info-card key-info-card">
-    <CardHeading heading={`Helpful Links`} />
+    <CardHeading onClose={toggle} heading={`Helpful Links`} />
     {KEY_INFO_CONTENT.map(({ heading, subHeading }) =>
       <CardRow heading={heading} subHeading={subHeading} key={subHeading} linked={true} />
     )}
   </div>
 );
 
-const CardHeading = ({ heading }) =>
+KeyInfoCard.propTypes = {
+  toggle: PropTypes.func.isRequired,
+};
+
+const CardHeading = ({ heading, onClose }) =>
   <div className="card-body" style={{ marginBottom: `-10%` }}>
-    <h5 className="card-title">{heading}</h5>
+    <div className="row">
+      <div className="col-10">
+        <h5>{heading}</h5>
+      </div>
+
+      <div className="col-2 text-center">
+        <a href={null} className="pointer link btn-close" onClick={onClose}>
+          <i className="fa fa-times" />
+        </a>
+      </div>
+    </div>
   </div>
+
+CardHeading.defaultProps = {
+  onClose: null,
+};
 
 CardHeading.propTypes = {
   heading: PropTypes.string.isRequired,
+  onClose: PropTypes.func,
 };
 
 const CardRow = ({ heading, subHeading, linked }) =>
@@ -75,7 +102,8 @@ const parsedHelplineNum = StateName => {
 };
 
 InfoCard.propTypes = {
-  cardType: PropTypes.string.isRequired
+  cardType: PropTypes.string.isRequired,
+  toggle: PropTypes.func.isRequired,
 };
 
 

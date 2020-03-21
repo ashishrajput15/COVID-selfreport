@@ -4,8 +4,6 @@ import classnames from 'classnames';
 import { Container, Button, Link } from 'react-floating-action-button';
 import { InfoCard } from "./InfoCard";
 
-function noop() {
-}
 class MapControls extends React.Component {
   constructor(props) {
     super(props);
@@ -13,7 +11,9 @@ class MapControls extends React.Component {
       stateName: '',
       showStateHelplineNumber: false,
       showKeyInfo: false
-    }
+    };
+
+    this.hideAllCards = this.hideAllCards.bind(this);
   }
 
   componentDidMount() {
@@ -28,6 +28,13 @@ class MapControls extends React.Component {
         this.getstateFromCordinates(nextProps.mapCenter);
       }
     }
+  }
+
+  hideAllCards() {
+    this.setState({
+      showStateHelplineNumber: false,
+      showKeyInfo: false
+    });
   }
 
   getstateFromCordinates = (location) => {
@@ -60,13 +67,13 @@ class MapControls extends React.Component {
   toggleHelplineBar = () =>
     this.setState({
       showStateHelplineNumber: !this.state.showStateHelplineNumber,
-      showKeyInfo: this.state.showKeyInfo && false
+      showKeyInfo: false,
     });
 
   toggleKeyInfoBar = () =>
     this.setState({
       showKeyInfo: !this.state.showKeyInfo,
-      showStateHelplineNumber: this.state.showStateHelplineNumber && false
+      showStateHelplineNumber: false,
     })
 
   render() {
@@ -123,14 +130,22 @@ class MapControls extends React.Component {
             Key Info
           </button>
           <span className="d=block d-sm-none"><br /></span>
-          <button className="btn btn-primary ml-0 ml-sm-3 mt-2 mt-sm-0" onClick={stateName ? this.toggleHelplineBar : noop}>
+          <button className="btn btn-primary ml-0 ml-sm-3 mt-2 mt-sm-0"
+                  onClick={this.toggleHelplineBar}>
             Helpline Nos
           </button>
           {showKeyInfo &&
-          <InfoCard cardType={InfoCard.cardTypes.KEY_INFO} />
+          <InfoCard
+            toggle={this.hideAllCards}
+            cardType={InfoCard.cardTypes.KEY_INFO}
+          />
           }
-          {stateName && showStateHelplineNumber &&
-          <InfoCard stateName={stateName} cardType={InfoCard.cardTypes.HELPLINE} />
+          {showStateHelplineNumber &&
+          <InfoCard
+            stateName={stateName}
+            cardType={InfoCard.cardTypes.HELPLINE}
+            toggle={this.hideAllCards}
+          />
           }
         </div>
 
