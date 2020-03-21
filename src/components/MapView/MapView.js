@@ -1,5 +1,5 @@
 /*
- global MarkerClusterer, google, document
+ global MarkerClusterer, google
  */
 import React from 'react';
 import PropTypes from 'prop-types';

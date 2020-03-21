@@ -1,8 +1,7 @@
 import React from "react";
-import { STATE_HELPLINE_NUMBERS } from "../../../tools/constants";
-import Fuse from "fuse.js";
 import PropTypes from 'prop-types';
-import { HELPLINE_CONTENT, KEY_INFO_CONTENT } from "../../../tools/constants";
+import Fuse from "fuse.js";
+import { STATE_HELPLINE_NUMBERS, HELPLINE_CONTENT, KEY_INFO_CONTENT } from "../../../tools/constants";
 
 
 export class InfoCard extends React.PureComponent {
@@ -10,6 +9,7 @@ export class InfoCard extends React.PureComponent {
     HELPLINE: `HELPLINE`,
     KEY_INFO: `KEY_INFO`
   }
+
   render() {
     const { cardType, ...restProps } = this.props;
     return (
@@ -27,6 +27,10 @@ const HelplineInfoCard = ({ stateName }) =>
     )}
   </div>
 
+HelplineInfoCard.propTypes = {
+  stateName: PropTypes.string.isRequired,
+};
+
 const KeyInfoCard = () => (
   <div className="card" style={{ width: "15rem" }}>
     <CardHeading heading={`Helpful Links`} />
@@ -36,11 +40,14 @@ const KeyInfoCard = () => (
   </div>
 );
 
-
 const CardHeading = ({ heading }) =>
   <div className="card-body" style={{ marginBottom: `-10%` }}>
     <h5 className="card-title">{heading}</h5>
   </div>
+
+CardHeading.propTypes = {
+  heading: PropTypes.string.isRequired,
+};
 
 const CardRow = ({ heading, subHeading, linked }) =>
   <div className="card-body">
@@ -48,6 +55,11 @@ const CardRow = ({ heading, subHeading, linked }) =>
     <p className="card-text">{linked ? <a href={subHeading}>{subHeading}</a> : subHeading}</p>
   </div>
 
+CardRow.propTypes = {
+  heading: PropTypes.string.isRequired,
+  subHeading: PropTypes.string.isRequired,
+  linked: PropTypes.bool.isRequired,
+};
 
 const parsedHelplineNum = StateName => {
   const options = {
