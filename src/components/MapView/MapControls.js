@@ -77,7 +77,7 @@ class MapControls extends React.Component {
     })
 
   render() {
-    const { isMapLoaded, clearSearchBox, onStatusChanged, status } = this.props;
+    const { isMapLoaded, clearSearchBox, goToUserLocation, onStatusChanged, status } = this.props;
     const { stateName, showStateHelplineNumber, showKeyInfo } = this.state;
 
     return (
@@ -95,30 +95,11 @@ class MapControls extends React.Component {
 
         <div id="btn-plus-container" className={classnames({ 'd-none': !isMapLoaded })}>
           <Container>
-            <Link
-              href="#"
-              onClick={() => console.log('Clicked on Report case')}
-              tooltip="Report a Case"
-              icon="fa fa-sticky-note"
-            />
-            <Link
-              href="#"
-              onClick={() => console.log('Clicked on Report Symptoms')}
-              tooltip="Report Symptoms"
-              icon="fa fa-sticky-note"
-            />
-            <Link
-              href="#"
-              onClick={() => console.log('Clicked on Request Help')}
-              tooltip="Request Help"
-              icon="fa fa-sticky-note"
-            />
             <Button
-              className="fab-item btn btn-success btn-link btn-lg text-white"
-              tooltip="Add"
-              icon="fa fa-plus"
+              className="fab-item btn btn-danger btn-link text-white"
+              tooltip="Report Symptoms"
+              icon="fa fa-exclamation-triangle"
               rotate={false}
-              styles={{ backgroundColor: '#368435', color: '#ffffff' }}
               onClick={() => {
               }}
             />
@@ -187,6 +168,12 @@ class MapControls extends React.Component {
             </div>
           </div>
         </div>
+
+        <div id="btn-gps-container" className={classnames({ 'd-none': !isMapLoaded })}>
+          <button className="btn btn-light" onClick={goToUserLocation}>
+            <i className="fa fa-location-arrow" />
+          </button>
+        </div>
       </div>
     )
   }
@@ -194,6 +181,7 @@ class MapControls extends React.Component {
 
 MapControls.propTypes = {
   clearSearchBox: PropTypes.func.isRequired,
+  goToUserLocation: PropTypes.func.isRequired,
   isMapLoaded: PropTypes.bool.isRequired,
   mapCenter: PropTypes.object.isRequired,
   onStatusChanged: PropTypes.func.isRequired,

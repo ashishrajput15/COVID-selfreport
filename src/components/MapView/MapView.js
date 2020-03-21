@@ -38,17 +38,22 @@ class MapView extends React.Component {
     this.searchBox = null;
 
     this.clearSearchBox = this.clearSearchBox.bind(this);
+    this.goToUserLocation = this.goToUserLocation.bind(this);
     this.onGeolocationSuccess = this.onGeolocationSuccess.bind(this);
     this.onGeolocationError = this.onGeolocationError.bind(this);
     this.onStatusChanged = this.onStatusChanged.bind(this);
   }
 
   componentDidMount() {
-    navigator.geolocation.getCurrentPosition(this.onGeolocationSuccess, this.onGeolocationError, {
-      enableHighAccuracy: true,
-      timeout: 60 * 1000,
-      maximumAge: 0
+    this.setState({
+      showMap: true,
     });
+
+    setTimeout(() => {
+      this.refreshPatientsData();
+    }, 100);
+
+    this.prepareMap();
   }
 
   componentWillReceiveProps(nextProps) {   // eslint-disable-line react/no-deprecated
@@ -98,12 +103,15 @@ class MapView extends React.Component {
     this.props.actions.getPatientsData(mapCenter.lat, mapCenter.lng, 2000, status);
   }
 
-  onGeolocationError(/* err */) {
-    //console.warn(`ERROR(${err.code}): ${err.message}`);
+  onGeolocationError(err) {
+    // console.warn(`ERROR(${err.code}): ${err.message}`);
+    if (err.code === 2) {
+      alert('Unable to get your location.');
+    }
 
     this.setState({
       showMap: true,
-      userDeniedGeolocation: true,
+      userDeniedGeolocation: (err.code === 1),
     });
 
     setTimeout(() => {
@@ -118,7 +126,7 @@ class MapView extends React.Component {
     if (!google) {
       setTimeout(() => {
         this.prepareMap();
-      }, 1000);
+      }, 400);
       return;
     }
 
@@ -162,6 +170,9 @@ class MapView extends React.Component {
         const btnSelect = document.getElementById('btn-select-container');
         this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(btnSelect);
 
+        const btnGps = document.getElementById('btn-gps-container');
+        this.map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(btnGps);
+
         this.searchBox.addListener('places_changed', () => {
           const places = this.searchBox.getPlaces();
 
@@ -182,6 +193,11 @@ class MapView extends React.Component {
           isMapLoaded: true,
         });
       }, 400);
+    } else if (this.map !== null) {
+      // map init already done
+      const { mapCenter, mapZoom } = this.state;
+      this.map.setCenter(mapCenter);
+      this.map.setZoom(mapZoom);
     }
 
     return null;
@@ -240,6 +256,18 @@ class MapView extends React.Component {
       });
   }
 
+  getUserLocation() {
+    navigator.geolocation.getCurrentPosition(this.onGeolocationSuccess, this.onGeolocationError, {
+      enableHighAccuracy: true,
+      timeout: 60 * 1000,
+      maximumAge: 0
+    });
+  }
+
+  goToUserLocation() {
+    this.getUserLocation();
+  }
+
   onStatusChanged(event) {
     this.setState({
       status: event.target.value,
@@ -277,6 +305,7 @@ class MapView extends React.Component {
 
         <MapControls
           clearSearchBox={this.clearSearchBox}
+          goToUserLocation={this.goToUserLocation}
           isMapLoaded={isMapLoaded}
           mapCenter={mapCenter}
           onStatusChanged={this.onStatusChanged}
