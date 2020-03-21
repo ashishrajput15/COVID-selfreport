@@ -1,6 +1,8 @@
 import React from 'react';
 import classnames from 'classnames';
 import { Container, Button, Link } from 'react-floating-action-button';
+import {STATE_HELPLINE_NUMBERS} from "../../tools/constants";
+import Fuse from "fuse.js"
 
 const mapContainerHeight = `${window.innerHeight - 1}px`;
 
@@ -96,30 +98,23 @@ const locations = [
 
 ];
 
+function noop(){};
 class Root extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
       showMap: false,
       isMapLoaded: false,
-
       userDeniedGeolocation: false,
-
       mapCenter: {
         lat: 21.125498,
-        lng: 81.914063,
+        lng: 81.914063
       },
-
       mapAccuracy: 0,
-
       mapZoom: 5,
-
+      showStateHelplineNumber:false
     };
-
     this.map = null;
-    this.onGeolocationSuccess = this.onGeolocationSuccess.bind(this);
-    this.onGeolocationError = this.onGeolocationError.bind(this);
   }
 
   componentDidMount() {
@@ -130,14 +125,10 @@ class Root extends React.Component {
     });
   }
 
-  onGeolocationSuccess(pos) {
+  onGeolocationSuccess = (pos) => {
     try {
-      const crd = pos.coords;
-      //console.log('Your current position is:');
-      //console.log(`Latitude : ${crd.latitude}`);
-      //console.log(`Longitude: ${crd.longitude}`);
-      //console.log(`More or less ${crd.accuracy} meters.`);
-
+      const { coords: crd } = pos;
+      this.getstateFromCordinates(crd);
       this.setState({
         showMap: true,
         userDeniedGeolocation: false,
@@ -158,9 +149,8 @@ class Root extends React.Component {
     this.prepareMap();
   }
 
-  onGeolocationError(err) {
-    //console.warn(`ERROR(${err.code}): ${err.message}`);
-
+  onGeolocationError = (err) => {
+    console.warn(`ERROR(${err.code}): ${err.message}`);
     this.setState({
       showMap: true,
       userDeniedGeolocation: true,
@@ -168,7 +158,44 @@ class Root extends React.Component {
 
     this.prepareMap();
   }
-
+  getstateFromCordinates = ({ latitude, longitude }) =>
+    new google.maps.Geocoder().geocode(
+      {
+        location: { lat: 19.076090, lng: 72.877426 }
+      },
+      (result, status) => {
+        if (status == google.maps.GeocoderStatus.OK) {
+          if (result[0]) {
+            let add = result[0].formatted_address;
+            let value = add.split(",");
+            let count = value.length;
+            const state = value[count-2];
+            this.setState({state});
+          } else {
+            alert("address not found");
+          }
+        } else {
+          alert("Geocoder failed due to: " + status);
+        }
+      }
+    );
+  parsedHelplineNum = state => {
+    const stateNames = Object.keys(STATE_HELPLINE_NUMBERS);
+    const options = {
+      shouldSort: true,
+      threshold: 0.8,
+      location: 0,
+      distance: 600,
+      minMatchCharLength: 1,
+      keys: ["stateName"]
+    };
+    const fuseS = new Fuse(STATE_HELPLINE_NUMBERS, options);
+    return fuseS.search(state)[0].item.phoneNo;
+  }
+  toggleHelplineBar = () =>
+    this.setState({
+      showStateHelplineNumber: !this.state.showStateHelplineNumber
+    });
   prepareMap() {
     const { isMapLoaded } = this.state;
 
@@ -244,8 +271,7 @@ class Root extends React.Component {
   }
 
   render() {
-    const { showMap, isMapLoaded } = this.state;
-
+    const { showMap, isMapLoaded, state, showStateHelplineNumber } = this.state;
     return (
       <div>
         {!showMap && (
@@ -315,11 +341,33 @@ class Root extends React.Component {
             Key Info
           </button>
 
-          <button className="btn btn-primary ml-3">
+          <button className="btn btn-primary ml-3" onClick={state?this.toggleHelplineBar:noop}>
             Helpline Nos
           </button>
+        {state && showStateHelplineNumber &&
+        <div className="card" style={{width: '18rem'}}>
+          <div className="card-body">
+            <h5 className="card-title">Helpline number</h5>
+            <h6 className="card-subtitle mb-2 text-muted">{state}</h6>
+            <p className="card-text">
+              {this.parsedHelplineNum(state)}
+            </p>
+          </div>
+          <div className="card-body">
+            <h6 className="card-subtitle mb-2 text-muted">National Helpline Number</h6>
+            <p className="card-text">1075 | 1800-112-545</p>
+          </div>
+          <div className="card-body">
+            <h6 className="card-subtitle mb-2 text-muted">Central Helpline Number</h6>
+            <p className="card-text">+91-11-23978043 | +91-11-23978046</p>
+          </div>
+          <div className="card-body">
+            <h6 className="card-subtitle mb-2 text-muted">Central Helpline Email</h6>
+            <p className="card-text">ncov2019@gmail.com</p>
+          </div>
         </div>
-
+        }
+        </div>
         <div id="btn-select-container" className={classnames({ 'd-none': !isMapLoaded })}>
           <div className="form-group">
             <select defaultValue="confirmed" className="form-control" id="exampleFormControlSelect1">
