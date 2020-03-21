@@ -1,5 +1,5 @@
 /*
- global MarkerClusterer, google
+ global MarkerClusterer, google, document
  */
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -32,7 +32,10 @@ class MapView extends React.Component {
     this.map = null;
     this.markers = [];
     this.markerClusterer = null;
+    this.pacInput = null;
+    this.searchBox = null;
 
+    this.clearSearchBox = this.clearSearchBox.bind(this);
     this.onGeolocationSuccess = this.onGeolocationSuccess.bind(this);
     this.onGeolocationError = this.onGeolocationError.bind(this);
   }
@@ -139,12 +142,12 @@ class MapView extends React.Component {
         });
 
         const pacContainer = document.getElementById('pac-container');
-        const pacInput = document.getElementById('pac-input');
-        const searchBox = new google.maps.places.SearchBox(pacInput);
+        this.pacInput = document.getElementById('pac-input');
+        this.searchBox = new google.maps.places.SearchBox(this.pacInput);
         this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(pacContainer);
 
         this.map.addListener('bounds_changed', () => {
-          searchBox.setBounds(this.map.getBounds());
+          this.searchBox.setBounds(this.map.getBounds());
         });
 
         const btnPlus = document.getElementById('btn-plus-container');
@@ -156,8 +159,8 @@ class MapView extends React.Component {
         const btnSelect = document.getElementById('btn-select-container');
         this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(btnSelect);
 
-        searchBox.addListener('places_changed', () => {
-          const places = searchBox.getPlaces();
+        this.searchBox.addListener('places_changed', () => {
+          const places = this.searchBox.getPlaces();
 
           if (places.length === 0) {
             return;
@@ -179,6 +182,11 @@ class MapView extends React.Component {
     }
 
     return null;
+  }
+
+  clearSearchBox() {
+    this.pacInput.value = "";
+    this.pacInput.focus();
   }
 
   updateMarkersOnMap(patientsData) {
@@ -255,6 +263,7 @@ class MapView extends React.Component {
         </div>
 
         <MapControls
+          clearSearchBox={this.clearSearchBox}
           isMapLoaded={isMapLoaded}
           mapCenter={mapCenter}
         />
