@@ -27,6 +27,8 @@ class MapView extends React.Component {
 
       mapAccuracy: 0,
       mapZoom: 5,
+
+      status: 'confirmed',
     };
 
     this.map = null;
@@ -38,6 +40,7 @@ class MapView extends React.Component {
     this.clearSearchBox = this.clearSearchBox.bind(this);
     this.onGeolocationSuccess = this.onGeolocationSuccess.bind(this);
     this.onGeolocationError = this.onGeolocationError.bind(this);
+    this.onStatusChanged = this.onStatusChanged.bind(this);
   }
 
   componentDidMount() {
@@ -72,18 +75,27 @@ class MapView extends React.Component {
         mapZoom: 8,
       });
 
-      this.props.actions.getPatientsData(crd.latitute, crd.longitude, 2000, 'confirmed');
+      setTimeout(() => {
+        this.refreshPatientsData();
+      }, 100);
     } catch (err) {
       this.setState({
         showMap: true,
         userDeniedGeolocation: false,
       });
 
-      const { mapCenter } = this.state;
-      this.props.actions.getPatientsData(mapCenter.lat, mapCenter.lng, 2000, 'confirmed');
+      setTimeout(() => {
+        this.refreshPatientsData();
+      }, 100);
     }
 
     this.prepareMap();
+  }
+
+  refreshPatientsData() {
+    const { mapCenter, status } = this.state;
+    this.props.actions.getPatientsDataStarting();
+    this.props.actions.getPatientsData(mapCenter.lat, mapCenter.lng, 2000, status);
   }
 
   onGeolocationError(/* err */) {
@@ -94,9 +106,9 @@ class MapView extends React.Component {
       userDeniedGeolocation: true,
     });
 
-    const { mapCenter } = this.state;
-    this.props.actions.getPatientsDataStarting();
-    this.props.actions.getPatientsData(mapCenter.lat, mapCenter.lng, 2000, 'confirmed');
+    setTimeout(() => {
+      this.refreshPatientsData();
+    }, 100);
 
     this.prepareMap();
   }
@@ -121,10 +133,6 @@ class MapView extends React.Component {
           disableDefaultUI: false,
 
           mapTypeControl: false,
-          mapTypeControlOptions: {
-            style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-            position: google.maps.ControlPosition.LEFT_BOTTOM
-          },
 
           zoomControl: true,
           zoomControlOptions: {
@@ -132,12 +140,7 @@ class MapView extends React.Component {
           },
 
           scaleControl: false,
-
           streetViewControl: false,
-          streetViewControlOptions: {
-            position: google.maps.ControlPosition.LEFT_TOP
-          },
-
           fullscreenControl: false,
         });
 
@@ -237,8 +240,18 @@ class MapView extends React.Component {
       });
   }
 
+  onStatusChanged(event) {
+    this.setState({
+      status: event.target.value,
+    });
+
+    setTimeout(() => {
+      this.refreshPatientsData();
+    }, 100);
+  }
+
   render() {
-    const { showMap, isMapLoaded, mapCenter } = this.state;
+    const { showMap, isMapLoaded, mapCenter, status } = this.state;
 
     return (
       <div>
@@ -266,6 +279,8 @@ class MapView extends React.Component {
           clearSearchBox={this.clearSearchBox}
           isMapLoaded={isMapLoaded}
           mapCenter={mapCenter}
+          onStatusChanged={this.onStatusChanged}
+          status={status}
         />
       </div>
     );

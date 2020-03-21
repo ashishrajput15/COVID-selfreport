@@ -34,6 +34,27 @@ $vin-red: #ff0000;
   top: 0px !important;
   margin-left: -200px !important;
   margin-top: 10px !important;
+
+  @media (max-width: 960px) {
+    max-width: 300px;
+    margin-left: -150px !important;
+  }
+
+  @media (max-width: 767px) {
+    max-width: 220px;
+    margin-left: -110px !important;
+  }
+
+  @media (max-width: 675px) {
+    max-width: 180px;
+    margin-left: -90px !important;
+  }
+
+  @media (max-width: 576px) {
+    max-width: 98vw;
+    left: 0 !important;
+    margin-left: 0 !important;
+  }
 }
 
 .pac-controls {
@@ -56,6 +77,23 @@ $vin-red: #ff0000;
   padding: 5px 11px 5px 13px;
   text-overflow: ellipsis;
   width: 400px;
+
+  @media (max-width: 960px) {
+    width: 300px;
+  }
+
+  @media (max-width: 767px) {
+    width: 220px;
+  }
+
+  @media (max-width: 675px) {
+    width: 180px;
+  }
+
+  @media (max-width: 576px) {
+    width: 98vw;
+    margin-left: 8px;
+  }
 }
 
 #pac-input:focus {
@@ -63,12 +101,13 @@ $vin-red: #ff0000;
 }
 
 #btn-plus-container {
-  margin-bottom: 10px;
   position: absolute !important;
+  margin-bottom: 10px;
+  bottom: 0;
   right: 10px !important;
 
   .fab-container {
-    bottom: 6vh;
+    bottom: 3vh;
     margin: 1em;
     right: 2vw;
   }
@@ -78,10 +117,78 @@ $vin-red: #ff0000;
   margin-top: 5px;
   position: absolute !important;
   right: 10px !important;
+
+  @media (max-width: 576px) {
+    margin-top: 60px;
+  }
+
+  .btn {
+    @media (max-width:576px) {
+      float: right;
+    }
+  }
 }
 
 #btn-select-container {
   margin-top: 5px;
   position: absolute !important;
   left: 10px !important;
+
+  @media (max-width: 960px) {
+    zoom: 0.8;
+  }
+
+  @media (max-width: 576px) {
+    margin-top: 72px;
+  }
+
+  .card {
+    width: 15rem;
+
+    @media (max-width: 960px) {
+      width: 12.5rem;
+    }
+  }
+
+  .form-check-label {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .form-check-input {
+    margin-top: 0.2rem;
+    margin-left: -1.25rem;
+  }
+}
+
+.info-card {
+  &.helpline-info-card {
+    position: fixed;
+    width: 20rem;
+    top: 3rem;
+    right: 10px;
+    left: auto;
+
+    @media (max-width: 576px) {
+      top: 6rem;
+      left: 50%;
+      right: auto;
+      margin-left: -10rem;
+    }
+  }
+
+  &.key-info-card {
+    position: fixed;
+    width: 20rem;
+    top: 3rem;
+    right: 10px;
+    left: auto;
+
+    @media (max-width: 576px) {
+      top: 6rem;
+      left: 50%;
+      right: auto;
+      margin-left: -10rem;
+    }
+  }
 }

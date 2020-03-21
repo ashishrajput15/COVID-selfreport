@@ -19,7 +19,7 @@ export class InfoCard extends React.PureComponent {
 }
 
 const HelplineInfoCard = ({ stateName }) =>
-  <div className="card" style={{ width: "15rem" }}>
+  <div className="card info-card helpline-info-card">
     <CardHeading heading={`Helpline Numbers`} />
     <CardRow heading={stateName} subHeading={parsedHelplineNum(stateName)} />
     {HELPLINE_CONTENT.map(({ heading, subHeading }) =>
@@ -32,7 +32,7 @@ HelplineInfoCard.propTypes = {
 };
 
 const KeyInfoCard = () => (
-  <div className="card" style={{ width: "15rem" }}>
+  <div className="card info-card key-info-card">
     <CardHeading heading={`Helpful Links`} />
     {KEY_INFO_CONTENT.map(({ heading, subHeading }) =>
       <CardRow heading={heading} subHeading={subHeading} key={subHeading} linked={true} />
