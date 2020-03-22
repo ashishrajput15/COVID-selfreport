@@ -1,18 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { Container, Button, Link } from 'react-floating-action-button';
+import { Container, Button } from 'react-floating-action-button';
 import { InfoCard } from "./InfoCard";
+import ReportSymptomsModal from './ReportSymptomsModal';
 
-function noop() { }
 class MapControls extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       stateName: '',
       showStateHelplineNumber: false,
-      showKeyInfo: false
-    }
+      showKeyInfo: false,
+      showReportSymptomsModal: false,
+    };
+
+    this.hideAllCards = this.hideAllCards.bind(this);
+    this.toggleReportSymptomsModal = this.toggleReportSymptomsModal.bind(this);
   }
 
   componentDidMount() {
@@ -27,6 +31,20 @@ class MapControls extends React.Component {
         this.getstateFromCordinates(nextProps.mapCenter);
       }
     }
+  }
+
+  hideAllCards() {
+    this.setState({
+      showStateHelplineNumber: false,
+      showKeyInfo: false
+    });
+  }
+
+  toggleReportSymptomsModal() {
+    const { showReportSymptomsModal}  = this.state;
+    this.setState({
+      showReportSymptomsModal: !showReportSymptomsModal,
+    });
   }
 
   getstateFromCordinates = (location) => {
@@ -56,28 +74,41 @@ class MapControls extends React.Component {
       }
     );
   }
+
   toggleHelplineBar = () =>
     this.setState({
       showStateHelplineNumber: !this.state.showStateHelplineNumber,
-      showKeyInfo: this.state.showKeyInfo && false
+      showKeyInfo: false,
+      showReportSymptomsModal: false,
     });
 
   toggleKeyInfoBar = () =>
     this.setState({
       showKeyInfo: !this.state.showKeyInfo,
-      showStateHelplineNumber: this.state.showStateHelplineNumber && false
+      showStateHelplineNumber: false,
+      showReportSymptomsModal: false,
     })
 
-
   render() {
-    const { isMapLoaded, clearSearchBox } = this.props;
-    const { stateName, showStateHelplineNumber, showKeyInfo } = this.state;
+    const { isMapLoaded, clearSearchBox, goToUserLocation, onStatusChanged, status } = this.props;
+    const { stateName, showStateHelplineNumber, showKeyInfo, showReportSymptomsModal } = this.state;
+
+    let reportSymptomsModal = null;
+    if (showReportSymptomsModal) {
+      reportSymptomsModal = (
+        <ReportSymptomsModal
+          toggleHelplineBar={this.toggleHelplineBar}
+          toggleKeyInfoBar={this.toggleKeyInfoBar}
+          toggleModal={this.toggleReportSymptomsModal}
+        />
+      );
+    }
 
     return (
       <div>
         <div id="pac-container" className={classnames({ 'input-group mb-3': true, 'd-none': !isMapLoaded })}>
           <input type="text" className="form-control controls" id="pac-input" placeholder="Search"
-            aria-label="Search" />
+                 aria-label="Search" />
 
           <div className="input-group-append pointer link" onClick={clearSearchBox}>
             <span className="input-group-text">
@@ -88,32 +119,12 @@ class MapControls extends React.Component {
 
         <div id="btn-plus-container" className={classnames({ 'd-none': !isMapLoaded })}>
           <Container>
-            <Link
-              href="#"
-              onClick={() => console.log('Clicked on Report case')}
-              tooltip="Report a Case"
-              icon="fa fa-sticky-note"
-            />
-            <Link
-              href="#"
-              onClick={() => console.log('Clicked on Report Symptoms')}
-              tooltip="Report Symptoms"
-              icon="fa fa-sticky-note"
-            />
-            <Link
-              href="#"
-              onClick={() => console.log('Clicked on Request Help')}
-              tooltip="Request Help"
-              icon="fa fa-sticky-note"
-            />
             <Button
-              className="fab-item btn btn-success btn-link btn-lg text-white"
-              tooltip="Add"
-              icon="fa fa-plus"
+              className="fab-item btn btn-danger btn-link text-white"
+              tooltip="Report Symptoms"
+              icon="fa fa-exclamation-triangle"
               rotate={false}
-              styles={{ backgroundColor: '#368435', color: '#ffffff' }}
-              onClick={() => {
-              }}
+              onClick={this.toggleReportSymptomsModal}
             />
           </Container>
         </div>
@@ -122,25 +133,72 @@ class MapControls extends React.Component {
           <button className="btn btn-primary" onClick={this.toggleKeyInfoBar}>
             Key Info
           </button>
-          <button className="btn btn-primary ml-3" onClick={stateName ? this.toggleHelplineBar : noop}>
+          <span className="d=block d-sm-none"><br /></span>
+          <button className="btn btn-primary ml-0 ml-sm-3 mt-2 mt-sm-0"
+                  onClick={this.toggleHelplineBar}>
             Helpline Nos
           </button>
           {showKeyInfo &&
-            <InfoCard cardType={InfoCard.cardTypes.KEY_INFO} />
+          <InfoCard
+            toggle={this.hideAllCards}
+            cardType={InfoCard.cardTypes.KEY_INFO}
+          />
           }
-          {stateName && showStateHelplineNumber &&
-            <InfoCard stateName={stateName} cardType={InfoCard.cardTypes.HELPLINE} />
+          {showStateHelplineNumber &&
+          <InfoCard
+            stateName={stateName}
+            cardType={InfoCard.cardTypes.HELPLINE}
+            toggle={this.hideAllCards}
+          />
           }
         </div>
+
         <div id="btn-select-container" className={classnames({ 'd-none': !isMapLoaded })}>
-          <div className="form-group">
-            <select defaultValue="confirmed" className="form-control" id="exampleFormControlSelect1">
-              <option value="confirmed">Confirmed</option>
-              <option value="symptoms">Symptoms</option>
-              <option value="help_requests">Help Request</option>
-            </select>
+          <div className="card">
+            <div className="card-body">
+              <h5 className="card-title">View</h5>
+
+              <form>
+                <div className="form-check">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="rdoStatus"
+                    id="rdoStatusConfirmed"
+                    value="confirmed"
+                    checked={status === 'confirmed'}
+                    onChange={onStatusChanged}
+                  />
+                  <label className="form-check-label" htmlFor="rdoStatusConfirmed">
+                    Confirmed Cases
+                  </label>
+                </div>
+                <div className="form-check">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="rdoStatus"
+                    id="rdoStatusSymptoms"
+                    value="symptoms"
+                    checked={status === 'symptoms'}
+                    onChange={onStatusChanged}
+                  />
+                  <label className="form-check-label" htmlFor="rdoStatusSymptoms">
+                    Self Reported Cases
+                  </label>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
+
+        <div id="btn-gps-container" className={classnames({ 'd-none': !isMapLoaded })}>
+          <button className="btn btn-light" onClick={goToUserLocation}>
+            <i className="fa fa-location-arrow" />
+          </button>
+        </div>
+
+        {reportSymptomsModal}
       </div>
     )
   }
@@ -148,8 +206,11 @@ class MapControls extends React.Component {
 
 MapControls.propTypes = {
   clearSearchBox: PropTypes.func.isRequired,
+  goToUserLocation: PropTypes.func.isRequired,
   isMapLoaded: PropTypes.bool.isRequired,
   mapCenter: PropTypes.object.isRequired,
+  onStatusChanged: PropTypes.func.isRequired,
+  status: PropTypes.string.isRequired,
 };
 
 export default MapControls;
