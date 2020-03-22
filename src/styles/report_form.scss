@@ -1,0 +1,102 @@
+// These are the modal styles
+.reportModal {
+  background: #fff;
+  outline: 0;
+  min-width: 500px;
+  max-width: 1000px;
+  border-radius: 1em;
+  min-height: 250px;
+  padding: 0.5em;
+  width: 100%;
+}
+
+.modal-header,
+.modal-body,
+.modal-footer {
+  padding: 0.5em 1.5em;
+}
+
+.reportModal-header {
+  border-bottom: 1px solid #eee;
+}
+
+.reportModal-title {
+  margin: 0;
+}
+
+.reportModal-footer {
+  border-top: 1px solid #eee;
+  text-align: right;
+}
+
+.reportModal--animated {
+  opacity: 0.3;
+  transform: scale(1.1) translateY(-10px);
+  -webkit-transform: scale(1.1) translateY(-10px);
+  transition: all 0.3s linear;
+  -webkit-transition: all 0.3s linear;
+}
+
+.reportModal--animated.has-entered {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+  -webkit-transform: scale(1) translateY(0);
+}
+
+.underlay {
+  background-color: rgba(0, 0, 0, 0);
+  transition: all 0.3s linear;
+  -webkit-transition: all 0.3s linear;
+}
+
+.underlay.has-entered {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+// The following styles are for transitions of the modal
+.reporter-rsw-wrapper {
+    min-height: 250px !important;
+    display: flex;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-align-items: center;
+    align-items: center;
+    width: 100%;
+  }
+  /** Progress Bar */
+  $progress-height: 5px;
+  $duration: 3s;
+  @keyframes stripes {
+      from { background-position: 1rem 0 }
+      to { background-position: 0 0 }
+  }
+  @keyframes rainbow {
+  0% { background-color: var(--red) }
+  20% { background-color: var(--orange) }
+  40% { background-color: var(--yellow) }
+  60% { background-color: var(--green) }
+  80% { background-color: var(--blue) }
+  100% { background-color: var(--indigo) }
+  }
+  @keyframes grow {
+      from { width: 0% }
+      to { width: 100% }
+  }
+  .reporter-progress-wrapper {
+  padding-top: 25%;
+  }
+  .reporter-progress {
+  height: $progress-height;
+  overflow: hidden;
+  }
+  .reporter-progress-bar {
+  height: $progress-height;
+  width: 100%;
+  .reporter-loaded & {
+  animation: grow $duration ease,
+              stripes 1s linear infinite,
+              rainbow $duration ease infinite;
+      }
+  }

@@ -2,6 +2,9 @@
 
 $fa-font-path: "~font-awesome/fonts/";
 @import "../../node_modules/font-awesome/scss/font-awesome";
+@import "./report_form";
+@import "../components/ReportModals/styles.scss";
+@import "./common_ui.scss";
 
 /* Variables */
 $vin-blue: #5bb7db;

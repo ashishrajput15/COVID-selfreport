@@ -1,0 +1,98 @@
+/* colors */
+$vin-blue: #5bb7db;
+$vin-green: #60b044;
+$vin-red: #ff0000;
+$color1: #eee;
+$color2: #ccc;
+$color3: #aaa;
+$color4: #999;
+$color5: #777;
+$color6: #555;
+$color7: #333;
+$color8: #222;
+$color9: #111;
+
+/* Border Radius */
+$radius1: 1px;
+$radius2: 2px;
+$radius3: 3px;
+$radius4: 4px;
+$radius5: 5px;
+$radius6: 6px;
+
+/* Headers */
+.header1 {
+  color: $color5;
+  font-size: 25px;
+}
+
+.header2 {
+  color: $color5;
+  font-size: 21px;
+}
+
+.header3 {
+  color: $color5;
+  font-size: 18px;
+}
+
+.header4 {
+  color: $color5;
+  font-size: 16px;
+}
+
+.iconPosition {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 80%;
+  display: flex;
+}
+
+/* Animations */
+
+.fadeIn {
+  animation: fadeIn 500ms ease;
+}
+
+/* Tooltips */
+
+.toolTips {
+  border-radius: 3px;
+  box-shadow: rgba(15, 15, 15, 0.05) 0px 0px 0px 1px,
+      rgba(15, 15, 15, 0.1) 0px 3px 6px, rgba(15, 15, 15, 0.2) 0px 9px 24px;
+  background: white;
+  overflow: hidden;
+}
+
+.miniTooltip {
+  border-radius: 3px;
+  background-color: rgb(55, 53, 47);
+  color: $color1;
+  font-size: 12px;
+  font-weight: 400;
+  width: 100%;
+}
+
+/* Buttons */
+
+.nakedButton {
+  padding: 3px 8px 3px 8px;
+  border-radius: $radius3;
+  font-weight: 500;
+}
+
+// .hoverColor:hover {
+//   background-color: $color7;
+//   color: $color4;
+// }
+
+.nakedSquareButton {
+  border-radius: radius3;
+  background-color: $color7;
+  color: $color4;
+  padding: 2px;
+}
+
+
+/* Miscellaneous */
+
