@@ -4,6 +4,7 @@ import classnames from 'classnames';
 import { Container, Button } from 'react-floating-action-button';
 import { InfoCard } from "./InfoCard";
 import ReportSymptomsModal_V2 from './ReportSymptomsModal_V2';
+import { Form, FormGroup, Input, Label } from 'reactstrap';
 
 class MapControls extends React.Component {
   constructor(props) {
@@ -159,36 +160,39 @@ class MapControls extends React.Component {
             <div className="card-body">
               <h5 className="card-title">View</h5>
 
-              <form>
-                <div className="form-check">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    name="rdoViewTypeReported"
-                    id="rdoViewTypeReported"
-                    value="reported"
-                    checked={viewType === 'reported'}
-                    onChange={onViewTypeChanged}
-                  />
-                  <label className="form-check-label" htmlFor="rdoStatusSymptoms">
+              <Form>
+                <FormGroup check>
+                  <Label check>
+                    <Input
+                      className="form-check-input"
+                      type="radio"
+                      name="rdoViewType"
+                      id="rdoViewTypeReported"
+                      value="reported"
+                      checked={viewType === 'reported'}
+                      onChange={onViewTypeChanged}
+                    />
+                    {' '}
                     Symptom Reports
-                  </label>
-                </div>
-                <div className="form-check">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    name="rdoStatus"
-                    id="rdoStatusConfirmed"
-                    value="confirmed"
-                    checked={viewType === 'confirmed'}
-                    onChange={onViewTypeChanged}
-                  />
-                  <label className="form-check-label" htmlFor="rdoStatusConfirmed">
+                  </Label>
+                </FormGroup>
+
+                <FormGroup check>
+                  <Label check>
+                    <Input
+                      className="form-check-input"
+                      type="radio"
+                      name="rdoViewType"
+                      id="rdoStatusConfirmed"
+                      value="confirmed"
+                      checked={viewType === 'confirmed'}
+                      onChange={onViewTypeChanged}
+                    />
+                    {' '}
                     Confirmed Cases
-                  </label>
-                </div>
-              </form>
+                  </Label>
+                </FormGroup>
+              </Form>
             </div>
           </div>
         </div>
@@ -211,7 +215,6 @@ MapControls.propTypes = {
   isMapLoaded: PropTypes.bool.isRequired,
   mapCenter: PropTypes.object.isRequired,
   onViewTypeChanged: PropTypes.func.isRequired,
-  status: PropTypes.string.isRequired,
   viewType: PropTypes.string.isRequired,
 };
 
