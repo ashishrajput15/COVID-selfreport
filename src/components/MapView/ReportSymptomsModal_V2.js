@@ -44,8 +44,6 @@ class ReportSymptomsModal_V2 extends React.Component {
   }
 
   toggleSymptom(name) {
-    console.log('Got symptom name', name);
-
     const { symptoms } = this.state;
 
     // Toggle symptom value

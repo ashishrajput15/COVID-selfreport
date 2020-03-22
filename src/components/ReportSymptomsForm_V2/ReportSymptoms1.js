@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Row } from 'reactstrap';
+import { Button, Col, Row } from 'reactstrap';
 import cough from '../../assets/cough.png';
 import fever from '../../assets/fever.png';
 import soreThroat from '../../assets/soreThroat.png';
@@ -31,7 +31,7 @@ class ReportSymptoms5 extends React.Component {
   }
 
   render() {
-    const { symptoms } = this.props;
+    const { jumpToStep, symptoms } = this.props;
 
     return (
       <div>
@@ -65,12 +65,27 @@ class ReportSymptoms5 extends React.Component {
             toggle={this.toggleTired}
             present={symptoms['Tired'] === true}
           />
-
         </Row>
 
-        <Button color="primary" onClick={this.onNext}>
-          <i className="fa fa-arrow-right" />&nbsp;Next
-        </Button>
+        <div className="report-symptoms-modal-footer">
+          <Row>
+            <Col xs={6}>
+              <Button
+                color="light"
+                onClick={() => {
+                  jumpToStep(0);
+                }}
+              >
+                <i className="fa fa-times" />&nbsp;Cancel
+              </Button>
+            </Col>
+            <Col xs={6} className="text-right">
+              <Button color="primary" onClick={this.onNext}>
+                <i className="fa fa-arrow-right" />&nbsp;Next
+              </Button>
+            </Col>
+          </Row>
+        </div>
       </div>
     );
   }

@@ -68,6 +68,10 @@ $vin-red: #ff0000;
   font-weight: 300;
 }
 
+.pac-container {
+  z-index: 1050;
+}
+
 #pac-input {
   background-color: #fff;
   font-family: Roboto;
@@ -208,7 +212,7 @@ $vin-red: #ff0000;
   }
 }
 
-#btn-gps-container {
+#btn-gps-container, #btn-gps-container2 {
   margin-left: 10px;
   margin-bottom: 10px;
 
