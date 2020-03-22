@@ -12,11 +12,18 @@ class ReportSymptoms2 extends React.Component {
 
         <br />
 
-        <Button color="primary" onClick={() => {
-          jumpToStep(3);
-        }}>
-          <i className="fa fa-arrow-right" />&nbsp;Next
-        </Button>
+        <div className="report-symptoms-modal-footer">
+          <Button color="primary" onClick={() => {
+            jumpToStep(1);
+          }}>
+            <i className="fa fa-arrow-left" />&nbsp;Back
+          </Button>
+          <Button color="primary" onClick={() => {
+            jumpToStep(3);
+          }}>
+            <i className="fa fa-arrow-right" />&nbsp;Next
+          </Button>
+        </div>
       </div>
     );
   }
