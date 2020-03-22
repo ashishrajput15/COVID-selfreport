@@ -17,10 +17,15 @@ class ReportSymptomsModal_V2 extends React.Component {
     super(props);
 
     this.state = {
-      symptoms: {},
+      symptoms: {
+        'Cough': false,
+        'Fever': false,
+        'Sore Throat': false,
+        'Tired': false,
+      },
     };
 
-    this.setSymptom = this.setSymptom.bind(this);
+    this.toggleSymptom = this.toggleSymptom.bind(this);
   }
 
   componentDidMount() {
@@ -38,9 +43,16 @@ class ReportSymptomsModal_V2 extends React.Component {
 
   }
 
-  setSymptom(name, event) {
+  toggleSymptom(name) {
+    console.log('Got symptom name', name);
+
     const { symptoms } = this.state;
-    symptoms[name] = event.target.checked;
+
+    // Toggle symptom value
+    let value = symptoms[name];
+    value = value !== true;
+    symptoms[name] = value;
+
     this.setState({
       symptoms,
     });
@@ -61,7 +73,7 @@ class ReportSymptomsModal_V2 extends React.Component {
           />
         )
       },
-      { name: 'ReportSymptoms1', component: (<ReportSymptoms1 symptoms={symptoms} setSymptom={this.setSymptom} />) },
+      { name: 'ReportSymptoms1', component: (<ReportSymptoms1 symptoms={symptoms} toggleSymptom={this.toggleSymptom} />) },
       { name: 'ReportSymptoms2', component: (<ReportSymptoms2 symptoms={symptoms} mapCenter={mapCenter} />) },
       { name: 'ReportSubmitted', component: (<ReportSubmitted toggleModal={toggleModal} />) },
     ];
