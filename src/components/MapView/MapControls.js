@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { Container, Button } from 'react-floating-action-button';
 import { InfoCard } from "./InfoCard";
-import ReportSymptomsModal from './ReportSymptomsModal';
+import ReportSymptomsModal_V2 from './ReportSymptomsModal_V2';
 
 class MapControls extends React.Component {
   constructor(props) {
@@ -90,13 +90,13 @@ class MapControls extends React.Component {
     });
 
   render() {
-    const { isMapLoaded, clearSearchBox, goToUserLocation, mapCenter, onStatusChanged, status } = this.props;
+    const { isMapLoaded, clearSearchBox, goToUserLocation, mapCenter, onViewTypeChanged, viewType } = this.props;
     const { stateName, showStateHelplineNumber, showKeyInfo, showReportSymptomsModal } = this.state;
 
     let reportSymptomsModal = null;
     if (showReportSymptomsModal) {
       reportSymptomsModal = (
-        <ReportSymptomsModal
+        <ReportSymptomsModal_V2
           mapCenter={mapCenter}
           toggleHelplineBar={this.toggleHelplineBar}
           toggleKeyInfoBar={this.toggleKeyInfoBar}
@@ -164,14 +164,14 @@ class MapControls extends React.Component {
                   <input
                     className="form-check-input"
                     type="radio"
-                    name="rdoStatus"
-                    id="rdoStatusConfirmed"
-                    value="confirmed"
-                    checked={status === 'confirmed'}
-                    onChange={onStatusChanged}
+                    name="rdoViewTypeReported"
+                    id="rdoViewTypeReported"
+                    value="reported"
+                    checked={viewType === 'reported'}
+                    onChange={onViewTypeChanged}
                   />
-                  <label className="form-check-label" htmlFor="rdoStatusConfirmed">
-                    Confirmed Cases
+                  <label className="form-check-label" htmlFor="rdoStatusSymptoms">
+                    Symptom Reports
                   </label>
                 </div>
                 <div className="form-check">
@@ -179,13 +179,13 @@ class MapControls extends React.Component {
                     className="form-check-input"
                     type="radio"
                     name="rdoStatus"
-                    id="rdoStatusSymptoms"
-                    value="symptoms"
-                    checked={status === 'symptoms'}
-                    onChange={onStatusChanged}
+                    id="rdoStatusConfirmed"
+                    value="confirmed"
+                    checked={viewType === 'confirmed'}
+                    onChange={onViewTypeChanged}
                   />
-                  <label className="form-check-label" htmlFor="rdoStatusSymptoms">
-                    Self Reported Cases
+                  <label className="form-check-label" htmlFor="rdoStatusConfirmed">
+                    Confirmed Cases
                   </label>
                 </div>
               </form>
@@ -210,8 +210,9 @@ MapControls.propTypes = {
   goToUserLocation: PropTypes.func.isRequired,
   isMapLoaded: PropTypes.bool.isRequired,
   mapCenter: PropTypes.object.isRequired,
-  onStatusChanged: PropTypes.func.isRequired,
+  onViewTypeChanged: PropTypes.func.isRequired,
   status: PropTypes.string.isRequired,
+  viewType: PropTypes.string.isRequired,
 };
 
 export default MapControls;

@@ -20,6 +20,7 @@ class MapView extends React.Component {
       isMapLoaded: false,
 
       userDeniedGeolocation: false,
+      errorAlertShown: false,
 
       mapCenter: {
         lat: 21.125498,
@@ -29,7 +30,7 @@ class MapView extends React.Component {
       mapAccuracy: 0,
       mapZoom: 5,
 
-      status: 'confirmed',
+      viewType: 'reported',
     };
 
     this.map = null;
@@ -42,7 +43,7 @@ class MapView extends React.Component {
     this.goToUserLocation = this.goToUserLocation.bind(this);
     this.onGeolocationSuccess = this.onGeolocationSuccess.bind(this);
     this.onGeolocationError = this.onGeolocationError.bind(this);
-    this.onStatusChanged = this.onStatusChanged.bind(this);
+    this.onViewTypeChanged = this.onViewTypeChanged.bind(this);
   }
 
   componentDidMount() {
@@ -58,14 +59,16 @@ class MapView extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {   // eslint-disable-line react/no-deprecated
-    if(this.state.status === 'confirmed') {
+    const { viewType } = this.state;
+
+    if(viewType === 'confirmed') {
       if (this.props.patientsData !== nextProps.patientsData) {
         if (this.props.patientsData.loading !== nextProps.patientsData.loading && nextProps.patientsData.loaded) {
           // data was reloaded
           this.updatePatientsMarkersOnMap(nextProps.patientsData);
         }
       }
-    } else {
+    } else if (viewType === 'reported') {
       if (this.props.reportsData !== nextProps.reportsData) {
         if (this.props.reportsData.loading !== nextProps.reportsData.loading && nextProps.reportsData.loaded) {
           // data was reloaded
@@ -108,20 +111,26 @@ class MapView extends React.Component {
   }
 
   refreshData() {
-    const { mapCenter, status } = this.state;
-    if (status === 'confirmed') {
+    const { mapCenter, viewType } = this.state;
+    if (viewType === 'confirmed') {
       this.props.actions.getPatientsDataStarting();
-      this.props.actions.getPatientsData(mapCenter.lat, mapCenter.lng, 2000, status);
-    } else if (status === 'symptoms') {
+      this.props.actions.getPatientsData(mapCenter.lat, mapCenter.lng, 2000, viewType);
+    } else if (viewType === 'reported') {
       this.props.actions.getReportsDataStarting();
-      this.props.actions.getReportsData(mapCenter.lat, mapCenter.lng, 2000, status);
+      this.props.actions.getReportsData(mapCenter.lat, mapCenter.lng, 2000);
     }
   }
 
   onGeolocationError(err) {
     // console.warn(`ERROR(${err.code}): ${err.message}`);
     if (err.code === 2) {
-      alert('Unable to get your location.');
+      if (!this.state.errorAlertShown) {
+        alert('Unable to get your location.');
+
+        this.setState({
+          errorAlertShown: true,
+        });
+      }
     }
 
     this.setState({
@@ -180,7 +189,7 @@ class MapView extends React.Component {
             mapCenter: {
               lat: mapCenter.lat(),
               lng: mapCenter.lng(),
-          }
+            }
           });
         });
 
@@ -345,9 +354,9 @@ class MapView extends React.Component {
     this.getUserLocation();
   }
 
-  onStatusChanged(event) {
+  onViewTypeChanged(event) {
     this.setState({
-      status: event.target.value,
+      viewType: event.target.value,
     });
 
     setTimeout(() => {
@@ -356,7 +365,7 @@ class MapView extends React.Component {
   }
 
   render() {
-    const { showMap, isMapLoaded, mapCenter, status } = this.state;
+    const { showMap, isMapLoaded, mapCenter, viewType } = this.state;
 
     return (
       <div>
@@ -385,8 +394,8 @@ class MapView extends React.Component {
           goToUserLocation={this.goToUserLocation}
           isMapLoaded={isMapLoaded}
           mapCenter={mapCenter}
-          onStatusChanged={this.onStatusChanged}
-          status={status}
+          onViewTypeChanged={this.onViewTypeChanged}
+          viewType={viewType}
         />
       </div>
     );

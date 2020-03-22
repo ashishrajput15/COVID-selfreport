@@ -17,9 +17,11 @@ export class InfoCard extends React.PureComponent {
   }
 }
 
-const HelplineInfoCard = ({ stateName, toggle }) =>
+export const HelplineInfoCard = ({ stateName, toggle }) =>
   <div className="card info-card helpline-info-card">
-    <CardHeading onClose={toggle} heading={`Helpline Numbers`} />
+    {toggle !== null  && (
+      <CardHeading onClose={toggle} heading={`Helpline Numbers`} />
+    )}
 
     {stateName && (
       <CardRow heading={stateName} subHeading={parsedHelplineNum(stateName)} />
@@ -52,7 +54,7 @@ KeyInfoCard.propTypes = {
   toggle: PropTypes.func.isRequired,
 };
 
-const CardHeading = ({ heading, onClose }) =>
+export const CardHeading = ({ heading, onClose }) =>
   <div className="card-body" style={{ marginBottom: `-10%` }}>
     <div className="row">
       <div className="col-10">
@@ -76,7 +78,7 @@ CardHeading.propTypes = {
   onClose: PropTypes.func,
 };
 
-const CardRow = ({ heading, subHeading, linked }) =>
+export const CardRow = ({ heading, subHeading, linked }) =>
   <div className="card-body">
     <h6 className="card-subtitle mb-2 text-muted">{heading}</h6>
     <p className="card-text">{linked ? <a href={subHeading}>{subHeading}</a> : subHeading}</p>
@@ -88,7 +90,7 @@ CardRow.propTypes = {
   linked: PropTypes.bool.isRequired,
 };
 
-const parsedHelplineNum = StateName => {
+export const parsedHelplineNum = StateName => {
   const options = {
     shouldSort: true,
     threshold: 0.8,

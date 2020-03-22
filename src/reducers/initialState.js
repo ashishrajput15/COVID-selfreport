@@ -15,4 +15,12 @@ export default {
     ids: [],
     map: {},
   },
+
+  sendNewReport: {
+    saving: false,
+    saved: false,
+    error: null,
+
+    reportData: {},
+  },
 };
