@@ -3,6 +3,23 @@ import PropTypes from 'prop-types';
 import { Button, Col, FormGroup, Input, Label, Row } from 'reactstrap';
 
 class ReportSymptoms3 extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state={
+      form: {},
+    }
+  }
+
+  updateForm = (key, value) => {
+    const { form } = this.state;
+    form[key] = value;
+
+    this.setState(prevState => ({
+      ...prevState,
+      form,
+    }))
+  }
+
   render() {
     const { jumpToStep } = this.props;
 
@@ -16,7 +33,9 @@ class ReportSymptoms3 extends React.Component {
                 autoComplete="off"
                 type="text"
                 placeholder="Jon Doe"
-                value={""}
+                name="name"
+                value={this.state.form['name']}
+                onChange={(e) => this.updateForm(e.target.name, e.target.value)}
               />
             </FormGroup>
           </Col>
@@ -28,7 +47,9 @@ class ReportSymptoms3 extends React.Component {
                 autoComplete="off"
                 type="text"
                 placeholder="Full name of the person"
-                value={""}
+                name="personName"
+                value={this.state.form['personName']}
+                onChange={(e) => this.updateForm(e.target.name, e.target.value)}
               />
 
               <p className="text-muted mt-1">
@@ -46,7 +67,9 @@ class ReportSymptoms3 extends React.Component {
                 autoComplete="off"
                 type="text"
                 placeholder="+91 12345 67890"
-                value={""}
+                name="phone"
+                value={this.state.form['phone']}
+                onChange={(e) => this.updateForm(e.target.name, e.target.value)}
               />
             </FormGroup>
           </Col>
@@ -58,7 +81,9 @@ class ReportSymptoms3 extends React.Component {
                 autoComplete="off"
                 type="text"
                 placeholder="+91 12345 67890"
-                value={""}
+                name="altPhone"
+                value={this.state.form['altPhone']}
+                onChange={(e) => this.updateForm(e.target.name, e.target.value)}
               />
 
               <p className="text-muted mt-1">
@@ -71,12 +96,14 @@ class ReportSymptoms3 extends React.Component {
         <Row className="mt-3">
           <Col xs={12} md={6}>
             <FormGroup>
-              <Label htmlFor="phoneNumber">Preferred Language</Label>
+              <Label htmlFor="preferredLanguage">Preferred Language</Label>
               <Input
                 autoComplete="off"
                 type="text"
                 placeholder="English"
-                value={""}
+                name="preferredLang"
+                value={this.state.form['preferredLang']}
+                onChange={(e) => this.updateForm(e.target.name, e.target.value)}
               />
             </FormGroup>
           </Col>
@@ -84,11 +111,18 @@ class ReportSymptoms3 extends React.Component {
 
         <br />
 
-        <Button color="primary" onClick={() => {
-          jumpToStep(4);
-        }}>
-          <i className="fa fa-arrow-right" />&nbsp;Next
-        </Button>
+        <div className="report-symptoms-modal-footer">
+          <Button color="primary" onClick={() => {
+            jumpToStep(2);
+          }}>
+            <i className="fa fa-arrow-left" />&nbsp;Back
+          </Button>
+          <Button color="primary" onClick={() => {
+            jumpToStep(4);
+          }}>
+            <i className="fa fa-arrow-right" />&nbsp;Next
+          </Button>
+        </div>
       </div>
     );
   }
