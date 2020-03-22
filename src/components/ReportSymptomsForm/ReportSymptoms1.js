@@ -25,7 +25,8 @@ class ReportSymptoms1 extends React.Component {
 
     return (
       <div>
-        <p className="mb-2"><h6>Are you reporting for yourself or someone else?</h6></p>
+        <h6 className="mb-2">Are you reporting for yourself or someone else?</h6>
+
         <br />
         <div className="report-symptoms-options-container">
           <FormGroup check>

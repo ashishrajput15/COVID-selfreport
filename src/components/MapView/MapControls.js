@@ -87,16 +87,17 @@ class MapControls extends React.Component {
       showKeyInfo: !this.state.showKeyInfo,
       showStateHelplineNumber: false,
       showReportSymptomsModal: false,
-    })
+    });
 
   render() {
-    const { isMapLoaded, clearSearchBox, goToUserLocation, onStatusChanged, status } = this.props;
+    const { isMapLoaded, clearSearchBox, goToUserLocation, mapCenter, onStatusChanged, status } = this.props;
     const { stateName, showStateHelplineNumber, showKeyInfo, showReportSymptomsModal } = this.state;
 
     let reportSymptomsModal = null;
     if (showReportSymptomsModal) {
       reportSymptomsModal = (
         <ReportSymptomsModal
+          mapCenter={mapCenter}
           toggleHelplineBar={this.toggleHelplineBar}
           toggleKeyInfoBar={this.toggleKeyInfoBar}
           toggleModal={this.toggleReportSymptomsModal}
@@ -194,7 +195,7 @@ class MapControls extends React.Component {
 
         <div id="btn-gps-container" className={classnames({ 'd-none': !isMapLoaded })}>
           <button className="btn btn-light" onClick={goToUserLocation}>
-            <i className="fa fa-location-arrow" />
+            <i className="fa fa-compass" />
           </button>
         </div>
 

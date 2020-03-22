@@ -14,7 +14,7 @@ import {
 class ReportSymptoms4 extends React.Component {
   constructor(props) {
     super(props);
-    this.state={
+    this.state = {
       step: 1,
       fade: {},
       chooseState: false,
@@ -45,15 +45,15 @@ class ReportSymptoms4 extends React.Component {
   }
 
   handleCountry = (radioValue) => {
-    this.setState({chooseState: radioValue === 'yes' ? true : false});
+    this.setState({ chooseState: radioValue === 'yes' ? true : false });
   }
 
   handleContact = (radioValue) => {
-    this.setState({contact: radioValue === 'yes' ? true : false})
+    this.setState({ contact: radioValue === 'yes' ? true : false })
   }
 
   handlePrecondition = (radioValue) => {
-    this.setState({precondition: radioValue === 'yes' ? true : false})
+    this.setState({ precondition: radioValue === 'yes' ? true : false })
   }
 
   render() {
@@ -61,114 +61,113 @@ class ReportSymptoms4 extends React.Component {
 
     return (
       <div>
-        <ListGroupItem>
-          <ListGroupItemText>
-            Have you traveled to a high-risk country/Indian state or
-            been in contact with someone who is ill and has traveled
-            to a high risk country/Indian state in the last 14 days?
-          </ListGroupItemText>
-          <FormGroup tag="fieldset">
-            <FormGroup check>
-              <Label check>
-                <Input type="radio" name="radio1" value="yes" onChange={(e) => {
-                  this.setState({step: 2})
-                  this.handleCountry(e.target.value);
-                }} />{' '}
-                Yes
-              </Label>
-              {
-                this.state.chooseState && (
-                  <FormGroup row>
-                    <br />
-                    <FormText color="muted">
-                      Which state/country did you travel to?
-                    </FormText>
-                      <Input type="text" name="state" id="state" onChange={(e) => {
-                        this.handleForm(e.target.name, e.target.value)
-                      }}/>
-                  </FormGroup>
-                )
-              }
-            </FormGroup>
-            <FormGroup check>
-              <Label check>
-                <Input type="radio" name="radio1" value="no" onChange={(e) => {
-                  this.setState({step: 2})
-                  this.handleCountry(e.target.value)
-                }}/>{' '}
-                No
-              </Label>
-            </FormGroup>
+        <p>
+          Have you traveled to a high-risk country/Indian state or
+          been in contact with someone who is ill and has traveled
+          to a high risk country/Indian state in the last 14 days?
+        </p>
+        <FormGroup tag="fieldset">
+          <FormGroup check>
+            <Label check>
+              <Input type="radio" name="radio1" value="yes" onChange={(e) => {
+                this.setState({ step: 2 })
+                this.handleCountry(e.target.value);
+              }} />{' '}
+              Yes
+            </Label>
+            {
+              this.state.chooseState && (
+                <FormGroup row>
+                  <br />
+                  <FormText color="muted">
+                    Which state/country did you travel to?
+                  </FormText>
+                  <Input type="text" name="state" id="state" onChange={(e) => {
+                    this.handleForm(e.target.name, e.target.value)
+                  }} />
+                </FormGroup>
+              )
+            }
           </FormGroup>
-          <hr />
-          <ListGroupItemText>
-            Have you been in close contact with a laboratory confirmed COVID-19
-            patient within the past 14 days?
-          </ListGroupItemText>
-          <FormGroup tag="fieldset">
-            <FormGroup check>
-              <Label check>
-                <Input type="radio" name="radio2" value="yes" onChange={(e) => {
-                  this.setState({step: 3})
-                  this.handleContact(e.target.value);
-                }} />{' '}
-                Yes
-              </Label>
-            </FormGroup>
-            <FormGroup check>
-              <Label check>
-                <Input type="radio" name="radio2" value="no" onChange={(e) => {
-                  this.setState({step: 3})
-                  this.handleContact(e.target.value);
-                }} />{' '}
-                No
-              </Label>
-            </FormGroup>
+          <FormGroup check>
+            <Label check>
+              <Input type="radio" name="radio1" value="no" onChange={(e) => {
+                this.setState({ step: 2 })
+                this.handleCountry(e.target.value)
+              }} />{' '}
+              No
+            </Label>
           </FormGroup>
-          <hr />
-          <ListGroupItemText>
+        </FormGroup>
+        <hr />
+        <p>
+          Have you been in close contact with a laboratory confirmed COVID-19
+          patient within the past 14 days?
+        </p>
+        <FormGroup tag="fieldset">
+          <FormGroup check>
+            <Label check>
+              <Input type="radio" name="radio2" value="yes" onChange={(e) => {
+                this.setState({ step: 3 })
+                this.handleContact(e.target.value);
+              }} />{' '}
+              Yes
+            </Label>
+          </FormGroup>
+          <FormGroup check>
+            <Label check>
+              <Input type="radio" name="radio2" value="no" onChange={(e) => {
+                this.setState({ step: 3 })
+                this.handleContact(e.target.value);
+              }} />{' '}
+              No
+            </Label>
+          </FormGroup>
+        </FormGroup>
+        <hr />
+        <p>
           Do you have a chronic Illness (Heart, Lung, or Kidney Disease, Diabetes)
           or are immunocompromised (Cancer, HIV, Autoimmune Disease)?
-          </ListGroupItemText>
-          <FormGroup tag="fieldset">
-            <FormGroup check>
-              <Label check>
-                <Input type="radio" name="radio3" value="yes" onChange={(e) => {
-                  this.setState({step: 4})
-                  this.handlePrecondition(e.target.value);
-                }} />{' '}
-                Yes
-              </Label>
-              {
-                this.state.precondition && (
-                  <FormGroup row>
-                    <br />
-                    <FormText color="muted">
-                      Please specify your condition
-                    </FormText>
-                      <Input type="text" name="condition" id="condition" onChange={(e) => {
-                        this.handleForm(e.target.name, e.target.value);
-                      }}/>
-                  </FormGroup>
-                )
-              }
-            </FormGroup>
-            <FormGroup check>
-              <Label check>
-                <Input type="radio" name="radio3" value="no" onChange={(e) => {
-                  this.setState({step: 4})
-                  this.handlePrecondition(e.target.value);
-                  }} />{' '}
-                  No
-                </Label>
-              </FormGroup>
-            </FormGroup>
-      <br />
-      {
-        this.state.fillContent && (
-          <Alert color="danger"> Please mark the options before proceeding </Alert>
+        </p>
+        <FormGroup tag="fieldset">
+          <FormGroup check>
+            <Label check>
+              <Input type="radio" name="radio3" value="yes" onChange={(e) => {
+                this.setState({ step: 4 })
+                this.handlePrecondition(e.target.value);
+              }} />{' '}
+              Yes
+            </Label>
+            {
+              this.state.precondition && (
+                <FormGroup row>
+                  <br />
+                  <FormText color="muted">
+                    Please specify your condition
+                  </FormText>
+                  <Input type="text" name="condition" id="condition" onChange={(e) => {
+                    this.handleForm(e.target.name, e.target.value);
+                  }} />
+                </FormGroup>
+              )
+            }
+          </FormGroup>
+          <FormGroup check>
+            <Label check>
+              <Input type="radio" name="radio3" value="no" onChange={(e) => {
+                this.setState({ step: 4 })
+                this.handlePrecondition(e.target.value);
+              }} />{' '}
+              No
+            </Label>
+          </FormGroup>
+        </FormGroup>
+        <br />
+        {
+          this.state.fillContent && (
+            <Alert color="danger"> Please mark the options before proceeding </Alert>
           )
-          }
+        }
 
         <div className="report-symptoms-modal-footer">
           <Button color="primary" onClick={() => {
@@ -178,13 +177,12 @@ class ReportSymptoms4 extends React.Component {
           </Button>
           <Button color="primary" onClick={() => {
             const proceed = (this.state.step === 4);
-            (!proceed) && this.setState({fillContent: true});
+            (!proceed) && this.setState({ fillContent: true });
             (proceed) && jumpToStep(5);
           }}>
             <i className="fa fa-arrow-right" />&nbsp;Next
           </Button>
         </div>
-          </ListGroupItem>
       </div>
     );
   }

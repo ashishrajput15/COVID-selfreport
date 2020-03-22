@@ -77,7 +77,7 @@ class MapView extends React.Component {
           lng: crd.longitude,
         },
         mapAccuracy: crd.accuracy,
-        mapZoom: 8,
+        mapZoom: 12,
       });
 
       setTimeout(() => {
@@ -159,6 +159,13 @@ class MapView extends React.Component {
 
         this.map.addListener('bounds_changed', () => {
           this.searchBox.setBounds(this.map.getBounds());
+          const mapCenter = this.map.getCenter();
+          this.setState({
+            mapCenter: {
+              lat: mapCenter.lat(),
+              lng: mapCenter.lng(),
+            },
+          });
         });
 
         const btnPlus = document.getElementById('btn-plus-container');
@@ -192,6 +199,8 @@ class MapView extends React.Component {
         this.setState({
           isMapLoaded: true,
         });
+
+        this.getUserLocation();
       }, 400);
     } else if (this.map !== null) {
       // map init already done
