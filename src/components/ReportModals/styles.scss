@@ -1,0 +1,60 @@
+// Report Case styles
+
+.reporterContainer {
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 1em;
+}
+
+.reportHeading {
+  border-bottom: 1px solid #ddd;
+  width: 75%;
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  align-items: center;
+  padding-bottom: 8px;
+}
+/*
+  Step 1 styles
+*/
+
+#step1 {
+  width: 100%;
+}
+
+/*
+  Step 2 styles
+*/
+
+.symptomContainer {
+  width: 100%;
+  display: flex;
+  -webkit-flex-direction: row;
+  flex-direction: row;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  align-items: center;
+}
+
+.symptom {
+  width: 100%;
+  display: flex;
+  -webkit-flex-direction: row;
+  flex-direction: row;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  align-items: center;
+}

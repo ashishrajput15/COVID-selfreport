@@ -44,39 +44,35 @@ const Wizard = (props) => {
 
 
     return (
-        <div className='container'>
-            <h3>Report Case</h3>
-            <div className={'jumbotron'}>
-                <div className='row'>
-                    <div className={'reporter-rsw-wrapper'}>
-                        <StepWizard
-                            onStepChange={onStepChange}
-                            isHashEnabled
-                            transitions={state.transitions} // comment out for default transitions
-                            instance={setInstance}
-                        >
-                            <Step1
-                              setReporterState={(val) => {
-                                props.reporterActions.reporterState(val);
-                                updateState({...state, myself: val});
-                              }}
-                              hashKey={'FirstStep'}
-                            />
-                            <Step2
-                              hashKey={'StepTwo'}
-                            />
-                            <Progress />
-                            <Step4
-                              myself={state.myself}
-                              updateForm={updateForm}
-                              hashKey={'StepFour'}
-                            />
-                        </StepWizard>
-                    </div>
-                </div>
+        <div className='reporterContainer'>
+            <h3 className='reportHeading'>Report Case</h3>
+              <div className={'reporter-rsw-wrapper'}>
+                  <StepWizard
+                      onStepChange={onStepChange}
+                      isHashEnabled
+                      transitions={state.transitions} // comment out for default transitions
+                      instance={setInstance}
+                  >
+                      <Step1
+                        setReporterState={(val) => {
+                          props.reporterActions.reporterState(val);
+                          updateState({...state, myself: val});
+                        }}
+                        hashKey={'FirstStep'}
+                      />
+                      <Step2
+                        hashKey={'StepTwo'}
+                      />
+                      <Progress />
+                      <Step4
+                        myself={state.myself}
+                        updateForm={updateForm}
+                        hashKey={'StepFour'}
+                      />
+                  </StepWizard>
+              </div>
             </div>
-        </div>
-    );
+  );
 };
 
 export default Wizard;

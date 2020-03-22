@@ -4,8 +4,10 @@
   outline: 0;
   min-width: 500px;
   max-width: 1000px;
-  border-radius: 4px;
-  min-height: 500px;
+  border-radius: 1em;
+  min-height: 250px;
+  padding: 0.5em;
+  width: 100%;
 }
 
 .modal-header,
@@ -52,8 +54,16 @@
 }
 
 // The following styles are for transitions of the modal
-.reporter-wrapper {
-  min-height: 400px !important;
+.reporter-rsw-wrapper {
+    min-height: 250px !important;
+    display: flex;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-align-items: center;
+    align-items: center;
+    width: 100%;
   }
   /** Progress Bar */
   $progress-height: 5px;

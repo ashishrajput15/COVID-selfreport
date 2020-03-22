@@ -8,7 +8,7 @@ const Step4 = (props) => {
   return (
     <Fragment>
       <div>
-        <p>{props.myself ? 'You' : 'The person'} may have Corona Virus</p><br />
+        <p>{props.myself ? 'You' : 'The person'} may have Corona Virus</p>
         <p>Please enter {props.myself ? 'your' : 'the person\'s'} name and phone number.</p>
       </div>
       <label>Name</label>

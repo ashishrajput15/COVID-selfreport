@@ -2,7 +2,7 @@ import React, {Fragment} from 'react';
 import PropTypes from 'prop-types';
 
 const Step1 = (props) => (
-    <Fragment>
+    <div id="step1">
       <button
         className='btn btn-primary btn-block'
         onClick={() => {
@@ -19,7 +19,7 @@ const Step1 = (props) => (
         }}>
           Report someone else
        </button>
-    </Fragment>
+    </div>
 );
 
 Step1.propTypes = {

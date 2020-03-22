@@ -7,33 +7,39 @@ import PropTypes from 'prop-types';
 const Step2 = (props) => (
     <Fragment>
       <div>
-        <input type="checkbox" id="cough" name="cough" value="false" />
-        <label htmlFor="cough">
-          <div>
-            <p>Cough</p>
-            <img src="../../../../images/illustration-noresults.png" alt="cough"></img>
-          </div>
-        </label>
-        <br />
-        <hr />
-        <input type="checkbox" id="fever" name="fever" value="false" />
-        <label htmlFor="fever">
-          <div>
-            <p>Fever</p>
-            <img src="../../../../images/illustration-noresults.png" alt="cough"></img>
-          </div>
-        </label>
-        <br />
-        <hr />
-        <input type="checkbox" id="sob" name="shortnessOfBreath" value="false" />
-        <label htmlFor="sob">
-          <div>
-            <p>Shortness of Breath</p>
-            <img src="../../../../images/illustration-noresults.png" alt="cough"></img>
-          </div>
-        </label>
-        <br />
-        <hr />
+        <div className="symptomContainer">
+          <input type="checkbox" id="cough" name="cough" value="false" />
+          <label htmlFor="cough">
+            <div className="symptom">
+              <img src="../../../../images/illustration-noresults.png" alt="cough"></img>
+              <p>Cough</p>
+            </div>
+          </label>
+          <br />
+          <hr />
+        </div>
+        <div className="symptomContainer">
+          <input type="checkbox" id="fever" name="fever" value="false" />
+          <label htmlFor="fever">
+            <div className="symptom">
+              <img src="../../../../images/illustration-noresults.png" alt="cough"></img>
+              <p>Fever</p>
+            </div>
+          </label>
+          <br />
+          <hr />
+        </div>
+        <div className="symptomContainer">
+          <input type="checkbox" id="sob" name="shortnessOfBreath" value="false" />
+          <label htmlFor="sob">
+            <div className="symptom">
+              <img src="../../../../images/illustration-noresults.png" alt="cough"></img>
+              <p>Shortness of Breath</p>
+            </div>
+          </label>
+          <br />
+          <hr />
+        </div>
       </div>
       <button className='btn btn-primary btn-block' onClick={props.nextStep}>Continue</button>
       <button className='btn btn-primary btn-block' onClick={props.previousStep}>Go Back</button>
