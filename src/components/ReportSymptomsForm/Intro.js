@@ -16,7 +16,7 @@ class Intro extends React.Component {
         </Alert>
 
         <Row>
-          <Col xs={12} md={6}>
+          <Col xs={12} md={12}>
             <p>
               If you want to report a symptom for yourself or someone you know,
               click the button below.
@@ -33,22 +33,22 @@ class Intro extends React.Component {
             </Button>
           </Col>
 
-          <Col xs={12} md={6}>
-            <p>
-              If you are running low on any essential supplies, like food, masks, medicines,
-              and want to raise a help request for them,
-              click the button below.
-            </p>
+          {/*<Col xs={12} md={6}>*/}
+            {/*<p>*/}
+              {/*If you are running low on any essential supplies, like food, masks, medicines,*/}
+              {/*and want to raise a help request for them,*/}
+              {/*click the button below.*/}
+            {/*</p>*/}
 
-            <Button color="primary" disabled id="btn-request-supplies" title="Not available at the moment.">
-              <i className="fa fa-medkit" />&nbsp;
-              Request Supplies
-            </Button>
-          </Col>
+            {/*<Button color="primary" disabled id="btn-request-supplies" title="Not available at the moment.">*/}
+              {/*<i className="fa fa-medkit" />&nbsp;*/}
+              {/*Request Supplies*/}
+            {/*</Button>*/}
+          {/*</Col>*/}
         </Row>
 
-        <Row className="mt-4">
-          <Col xs={12} md={6}>
+        <Row className="mt-5">
+          <Col xs={12} md={12}>
             <p>
               For key information regarding the COVID-19 Pandemic,
               click the button below.

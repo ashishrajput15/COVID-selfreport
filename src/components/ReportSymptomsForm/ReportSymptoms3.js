@@ -5,23 +5,38 @@ import { Button, Col, FormGroup, Input, Label, Row } from 'reactstrap';
 class ReportSymptoms3 extends React.Component {
   constructor(props) {
     super(props);
-    this.state={
-      form: {},
-    }
+
+    this.state = {
+      name: '',
+      otherPersonName: '',
+      phone: '',
+      altPhone: '',
+      preferredLang: '',
+    };
+
+    this.onFormFieldUpdate = this.onFormFieldUpdate.bind(this);
+    this.onNameChanged = this.onFormFieldUpdate.bind(this, 'name');
+    this.onOtherPersonNameChanged = this.onFormFieldUpdate.bind(this, 'otherPersonName');
+    this.onPhoneChanged = this.onFormFieldUpdate.bind(this, 'phone');
+    this.onAltPhoneChanged = this.onFormFieldUpdate.bind(this, 'altPhone');
+    this.onPreferredLangChanged = this.onFormFieldUpdate.bind(this, 'preferredLang');
   }
 
-  updateForm = (key, value) => {
-    const { form } = this.state;
-    form[key] = value;
-
-    this.setState(prevState => ({
-      ...prevState,
-      form,
-    }))
+  onFormFieldUpdate(name, event) {
+    this.setState({
+      [name]: event.target.value,
+    });
   }
 
   render() {
     const { jumpToStep } = this.props;
+    const {
+      name,
+      otherPersonName,
+      phone,
+      altPhone,
+      preferredLang,
+    } = this.state;
 
     return (
       <div>
@@ -34,8 +49,8 @@ class ReportSymptoms3 extends React.Component {
                 type="text"
                 placeholder="Jon Doe"
                 name="name"
-                value={this.state.form['name']}
-                onChange={(e) => this.updateForm(e.target.name, e.target.value)}
+                value={name}
+                onChange={this.onNameChanged}
               />
             </FormGroup>
           </Col>
@@ -48,8 +63,8 @@ class ReportSymptoms3 extends React.Component {
                 type="text"
                 placeholder="Full name of the person"
                 name="personName"
-                value={this.state.form['personName']}
-                onChange={(e) => this.updateForm(e.target.name, e.target.value)}
+                value={otherPersonName}
+                onChange={this.onOtherPersonNameChanged}
               />
 
               <p className="text-muted mt-1">
@@ -68,9 +83,14 @@ class ReportSymptoms3 extends React.Component {
                 type="text"
                 placeholder="+91 12345 67890"
                 name="phone"
-                value={this.state.form['phone']}
-                onChange={(e) => this.updateForm(e.target.name, e.target.value)}
+                value={phone}
+                onChange={this.onPhoneChanged}
               />
+
+              <p className="text-muted mt-1">
+                <small>If you are looking for any help or want us to reach out to you, enter your mobile number above.
+                </small>
+              </p>
             </FormGroup>
           </Col>
 
@@ -82,12 +102,12 @@ class ReportSymptoms3 extends React.Component {
                 type="text"
                 placeholder="+91 12345 67890"
                 name="altPhone"
-                value={this.state.form['altPhone']}
-                onChange={(e) => this.updateForm(e.target.name, e.target.value)}
+                value={altPhone}
+                onChange={this.onAltPhoneChanged}
               />
 
               <p className="text-muted mt-1">
-                <small>If you are reporting for someone else, please enter their mobile number as well.</small>
+                <small>If you are reporting for someone else, enter their mobile number above.</small>
               </p>
             </FormGroup>
           </Col>
@@ -102,8 +122,8 @@ class ReportSymptoms3 extends React.Component {
                 type="text"
                 placeholder="English"
                 name="preferredLang"
-                value={this.state.form['preferredLang']}
-                onChange={(e) => this.updateForm(e.target.name, e.target.value)}
+                value={preferredLang}
+                onChange={this.onPreferredLangChanged}
               />
             </FormGroup>
           </Col>

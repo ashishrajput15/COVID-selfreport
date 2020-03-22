@@ -39,7 +39,7 @@ class ReportSymptomsModal extends React.Component {
   }
 
   render() {
-    const { toggleHelplineBar, toggleKeyInfoBar } = this.props;
+    const { mapCenter, toggleHelplineBar, toggleKeyInfoBar } = this.props;
     const { saving } = { saving: false }; // reportSymptoms;
 
     let content;
@@ -54,7 +54,7 @@ class ReportSymptomsModal extends React.Component {
       const steps = [
         { name: 'Intro', component: (<Intro toggleHelplineBar={toggleHelplineBar} toggleKeyInfoBar={toggleKeyInfoBar} />) },
         { name: 'ReportSymptoms1', component: (<ReportSymptoms1 />) },
-        { name: 'ReportSymptoms2', component: (<ReportSymptoms2 />) },
+        { name: 'ReportSymptoms2', component: (<ReportSymptoms2 mapCenter={mapCenter} />) },
         { name: 'ReportSymptoms3', component: (<ReportSymptoms3 />) },
         { name: 'ReportSymptoms4', component: (<ReportSymptoms4 />) },
         { name: 'ReportSymptoms5', component: (<ReportSymptoms5 />) },
@@ -70,6 +70,7 @@ class ReportSymptomsModal extends React.Component {
               showNavigation={false}
               showSteps={false}
               stepsNavigation={false}
+              startAtStep={0}
             />
           </div>
         </Form>
@@ -107,6 +108,7 @@ ReportSymptomsModal.defaultProps = {
 
 ReportSymptomsModal.propTypes = {
   actions: PropTypes.object,
+  mapCenter: PropTypes.object.isRequired,
   reportSymptoms: PropTypes.object,
   toggleHelplineBar: PropTypes.func.isRequired,
   toggleKeyInfoBar: PropTypes.func.isRequired,
