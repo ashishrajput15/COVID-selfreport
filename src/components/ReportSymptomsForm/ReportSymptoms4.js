@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
 import {
   Button,
   ListGroupItem,
@@ -91,7 +90,6 @@ class ReportSymptoms4 extends React.Component {
                 )
               }
             </FormGroup>
-            <hr />
             <FormGroup check>
               <Label check>
                 <Input type="radio" name="radio1" value="no" onChange={(e) => {
@@ -102,86 +100,75 @@ class ReportSymptoms4 extends React.Component {
               </Label>
             </FormGroup>
           </FormGroup>
-        </ListGroupItem>
-          {
-            (this.state.step >= 2) && (
-              <ListGroupItem>
-                <ListGroupItemText>
-                Have you been in close contact with a laboratory confirmed COVID-19
-                 patient within the past 14 days?
-                </ListGroupItemText>
-                <FormGroup tag="fieldset">
-                  <FormGroup check>
-                    <Label check>
-                      <Input type="radio" name="radio2" value="yes" onChange={(e) => {
-                        this.setState({step: 3})
-                        this.handleContact(e.target.value);
-                      }} />{' '}
-                      Yes
-                    </Label>
+          <hr />
+          <ListGroupItemText>
+            Have you been in close contact with a laboratory confirmed COVID-19
+            patient within the past 14 days?
+          </ListGroupItemText>
+          <FormGroup tag="fieldset">
+            <FormGroup check>
+              <Label check>
+                <Input type="radio" name="radio2" value="yes" onChange={(e) => {
+                  this.setState({step: 3})
+                  this.handleContact(e.target.value);
+                }} />{' '}
+                Yes
+              </Label>
+            </FormGroup>
+            <FormGroup check>
+              <Label check>
+                <Input type="radio" name="radio2" value="no" onChange={(e) => {
+                  this.setState({step: 3})
+                  this.handleContact(e.target.value);
+                }} />{' '}
+                No
+              </Label>
+            </FormGroup>
+          </FormGroup>
+          <hr />
+          <ListGroupItemText>
+          Do you have a chronic Illness (Heart, Lung, or Kidney Disease, Diabetes)
+          or are immunocompromised (Cancer, HIV, Autoimmune Disease)?
+          </ListGroupItemText>
+          <FormGroup tag="fieldset">
+            <FormGroup check>
+              <Label check>
+                <Input type="radio" name="radio3" value="yes" onChange={(e) => {
+                  this.setState({step: 4})
+                  this.handlePrecondition(e.target.value);
+                }} />{' '}
+                Yes
+              </Label>
+              {
+                this.state.precondition && (
+                  <FormGroup row>
+                    <br />
+                    <FormText color="muted">
+                      Please specify your condition
+                    </FormText>
+                      <Input type="text" name="condition" id="condition" onChange={(e) => {
+                        this.handleForm(e.target.name, e.target.value);
+                      }}/>
                   </FormGroup>
-                  <FormGroup check>
-                    <Label check>
-                      <Input type="radio" name="radio2" value="no" onChange={(e) => {
-                        this.setState({step: 3})
-                        this.handleContact(e.target.value);
-                      }} />{' '}
-                      No
-                    </Label>
-                  </FormGroup>
-                </FormGroup>
-              </ListGroupItem>
-            )
-          }
-          {
-            (this.state.step >= 3) && (
-              <ListGroupItem>
-               <ListGroupItemText>
-               Do you have a chronic Illness (Heart, Lung, or Kidney Disease, Diabetes)
-               or are immunocompromised (Cancer, HIV, Autoimmune Disease)?
-                </ListGroupItemText>
-                <FormGroup tag="fieldset">
-                  <FormGroup check>
-                    <Label check>
-                      <Input type="radio" name="radio3" value="yes" onChange={(e) => {
-                        this.setState({step: 4})
-                        this.handlePrecondition(e.target.value);
-                      }} />{' '}
-                      Yes
-                    </Label>
-                    {
-                      this.state.precondition && (
-                        <FormGroup row>
-                          <br />
-                          <FormText color="muted">
-                            Please specify your condition
-                          </FormText>
-                            <Input type="text" name="condition" id="condition" onChange={(e) => {
-                              this.handleForm(e.target.name, e.target.value);
-                            }}/>
-                        </FormGroup>
-                      )
-                    }
-                  </FormGroup>
-                  <FormGroup check>
-                    <Label check>
-                      <Input type="radio" name="radio3" value="no" onChange={(e) => {
-                        this.setState({step: 4})
-                        this.handlePrecondition(e.target.value);
-                      }} />{' '}
-                      No
-                    </Label>
-                  </FormGroup>
-                </FormGroup>
-              </ListGroupItem>
-            )
-          }
-        <br />
-        {
-          this.state.fillContent && (
-            <Alert color="danger"> Please mark the options before proceeding </Alert>
+                )
+              }
+            </FormGroup>
+            <FormGroup check>
+              <Label check>
+                <Input type="radio" name="radio3" value="no" onChange={(e) => {
+                  this.setState({step: 4})
+                  this.handlePrecondition(e.target.value);
+                  }} />{' '}
+                  No
+                </Label>
+              </FormGroup>
+            </FormGroup>
+      <br />
+      {
+        this.state.fillContent && (
+          <Alert color="danger"> Please mark the options before proceeding </Alert>
           )
-        }
+          }
 
         <div className="report-symptoms-modal-footer">
           <Button color="primary" onClick={() => {
@@ -190,16 +177,14 @@ class ReportSymptoms4 extends React.Component {
             <i className="fa fa-arrow-left" />&nbsp;Back
           </Button>
           <Button color="primary" onClick={() => {
-            const proceed = (this.state.step === 4)
-            && !(_.isEmpty(this.state.form))
-            && (this.state.form.condition !== '')
-             && (this.state.form.state !=='');
+            const proceed = (this.state.step === 4);
             (!proceed) && this.setState({fillContent: true});
             (proceed) && jumpToStep(5);
           }}>
             <i className="fa fa-arrow-right" />&nbsp;Next
           </Button>
         </div>
+          </ListGroupItem>
       </div>
     );
   }
