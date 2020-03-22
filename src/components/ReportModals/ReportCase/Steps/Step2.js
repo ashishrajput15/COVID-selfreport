@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 const Step2 = (props) => (
     <Fragment>
       <div>
+        <form>
         <div className="symptomContainer">
           <input type="checkbox" id="cough" name="cough" value="false" />
           <label htmlFor="cough">
@@ -40,6 +41,8 @@ const Step2 = (props) => (
           <br />
           <hr />
         </div>
+        <hr />
+        </form>
       </div>
       <button className='btn btn-primary btn-block' onClick={props.nextStep}>Continue</button>
       <button className='btn btn-primary btn-block' onClick={props.previousStep}>Go Back</button>

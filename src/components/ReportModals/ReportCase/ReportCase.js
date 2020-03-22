@@ -46,12 +46,12 @@ const Wizard = (props) => {
     return (
         <div className='reporterContainer'>
             <h3 className='reportHeading'>Report Case</h3>
-              <div className={'reporter-rsw-wrapper'}>
                   <StepWizard
                       onStepChange={onStepChange}
                       isHashEnabled
                       transitions={state.transitions} // comment out for default transitions
                       instance={setInstance}
+                      className="wizardContainer"
                   >
                       <Step1
                         setReporterState={(val) => {
@@ -70,7 +70,6 @@ const Wizard = (props) => {
                         hashKey={'StepFour'}
                       />
                   </StepWizard>
-              </div>
             </div>
   );
 };
