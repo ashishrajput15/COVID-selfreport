@@ -113,6 +113,8 @@ $vin-red: #ff0000;
   }
 
   .fab-item {
+    border-radius: 50%;
+
     //width: 40px;
     //height: 40px;
   }
@@ -222,5 +224,15 @@ $vin-red: #ff0000;
     i {
       font-size: 1.25rem;
     }
+  }
+}
+
+.report-symptoms-modal {
+  .modal-content {
+    border-color: #dc3545 !important;
+  }
+
+  &.modal-dialog {
+    max-width: 720px;
   }
 }

@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { Container, Button, Link } from 'react-floating-action-button';
+import { Container, Button } from 'react-floating-action-button';
 import { InfoCard } from "./InfoCard";
+import ReportSymptomsModal from './ReportSymptomsModal';
 
 class MapControls extends React.Component {
   constructor(props) {
@@ -10,10 +11,12 @@ class MapControls extends React.Component {
     this.state = {
       stateName: '',
       showStateHelplineNumber: false,
-      showKeyInfo: false
+      showKeyInfo: false,
+      showReportSymptomsModal: false,
     };
 
     this.hideAllCards = this.hideAllCards.bind(this);
+    this.toggleReportSymptomsModal = this.toggleReportSymptomsModal.bind(this);
   }
 
   componentDidMount() {
@@ -34,6 +37,13 @@ class MapControls extends React.Component {
     this.setState({
       showStateHelplineNumber: false,
       showKeyInfo: false
+    });
+  }
+
+  toggleReportSymptomsModal() {
+    const { showReportSymptomsModal}  = this.state;
+    this.setState({
+      showReportSymptomsModal: !showReportSymptomsModal,
     });
   }
 
@@ -64,21 +74,35 @@ class MapControls extends React.Component {
       }
     );
   }
+
   toggleHelplineBar = () =>
     this.setState({
       showStateHelplineNumber: !this.state.showStateHelplineNumber,
       showKeyInfo: false,
+      showReportSymptomsModal: false,
     });
 
   toggleKeyInfoBar = () =>
     this.setState({
       showKeyInfo: !this.state.showKeyInfo,
       showStateHelplineNumber: false,
+      showReportSymptomsModal: false,
     })
 
   render() {
     const { isMapLoaded, clearSearchBox, goToUserLocation, onStatusChanged, status } = this.props;
-    const { stateName, showStateHelplineNumber, showKeyInfo } = this.state;
+    const { stateName, showStateHelplineNumber, showKeyInfo, showReportSymptomsModal } = this.state;
+
+    let reportSymptomsModal = null;
+    if (showReportSymptomsModal) {
+      reportSymptomsModal = (
+        <ReportSymptomsModal
+          toggleHelplineBar={this.toggleHelplineBar}
+          toggleKeyInfoBar={this.toggleKeyInfoBar}
+          toggleModal={this.toggleReportSymptomsModal}
+        />
+      );
+    }
 
     return (
       <div>
@@ -100,8 +124,7 @@ class MapControls extends React.Component {
               tooltip="Report Symptoms"
               icon="fa fa-exclamation-triangle"
               rotate={false}
-              onClick={() => {
-              }}
+              onClick={this.toggleReportSymptomsModal}
             />
           </Container>
         </div>
@@ -161,7 +184,7 @@ class MapControls extends React.Component {
                     onChange={onStatusChanged}
                   />
                   <label className="form-check-label" htmlFor="rdoStatusSymptoms">
-                    Reported Cases
+                    Self Reported Cases
                   </label>
                 </div>
               </form>
@@ -174,6 +197,8 @@ class MapControls extends React.Component {
             <i className="fa fa-location-arrow" />
           </button>
         </div>
+
+        {reportSymptomsModal}
       </div>
     )
   }
