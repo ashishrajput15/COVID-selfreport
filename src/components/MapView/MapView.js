@@ -175,11 +175,12 @@ class MapView extends React.Component {
         this.map.addListener('bounds_changed', () => {
           this.searchBox.setBounds(this.map.getBounds());
           const mapCenter = this.map.getCenter();
+
           this.setState({
             mapCenter: {
               lat: mapCenter.lat(),
               lng: mapCenter.lng(),
-            },
+          }
           });
         });
 
