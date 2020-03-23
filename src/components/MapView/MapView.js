@@ -8,6 +8,7 @@ import { connect } from "react-redux";
 import * as patientsActions from '../../actions/patients';
 import * as reportsActions from '../../actions/reports';
 import MapControls from './MapControls';
+import { MapStyle1, MapStyle2 } from '../../../tools/constants';
 
 const mapContainerHeight = `${window.innerHeight - 1}px`;
 
@@ -79,7 +80,7 @@ class MapView extends React.Component {
   componentWillReceiveProps(nextProps) {   // eslint-disable-line react/no-deprecated
     const { viewType } = this.state;
 
-    if(viewType === 'confirmed') {
+    if (viewType === 'confirmed') {
       if (this.props.patientsData !== nextProps.patientsData) {
         if (this.props.patientsData.loading !== nextProps.patientsData.loading && nextProps.patientsData.loaded) {
           // data was reloaded
@@ -195,6 +196,8 @@ class MapView extends React.Component {
           fullscreenControl: false,
         });
 
+        this.map.set('styles', MapStyle1);
+
         const pacContainer = document.getElementById('pac-container');
         this.pacInput = document.getElementById('pac-input');
         this.searchBox = new google.maps.places.SearchBox(this.pacInput);
@@ -210,7 +213,16 @@ class MapView extends React.Component {
               lng: mapCenter.lng(),
             }
           });
+
+          const currentZoom = this.map.getZoom();
+          if (currentZoom <= 15) {
+            this.map.set('styles', MapStyle1);
+          } else {
+            this.map.set('styles', MapStyle2);
+          }
         });
+
+        this.map.setZoom(16);
 
         const btnPlus = document.getElementById('btn-plus-container');
         this.map.controls[google.maps.ControlPosition.BOTTOM_RIGHT].push(btnPlus);
