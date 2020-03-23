@@ -161,6 +161,8 @@ class ReportSymptoms2 extends React.Component {
 
         const btnGps = document.getElementById('btn-gps-container2');
         this.map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(btnGps);
+
+        this.goToUserLocation();
       }, 100);
     }
   }
@@ -290,8 +292,10 @@ class ReportSymptoms2 extends React.Component {
       maximumAge: 0
     });
 
-    event.preventDefault();
-    event.stopPropagation();
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
   }
 
   onGeolocationSuccess(pos) {
