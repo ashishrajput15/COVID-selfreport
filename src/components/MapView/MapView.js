@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import * as patientsActions from '../../actions/patients';
+import * as reportsActions from '../../actions/reports';
 import MapControls from './MapControls';
 
 const mapContainerHeight = `${window.innerHeight - 1}px`;
@@ -19,6 +20,7 @@ class MapView extends React.Component {
       isMapLoaded: false,
 
       userDeniedGeolocation: false,
+      errorAlertShown: false,
 
       mapCenter: {
         lat: 21.125498,
@@ -28,7 +30,7 @@ class MapView extends React.Component {
       mapAccuracy: 0,
       mapZoom: 5,
 
-      status: 'confirmed',
+      viewType: 'reported',
     };
 
     this.map = null;
@@ -41,7 +43,7 @@ class MapView extends React.Component {
     this.goToUserLocation = this.goToUserLocation.bind(this);
     this.onGeolocationSuccess = this.onGeolocationSuccess.bind(this);
     this.onGeolocationError = this.onGeolocationError.bind(this);
-    this.onStatusChanged = this.onStatusChanged.bind(this);
+    this.onViewTypeChanged = this.onViewTypeChanged.bind(this);
   }
 
   componentDidMount() {
@@ -50,17 +52,28 @@ class MapView extends React.Component {
     });
 
     setTimeout(() => {
-      this.refreshPatientsData();
+      this.refreshData();
     }, 100);
 
     this.prepareMap();
   }
 
   componentWillReceiveProps(nextProps) {   // eslint-disable-line react/no-deprecated
-    if (this.props.patientsData !== nextProps.patientsData) {
-      if (this.props.patientsData.loading !== nextProps.patientsData.loading && nextProps.patientsData.loaded) {
-        // data was reloaded
-        this.updateMarkersOnMap(nextProps.patientsData);
+    const { viewType } = this.state;
+
+    if(viewType === 'confirmed') {
+      if (this.props.patientsData !== nextProps.patientsData) {
+        if (this.props.patientsData.loading !== nextProps.patientsData.loading && nextProps.patientsData.loaded) {
+          // data was reloaded
+          this.updatePatientsMarkersOnMap(nextProps.patientsData);
+        }
+      }
+    } else if (viewType === 'reported') {
+      if (this.props.reportsData !== nextProps.reportsData) {
+        if (this.props.reportsData.loading !== nextProps.reportsData.loading && nextProps.reportsData.loaded) {
+          // data was reloaded
+          this.updateReportsMarkersOnMap(nextProps.reportsData);
+        }
       }
     }
   }
@@ -81,7 +94,7 @@ class MapView extends React.Component {
       });
 
       setTimeout(() => {
-        this.refreshPatientsData();
+        this.refreshData();
       }, 100);
     } catch (err) {
       this.setState({
@@ -90,23 +103,34 @@ class MapView extends React.Component {
       });
 
       setTimeout(() => {
-        this.refreshPatientsData();
+        this.refreshData();
       }, 100);
     }
 
     this.prepareMap();
   }
 
-  refreshPatientsData() {
-    const { mapCenter, status } = this.state;
-    this.props.actions.getPatientsDataStarting();
-    this.props.actions.getPatientsData(mapCenter.lat, mapCenter.lng, 2000, status);
+  refreshData() {
+    const { mapCenter, viewType } = this.state;
+    if (viewType === 'confirmed') {
+      this.props.actions.getPatientsDataStarting();
+      this.props.actions.getPatientsData(mapCenter.lat, mapCenter.lng, 2000, viewType);
+    } else if (viewType === 'reported') {
+      this.props.actions.getReportsDataStarting();
+      this.props.actions.getReportsData(mapCenter.lat, mapCenter.lng, 2000);
+    }
   }
 
   onGeolocationError(err) {
     // console.warn(`ERROR(${err.code}): ${err.message}`);
     if (err.code === 2) {
-      alert('Unable to get your location.');
+      if (!this.state.errorAlertShown) {
+        alert('Unable to get your location.');
+
+        this.setState({
+          errorAlertShown: true,
+        });
+      }
     }
 
     this.setState({
@@ -115,7 +139,7 @@ class MapView extends React.Component {
     });
 
     setTimeout(() => {
-      this.refreshPatientsData();
+      this.refreshData();
     }, 100);
 
     this.prepareMap();
@@ -160,11 +184,12 @@ class MapView extends React.Component {
         this.map.addListener('bounds_changed', () => {
           this.searchBox.setBounds(this.map.getBounds());
           const mapCenter = this.map.getCenter();
+
           this.setState({
             mapCenter: {
               lat: mapCenter.lat(),
               lng: mapCenter.lng(),
-            },
+            }
           });
         });
 
@@ -200,7 +225,9 @@ class MapView extends React.Component {
           isMapLoaded: true,
         });
 
-        this.getUserLocation();
+        //setTimeout(() => {
+        //  this.getUserLocation();
+        //}, 400);
       }, 400);
     } else if (this.map !== null) {
       // map init already done
@@ -217,10 +244,10 @@ class MapView extends React.Component {
     this.pacInput.focus();
   }
 
-  updateMarkersOnMap(patientsData) {
+  updatePatientsMarkersOnMap(patientsData) {
     if (this.map === null) {
       setTimeout(() => {
-        this.updateMarkersOnMap(patientsData);
+        this.updatePatientsMarkersOnMap(patientsData);
       }, 1000);
       return;
     }
@@ -273,22 +300,74 @@ class MapView extends React.Component {
     });
   }
 
+  /**
+   * Update the markers for reports on the map when selected by the user
+   */
+
+  updateReportsMarkersOnMap(reportsData) {
+    if (this.map === null) {
+      setTimeout(() => {
+        this.updateReportsMarkersOnMap(reportsData);
+      }, 1000);
+      return;
+    }
+
+    if (this.markerClusterer !== null) {
+      this.markerClusterer.clearMarkers();
+    }
+
+    if (this.markers.length > 0) {
+      this.markers.forEach((marker) => {
+        marker.setMap(null);
+      });
+
+      this.markers = [];
+    }
+
+    const { ids, map } = reportsData;
+    if (!ids.length) {
+      // TODO Delete any existing markers from before
+      return;
+    }
+
+    this.markers = ids.map((reportId) => {
+      const report = map[reportId];
+
+      // TODO Handle marker on click
+      return new google.maps.Marker({
+        position: {
+          lat: report.loc.coordinates[1],
+          lng: report.loc.coordinates[0],
+        },
+        label: report.name,
+      });
+    });
+
+    // Add a marker clusterer to manage the markers.
+    this.markerClusterer = new MarkerClusterer(this.map, this.markers,
+      {
+        //imageSizes: [106, 112, 132, 156, 180],
+        imageSizes: [53, 56, 66, 78, 90],
+        imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'
+      });
+  }
+
   goToUserLocation() {
     this.getUserLocation();
   }
 
-  onStatusChanged(event) {
+  onViewTypeChanged(event) {
     this.setState({
-      status: event.target.value,
+      viewType: event.target.value,
     });
 
     setTimeout(() => {
-      this.refreshPatientsData();
+      this.refreshData();
     }, 100);
   }
 
   render() {
-    const { showMap, isMapLoaded, mapCenter, status } = this.state;
+    const { showMap, isMapLoaded, mapCenter, viewType } = this.state;
 
     return (
       <div>
@@ -317,8 +396,8 @@ class MapView extends React.Component {
           goToUserLocation={this.goToUserLocation}
           isMapLoaded={isMapLoaded}
           mapCenter={mapCenter}
-          onStatusChanged={this.onStatusChanged}
-          status={status}
+          onViewTypeChanged={this.onViewTypeChanged}
+          viewType={viewType}
         />
       </div>
     );
@@ -335,15 +414,17 @@ MapView.propTypes = {
   patientsData: PropTypes.object,
   history: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
+  reportsData: PropTypes.object,
 };
 
 const mapStateToProps = (state => ({
   patientsData: state.patientsData,
+  reportsData: state.reportsData,
 }));
 
 const mapDispatchToProps = (dispatch => ({
   actions: bindActionCreators(
-    Object.assign({}, patientsActions),
+    Object.assign({}, patientsActions, reportsActions),
     dispatch,
   ),
 }));

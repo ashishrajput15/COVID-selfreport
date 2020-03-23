@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { Container, Button } from 'react-floating-action-button';
 import { InfoCard } from "./InfoCard";
-import ReportSymptomsModal from './ReportSymptomsModal';
+import ReportSymptomsModal_V2 from './ReportSymptomsModal_V2';
+import { Form, FormGroup, Input, Label } from 'reactstrap';
 
 class MapControls extends React.Component {
   constructor(props) {
@@ -23,6 +24,8 @@ class MapControls extends React.Component {
     if (this.props.mapCenter) {
       this.getstateFromCordinates(this.props.mapCenter);
     }
+
+    this.toggleReportSymptomsModal();
   }
 
   componentWillReceiveProps(nextProps) { // eslint-disable-line react/no-deprecated
@@ -41,7 +44,7 @@ class MapControls extends React.Component {
   }
 
   toggleReportSymptomsModal() {
-    const { showReportSymptomsModal}  = this.state;
+    const { showReportSymptomsModal } = this.state;
     this.setState({
       showReportSymptomsModal: !showReportSymptomsModal,
     });
@@ -90,13 +93,13 @@ class MapControls extends React.Component {
     });
 
   render() {
-    const { isMapLoaded, clearSearchBox, goToUserLocation, mapCenter, onStatusChanged, status } = this.props;
+    const { isMapLoaded, clearSearchBox, goToUserLocation, mapCenter, onViewTypeChanged, viewType } = this.props;
     const { stateName, showStateHelplineNumber, showKeyInfo, showReportSymptomsModal } = this.state;
 
     let reportSymptomsModal = null;
     if (showReportSymptomsModal) {
       reportSymptomsModal = (
-        <ReportSymptomsModal
+        <ReportSymptomsModal_V2
           mapCenter={mapCenter}
           toggleHelplineBar={this.toggleHelplineBar}
           toggleKeyInfoBar={this.toggleKeyInfoBar}
@@ -113,7 +116,7 @@ class MapControls extends React.Component {
 
           <div className="input-group-append pointer link" onClick={clearSearchBox}>
             <span className="input-group-text">
-              <i className="fa fa-times" />
+              <i className="fa fa-search" />
             </span>
           </div>
         </div>
@@ -123,7 +126,7 @@ class MapControls extends React.Component {
             <Button
               className="fab-item btn btn-danger btn-link text-white"
               tooltip="Report Symptoms"
-              icon="fa fa-exclamation-triangle"
+              icon="fa fa-plus"
               rotate={false}
               onClick={this.toggleReportSymptomsModal}
             />
@@ -159,36 +162,56 @@ class MapControls extends React.Component {
             <div className="card-body">
               <h5 className="card-title">View</h5>
 
-              <form>
-                <div className="form-check">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    name="rdoStatus"
-                    id="rdoStatusConfirmed"
-                    value="confirmed"
-                    checked={status === 'confirmed'}
-                    onChange={onStatusChanged}
-                  />
-                  <label className="form-check-label" htmlFor="rdoStatusConfirmed">
+              <Form>
+                <FormGroup check>
+                  <Label check>
+                    <Input
+                      className="form-check-input"
+                      type="radio"
+                      name="rdoViewType"
+                      id="rdoViewTypeReported"
+                      value="reported"
+                      checked={viewType === 'reported'}
+                      onChange={onViewTypeChanged}
+                    />
+                    {' '}
+                    Symptom Reports
+                  </Label>
+                </FormGroup>
+
+                <FormGroup check>
+                  <Label check>
+                    <Input
+                      className="form-check-input"
+                      type="radio"
+                      name="rdoViewType"
+                      id="rdoStatusConfirmed"
+                      value="confirmed"
+                      checked={viewType === 'confirmed'}
+                      onChange={onViewTypeChanged}
+                    />
+                    {' '}
                     Confirmed Cases
-                  </label>
-                </div>
-                <div className="form-check">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    name="rdoStatus"
-                    id="rdoStatusSymptoms"
-                    value="symptoms"
-                    checked={status === 'symptoms'}
-                    onChange={onStatusChanged}
-                  />
-                  <label className="form-check-label" htmlFor="rdoStatusSymptoms">
-                    Self Reported Cases
-                  </label>
-                </div>
-              </form>
+                  </Label>
+                </FormGroup>
+
+                <FormGroup check title="Currently unavailable.">
+                  <Label check>
+                    <Input
+                      disabled
+                      className="form-check-input"
+                      type="radio"
+                      name="rdoViewType"
+                      id="rdoViewTypeHelpRequests"
+                      value="help_requests"
+                      checked={viewType === 'help_requests'}
+                      //onChange={onViewTypeChanged}
+                    />
+                    {' '}
+                    Help Requests
+                  </Label>
+                </FormGroup>
+              </Form>
             </div>
           </div>
         </div>
@@ -210,8 +233,8 @@ MapControls.propTypes = {
   goToUserLocation: PropTypes.func.isRequired,
   isMapLoaded: PropTypes.bool.isRequired,
   mapCenter: PropTypes.object.isRequired,
-  onStatusChanged: PropTypes.func.isRequired,
-  status: PropTypes.string.isRequired,
+  onViewTypeChanged: PropTypes.func.isRequired,
+  viewType: PropTypes.string.isRequired,
 };
 
 export default MapControls;

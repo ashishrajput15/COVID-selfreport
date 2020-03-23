@@ -6,7 +6,7 @@ import {
   Button, Form, Modal, ModalBody, ModalFooter,
   ModalHeader
 } from 'reactstrap';
-import * as reportsActions from '../../actions/reportsActions';
+import * as reportsActions from '../../actions/reports';
 import StepZilla from 'react-stepzilla';
 import Intro from '../ReportSymptomsForm/Intro';
 import ReportSymptoms1 from '../ReportSymptomsForm/ReportSymptoms1';

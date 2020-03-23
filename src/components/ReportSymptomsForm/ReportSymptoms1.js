@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, FormGroup, Input, Label, Alert } from 'reactstrap';
+import { Button, FormGroup, Input, Label } from 'reactstrap';
 
 class ReportSymptoms1 extends React.Component {
   constructor(props) {
