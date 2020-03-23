@@ -21,10 +21,13 @@ class ReportSymptomsModal_V2 extends React.Component {
         'Cough': false,
         'Fever': false,
         'Sore Throat': false,
-        'Tired': false,
+        'Shortness of Breath': false,
       },
+
+      numDays: '',
     };
 
+    this.onNumDaysChanged = this.onNumDaysChanged.bind(this);
     this.toggleSymptom = this.toggleSymptom.bind(this);
   }
 
@@ -56,9 +59,15 @@ class ReportSymptomsModal_V2 extends React.Component {
     });
   }
 
+  onNumDaysChanged(event) {
+    this.setState({
+      numDays: event.target.value,
+    });
+  }
+
   render() {
     const { mapCenter, toggleHelplineBar, toggleKeyInfoBar, toggleModal } = this.props;
-    const { symptoms } = this.state;
+    const { symptoms, numDays } = this.state;
 
     // Show simple form
     const steps = [
@@ -68,20 +77,34 @@ class ReportSymptomsModal_V2 extends React.Component {
           <Intro
             toggleHelplineBar={toggleHelplineBar}
             toggleKeyInfoBar={toggleKeyInfoBar}
+            toggleModal={toggleModal}
           />
         )
       },
-      { name: 'ReportSymptoms1', component: (<ReportSymptoms1 symptoms={symptoms} toggleSymptom={this.toggleSymptom} />) },
-      { name: 'ReportSymptoms2', component: (<ReportSymptoms2 symptoms={symptoms} mapCenter={mapCenter} />) },
+      {
+        name: 'ReportSymptoms1', component: (
+        <ReportSymptoms1
+          symptoms={symptoms}
+          numDays={numDays}
+          onNumDaysChanged={this.onNumDaysChanged}
+          toggleSymptom={this.toggleSymptom}
+        />
+      )
+      },
+      { name: 'ReportSymptoms2', component: (
+        <ReportSymptoms2
+          mapCenter={mapCenter}
+          symptoms={symptoms}
+          numDays={numDays}
+        />
+      ) },
       { name: 'ReportSubmitted', component: (<ReportSubmitted toggleModal={toggleModal} />) },
     ];
 
     return (
       <Modal isOpen={true} toggle={this.props.toggleModal} className="report-symptoms-modal" backdrop="static">
         <ModalHeader toggle={this.props.toggleModal} className="text-danger">
-          <i className="fa fa-exclamation-triangle" />
-          {' '}
-          Report Symptoms
+          Help India Fight Corona
         </ModalHeader>
 
         <ModalBody className="pb-4">

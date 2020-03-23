@@ -271,3 +271,8 @@ $vin-red: #ff0000;
     }
   }
 }
+
+.fab-item:nth-last-child(1)[tooltip]:before {
+  visibility: visible;
+  opacity: 1;
+}

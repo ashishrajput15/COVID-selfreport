@@ -24,6 +24,8 @@ class MapControls extends React.Component {
     if (this.props.mapCenter) {
       this.getstateFromCordinates(this.props.mapCenter);
     }
+
+    this.toggleReportSymptomsModal();
   }
 
   componentWillReceiveProps(nextProps) { // eslint-disable-line react/no-deprecated
@@ -114,7 +116,7 @@ class MapControls extends React.Component {
 
           <div className="input-group-append pointer link" onClick={clearSearchBox}>
             <span className="input-group-text">
-              <i className="fa fa-times" />
+              <i className="fa fa-search" />
             </span>
           </div>
         </div>

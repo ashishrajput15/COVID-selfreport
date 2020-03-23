@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Col, Row } from 'reactstrap';
+import { Button, Col, FormGroup, Input, Row } from 'reactstrap';
 import cough from '../../assets/cough.png';
 import fever from '../../assets/fever.png';
 import soreThroat from '../../assets/soreThroat.png';
@@ -15,15 +15,21 @@ class ReportSymptoms5 extends React.Component {
     this.toggleCough = props.toggleSymptom.bind(null, 'Cough');
     this.toggleFever = props.toggleSymptom.bind(null, 'Fever');
     this.toggleSoreThroat = props.toggleSymptom.bind(null, 'Sore Throat');
-    this.toggleTired = props.toggleSymptom.bind(null, 'Tired');
+    this.toggleShortnessOfBreath = props.toggleSymptom.bind(null, 'Shortness of Breath');
   }
 
   onNext() {
-    const { jumpToStep, symptoms } = this.props;
+    const { jumpToStep, symptoms, numDays } = this.props;
+
+    if (!numDays) {
+      alert('Please enter since how many days symptoms are being faced.');
+      document.getElementById('txtNumDays').focus();
+      return;
+    }
 
     const selectedSymptoms = Object.keys(symptoms).filter(key => symptoms[key] === true);
     if (!selectedSymptoms.length) {
-      alert('Please select the symptoms being faced to proceed.');
+      alert('Please select symptoms.');
       return;
     }
 
@@ -31,10 +37,24 @@ class ReportSymptoms5 extends React.Component {
   }
 
   render() {
-    const { jumpToStep, symptoms } = this.props;
+    const { jumpToStep, symptoms, numDays, onNumDaysChanged } = this.props;
 
     return (
       <div>
+        <h5>How many days before did you first see any symptom?</h5>
+
+        <FormGroup className="mt-3">
+          <Input
+            autoComplete="off"
+            type="number"
+            placeholder=""
+            name="numDays"
+            id="txtNumDays"
+            value={numDays}
+            onChange={onNumDaysChanged}
+          />
+        </FormGroup>
+
         <h5>What are the symptoms?</h5>
         <br />
         <Row>
@@ -61,9 +81,9 @@ class ReportSymptoms5 extends React.Component {
 
           <SymptomCard
             image={tired}
-            label={'Tired'}
-            toggle={this.toggleTired}
-            present={symptoms['Tired'] === true}
+            label={'Shortness of Breath'}
+            toggle={this.toggleShortnessOfBreath}
+            present={symptoms['Shortness of Breath'] === true}
           />
         </Row>
 
@@ -76,7 +96,7 @@ class ReportSymptoms5 extends React.Component {
                   jumpToStep(0);
                 }}
               >
-                <i className="fa fa-times" />&nbsp;Cancel
+                <i className="fa fa-arrow-left" />&nbsp;Back
               </Button>
             </Col>
             <Col xs={6} className="text-right">
@@ -94,10 +114,13 @@ class ReportSymptoms5 extends React.Component {
 ReportSymptoms5.defaultProps = {
   jumpToStep: () => {
   },
+  numDays: '',
 };
 
 ReportSymptoms5.propTypes = {
   jumpToStep: PropTypes.func,
+  numDays: PropTypes.string.isRequired,
+  onNumDaysChanged: PropTypes.func.isRequired,
   toggleSymptom: PropTypes.func.isRequired,
   symptoms: PropTypes.object.isRequired,
 };

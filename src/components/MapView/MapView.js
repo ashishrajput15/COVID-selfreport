@@ -225,7 +225,9 @@ class MapView extends React.Component {
           isMapLoaded: true,
         });
 
-        this.getUserLocation();
+        //setTimeout(() => {
+        //  this.getUserLocation();
+        //}, 400);
       }, 400);
     } else if (this.map !== null) {
       // map init already done

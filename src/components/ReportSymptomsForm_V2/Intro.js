@@ -1,65 +1,76 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Alert, Button, Col, Row } from 'reactstrap';
+import { Button, Col, Row } from 'reactstrap';
 
 class Intro extends React.Component {
   render() {
-    const { toggleHelplineBar, toggleKeyInfoBar, jumpToStep } = this.props;
+    const { toggleModal, jumpToStep } = this.props;
 
     return (
       <div>
-        <Alert color="danger">
-          If you are strongly suspecting you have contracted COVID-19, please use
-          the <a href={null} className="text-primary pointer link" onClick={toggleHelplineBar}>Helpline Numbers</a>
-          &nbsp;to reach out to <a href="https://www.mohfw.gov.in" target="_blank" rel="noopener noreferrer">MoHFW, India</a>
-          &nbsp;immediately.
-        </Alert>
-
         <Row>
-          <Col xs={12} md={12}>
+          <Col xs={12} md={12} className="text-center">
             <p>
-              If you or anyone you know have any symptoms, to send a new Report,
-              click the button below.
+              Let’s fight community spread by reporting symptoms.
             </p>
 
-            <Button
-              color="primary"
-              onClick={() => {
-                jumpToStep(1);
-              }}
-            >
-              <i className="fa fa-bullhorn" />&nbsp;
-              Report Symptoms
-            </Button>
+            <h5>
+              Do you or anyone you know have any symptoms?
+            </h5>
+
+            <br />
+
+            <Row>
+              <Col xs={12} md={12} className="justify-content-center">
+                <Button
+                  color="primary"
+                  onClick={() => {
+                    jumpToStep(1);
+                  }}
+                  size="lg"
+                >
+                  Yes
+                </Button>
+
+                <Button
+                  className="ml-4"
+                  color="secondary"
+                  onClick={toggleModal}
+                  size="lg"
+                >
+                  No
+                </Button>
+              </Col>
+            </Row>
           </Col>
 
           {/*<Col xs={12} md={6}>*/}
-            {/*<p>*/}
-              {/*If you are running low on any essential supplies, like food, masks, medicines,*/}
-              {/*and want to raise a help request for them,*/}
-              {/*click the button below.*/}
-            {/*</p>*/}
+          {/*<p>*/}
+          {/*If you are running low on any essential supplies, like food, masks, medicines,*/}
+          {/*and want to raise a help request for them,*/}
+          {/*click the button below.*/}
+          {/*</p>*/}
 
-            {/*<Button color="primary" disabled id="btn-request-supplies" title="Not available at the moment.">*/}
-              {/*<i className="fa fa-medkit" />&nbsp;*/}
-              {/*Request Supplies*/}
-            {/*</Button>*/}
+          {/*<Button color="primary" disabled id="btn-request-supplies" title="Not available at the moment.">*/}
+          {/*<i className="fa fa-medkit" />&nbsp;*/}
+          {/*Request Supplies*/}
+          {/*</Button>*/}
           {/*</Col>*/}
         </Row>
 
-        <Row className="mt-5">
-          <Col xs={12} md={12}>
-            <p>
-              For key information regarding the COVID-19 Pandemic,
-              click the button below.
-            </p>
+        {/*<Row className="mt-5">*/}
+          {/*<Col xs={12} md={12}>*/}
+            {/*<p>*/}
+              {/*For key information regarding the COVID-19 Pandemic,*/}
+              {/*click the button below.*/}
+            {/*</p>*/}
 
-            <Button color="info" onClick={toggleKeyInfoBar}>
-              <i className="fa fa-info-circle" />&nbsp;
-              Key Info
-            </Button>
-          </Col>
-        </Row>
+            {/*<Button color="info" onClick={toggleKeyInfoBar}>*/}
+              {/*<i className="fa fa-info-circle" />&nbsp;*/}
+              {/*Key Info*/}
+            {/*</Button>*/}
+          {/*</Col>*/}
+        {/*</Row>*/}
       </div>
     );
   }
@@ -74,6 +85,7 @@ Intro.propTypes = {
   jumpToStep: PropTypes.func,
   toggleHelplineBar: PropTypes.func.isRequired,
   toggleKeyInfoBar: PropTypes.func.isRequired,
+  toggleModal: PropTypes.func.isRequired,
 };
 
 export default Intro;

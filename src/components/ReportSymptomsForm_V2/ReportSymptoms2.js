@@ -14,6 +14,8 @@ class ReportSymptoms2 extends React.Component {
       errorAlertShown: false,
 
       symptoms: props.symptoms,
+      numDays: props.numDays,
+
       mapCenter,
       mapZoom: 15,
       markedLat: null,
@@ -345,7 +347,7 @@ class ReportSymptoms2 extends React.Component {
           color="danger"
           disabled
         >
-          <i className="fa fa-spin fa-spinner" />&nbsp;Confirm and Send Report
+          <i className="fa fa-spin fa-spinner" />&nbsp;Please wait
         </Button>
       )
     } else {
@@ -355,7 +357,7 @@ class ReportSymptoms2 extends React.Component {
           onClick={this.sendReport}
           disabled={markedLat === null || markedLng === null}
         >
-          <i className="fa fa-exclamation-triangle" />&nbsp;Confirm and Send Report
+          &nbsp;Confirm
         </Button>
       );
     }
@@ -373,7 +375,7 @@ class ReportSymptoms2 extends React.Component {
           />
           <InputGroupAddon addonType="append" onClick={this.clearAddress} className="pointer link">
             <InputGroupText>
-              <i className="fa fa-times" />
+              <i className="fa fa-search" />
             </InputGroupText>
           </InputGroupAddon>
         </InputGroup>
@@ -405,7 +407,7 @@ class ReportSymptoms2 extends React.Component {
         </div>
 
         <div id="btn-gps-container2">
-          <button className="btn btn-light" onClick={this.goToUserLocation}>
+          <button className="btn btn-light" onClick={this.goToUserLocation} title="Use your current location">
             <i className="fa fa-compass" />
           </button>
         </div>
@@ -425,6 +427,7 @@ ReportSymptoms2.propTypes = {
   actions: PropTypes.object,
   jumpToStep: PropTypes.func,
   mapCenter: PropTypes.object.isRequired,
+  numDays: PropTypes.string.isRequired,
   sendNewReport: PropTypes.object,
   symptoms: PropTypes.object.isRequired,
 };
