@@ -44,7 +44,7 @@ class MapControls extends React.Component {
   }
 
   toggleReportSymptomsModal() {
-    const { showReportSymptomsModal}  = this.state;
+    const { showReportSymptomsModal } = this.state;
     this.setState({
       showReportSymptomsModal: !showReportSymptomsModal,
     });

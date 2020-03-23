@@ -26,7 +26,7 @@ class ReportSubmitted extends React.Component {
         />
 
         <Button color="secondary" onClick={toggleModal}>
-          <i className="fa fa-times" />&nbsp;Close
+          Close
         </Button>
       </div>
     );
