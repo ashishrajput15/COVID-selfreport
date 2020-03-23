@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { CardRow, parsedHelplineNum } from '../MapView/InfoCard';
-import { HELPLINE_CONTENT } from "../../../tools/constants";
+import { HelplineInfoCard } from '../MapView/InfoCard';
 
 class ReportSubmitted extends React.Component {
   render() {
@@ -21,13 +20,10 @@ class ReportSubmitted extends React.Component {
 
         <p className="mb-4">Please reach out to Helpline Numbers shown below.</p>
 
-        {stateName && (
-          <CardRow heading={stateName} subHeading={parsedHelplineNum(stateName)} linked={false} />
-        )}
-
-        {HELPLINE_CONTENT.map(({ heading, subHeading }) =>
-          <CardRow heading={heading} subHeading={subHeading} key={subHeading} linked={false} />
-        )}
+        <HelplineInfoCard
+          stateName={stateName}
+          toggle={null}
+        />
 
         <Button color="secondary" onClick={toggleModal}>
           <i className="fa fa-times" />&nbsp;Close

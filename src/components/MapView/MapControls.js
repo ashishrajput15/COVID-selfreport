@@ -126,7 +126,7 @@ class MapControls extends React.Component {
             <Button
               className="fab-item btn btn-danger btn-link text-white"
               tooltip="Report Symptoms"
-              icon="fa fa-exclamation-triangle"
+              icon="fa fa-plus"
               rotate={false}
               onClick={this.toggleReportSymptomsModal}
             />
@@ -192,6 +192,23 @@ class MapControls extends React.Component {
                     />
                     {' '}
                     Confirmed Cases
+                  </Label>
+                </FormGroup>
+
+                <FormGroup check title="Currently unavailable.">
+                  <Label check>
+                    <Input
+                      disabled
+                      className="form-check-input"
+                      type="radio"
+                      name="rdoViewType"
+                      id="rdoViewTypeHelpRequests"
+                      value="help_requests"
+                      checked={viewType === 'help_requests'}
+                      //onChange={onViewTypeChanged}
+                    />
+                    {' '}
+                    Help Requests
                   </Label>
                 </FormGroup>
               </Form>
