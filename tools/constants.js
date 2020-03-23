@@ -9,7 +9,7 @@ export const STATE_HELPLINE_NUMBERS = [
   { stateName: "Haryana", phone1: `8558893911` },
   { stateName: "Himachal Pradesh", phone1: `104` },
   { stateName: "Jharkhand", phone1: `104` },
-  { stateName: "Karnataka", phone1: `104` },
+  { stateName: "Karnataka", phone1: `080-46848600`, phone2: `080-66692000`, phone3: `104` },
   { stateName: "Kerala", phone1: `0471-2552056` },
   { stateName: "Madhya Pradesh", phone1: `0755-2527177` },
   { stateName: "Maharashtra", phone1: `020-26127394` },

@@ -43,12 +43,16 @@ export const HelplineInfoCard = ({ stateName, toggle }) => {
               {helpline.phone2 && (
                 <span> | <a href={`tel:${helpline.phone2}`}>{helpline.phone2}</a></span>
               )}
+
+              {helpline.phone3 && (
+                <span> | <a href={`tel:${helpline.phone3}`}>{helpline.phone3}</a></span>
+              )}
             </p>
           )}
         </div>
       )}
 
-      {HELPLINE_CONTENT.map(({ heading, subHeading, email1, phone1, phone2 }) =>
+      {HELPLINE_CONTENT.map(({ heading, subHeading, email1, phone1, phone2, phone3 }) =>
         <div className="card-body" key={heading}>
           <h6 className="card-subtitle mb-2 text-muted">{heading}</h6>
 
@@ -67,6 +71,9 @@ export const HelplineInfoCard = ({ stateName, toggle }) => {
               <a href={`tel:${phone1}`}>{phone1}</a>
               {phone2 && (
                 <span> | <a href={`tel:${phone2}`}>{phone2}</a></span>
+              )}
+              {phone3 && (
+                <span> | <a href={`tel:${phone3}`}>{phone3}</a></span>
               )}
             </p>
           )}
