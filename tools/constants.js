@@ -91,7 +91,7 @@ export const MapStyle1 = [{
 }, {
   featureType: "road",
   stylers: [
-    { visibility: "on" }
+    { visibility: "off" }
   ]
 }, {
   featureType: "transit",
