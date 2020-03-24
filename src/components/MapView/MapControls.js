@@ -111,8 +111,8 @@ class MapControls extends React.Component {
     return (
       <div>
         <div id="pac-container" className={classnames({ 'input-group mb-3': true, 'd-none': !isMapLoaded })}>
-          <input type="text" className="form-control controls" id="pac-input" placeholder="Search"
-                 aria-label="Search" />
+          <input type="text" className="form-control controls" id="pac-input" placeholder="Search location"
+                 aria-label="Search location" />
 
           <div className="input-group-append pointer link" onClick={clearSearchBox}>
             <span className="input-group-text">
@@ -214,6 +214,25 @@ class MapControls extends React.Component {
               </Form>
             </div>
           </div>
+        </div>
+
+        <div id="legend-container" className={classnames({ 'input-group mb-3': true, 'd-none': !isMapLoaded })}>
+          <div  id="legend-input">
+            <h6 className="tex-muted">Cases</h6>
+            <div className="legend-input clearfix">
+              <img className="float-left" src="../../assets/marker1.png" width="25" alt="Less than 10"></img>
+              <div className="badge text-wrap">Less than 10</div>
+            </div>
+            <div className="legend-input clearfix">
+              <img className="float-left" src="../../assets/marker2.png" width="25" alt="10 - 100"></img>
+              <div className="badge text-wrap">10 - 100</div>
+            </div>
+            <div className="legend-input clearfix">
+              <img className="float-left" src="../../assets/marker3.png" width="25" alt="Greater than 100"></img>
+              <div className="badge text-wrap">Greater than 100</div>
+            </div>
+          </div>
+
         </div>
 
         <div id="btn-gps-container" className={classnames({ 'd-none': !isMapLoaded })}>

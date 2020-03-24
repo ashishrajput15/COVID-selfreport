@@ -31,6 +31,24 @@ class MapView extends React.Component {
       mapZoom: 5,
 
       viewType: 'reported',
+      markerStyles: [
+        {
+          width: 30,
+          height: 30,
+          className: 'reporter-custom-clustericon-1'
+        },
+        {
+          width: 40,
+          height: 40,
+          className: 'reporter-custom-clustericon-2'
+        },
+        {
+          width: 50,
+          height: 50,
+          className: 'reporter-custom-clustericon-3'
+        }
+      ],
+      markerImageUrl: "../../assets/marker1.png",
     };
 
     this.map = null;
@@ -47,6 +65,7 @@ class MapView extends React.Component {
   }
 
   componentDidMount() {
+    console.log(this.props);
     this.setState({
       showMap: true,
     });
@@ -165,6 +184,7 @@ class MapView extends React.Component {
           disableDefaultUI: false,
 
           mapTypeControl: false,
+          mapTypeId: google.maps.MapTypeId.ROADMAP,
 
           zoomControl: true,
           zoomControlOptions: {
@@ -270,6 +290,11 @@ class MapView extends React.Component {
       return;
     }
 
+    let markerImage = new google.maps.MarkerImage(
+      this.state.markerImageUrl,
+      new google.maps.Size(50, 50)
+    );
+
     this.markers = ids.map((patientId) => {
       const patient = map[patientId];
 
@@ -279,16 +304,15 @@ class MapView extends React.Component {
           lat: patient.loc.coordinates[1],
           lng: patient.loc.coordinates[0],
         },
-        label: patient.name,
+        icon: markerImage,
       });
     });
 
     // Add a marker clusterer to manage the markers.
     this.markerClusterer = new MarkerClusterer(this.map, this.markers,
       {
-        //imageSizes: [106, 112, 132, 156, 180],
-        imageSizes: [53, 56, 66, 78, 90],
-        imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'
+        styles: this.state.markerStyles,
+        clusterClass: 'reporter-custom-clustericon',
       });
   }
 
@@ -330,6 +354,11 @@ class MapView extends React.Component {
       return;
     }
 
+    let markerImage = new google.maps.MarkerImage(
+      this.state.markerImageUrl,
+      new google.maps.Size(50, 50)
+    );
+
     this.markers = ids.map((reportId) => {
       const report = map[reportId];
 
@@ -340,15 +369,15 @@ class MapView extends React.Component {
           lng: report.loc.coordinates[0],
         },
         label: report.name,
+        icon: markerImage,
       });
     });
 
     // Add a marker clusterer to manage the markers.
     this.markerClusterer = new MarkerClusterer(this.map, this.markers,
       {
-        //imageSizes: [106, 112, 132, 156, 180],
-        imageSizes: [53, 56, 66, 78, 90],
-        imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'
+        styles: this.state.markerStyles,
+        clusterClass: 'reporter-custom-clustericon',
       });
   }
 

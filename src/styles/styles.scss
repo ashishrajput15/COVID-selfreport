@@ -2,11 +2,17 @@
 
 $fa-font-path: "~font-awesome/fonts/";
 @import "../../node_modules/font-awesome/scss/font-awesome";
+@import "./clusterIcon.scss";
 
 /* Variables */
 $vin-blue: #5bb7db;
 $vin-green: #60b044;
 $vin-red: #ff0000;
+
+#map {
+  width: 100%;
+  height: 100%;
+}
 
 .pointer.link {
   cursor: pointer;
@@ -155,6 +161,7 @@ $vin-red: #ff0000;
 
   .card {
     width: 15rem;
+    background-color: white;;
 
     @media (max-width: 960px) {
       width: 12.5rem;
@@ -229,6 +236,53 @@ $vin-red: #ff0000;
       font-size: 1.25rem;
     }
   }
+}
+
+
+#legend-container {
+  padding-bottom: 12px;
+  // margin-right: 12px;
+
+  max-width: 100px;
+
+  position: absolute !important;
+  left: 50px !important;
+  bottom: 10px !important;
+  margin-top: 10px !important;
+
+  @media (max-width: 576px) {
+    left: 0px !important;
+    bottom: 170px !important;
+  }
+}
+
+#legend-input {
+  // border: 1px solid black;
+  background-color: #fff;
+  font-family: Roboto;
+  font-size: 15px;
+  font-weight: 300;
+  margin-left: 11px;
+  // padding: 5px 11px 5px 11px;
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  align-items: center;
+}
+
+.legend-input {
+  // border: 1px solid black;
+  display: flex;
+  -webkit-flex-direction: row;
+  flex-direction: row;
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
+  -webkit-align-items: center;
+  align-items: center;
+  width: 100px;
 }
 
 .report-symptoms-modal {
