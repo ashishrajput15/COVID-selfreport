@@ -71,7 +71,7 @@ export const KEY_INFO_CONTENT = [
     heading: `COVID-19 Global Tracker`,
     subHeading: `https://coronavirus.thebaselab.com/`
   }
-]
+];
 
 export const MapStyle1 = [{
   featureType: "administrative",

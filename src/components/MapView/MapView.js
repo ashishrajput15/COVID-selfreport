@@ -9,6 +9,7 @@ import * as patientsActions from '../../actions/patients';
 import * as reportsActions from '../../actions/reports';
 import MapControls from './MapControls';
 import { MapStyle1, MapStyle2 } from '../../../tools/constants';
+import imgSingleReportMarker from '../../assets/marker_single_case.png';
 
 const mapContainerHeight = `${window.innerHeight - 1}px`;
 
@@ -24,8 +25,8 @@ class MapView extends React.Component {
       errorAlertShown: false,
 
       mapCenter: {
-        lat: 21.125498,
-        lng: 81.914063,
+        lat: 23.259933,
+        lng: 77.412613,
       },
 
       mapAccuracy: 0,
@@ -49,7 +50,6 @@ class MapView extends React.Component {
           className: 'reporter-custom-clustericon-3'
         }
       ],
-      markerImageUrl: "../../assets/marker1.png",
     };
 
     this.map = null;
@@ -222,8 +222,6 @@ class MapView extends React.Component {
           }
         });
 
-        this.map.setZoom(16);
-
         const btnPlus = document.getElementById('btn-plus-container');
         this.map.controls[google.maps.ControlPosition.BOTTOM_RIGHT].push(btnPlus);
 
@@ -260,11 +258,6 @@ class MapView extends React.Component {
         //  this.getUserLocation();
         //}, 400);
       }, 400);
-    } else if (this.map !== null) {
-      // map init already done
-      const { mapCenter, mapZoom } = this.state;
-      this.map.setCenter(mapCenter);
-      this.map.setZoom(mapZoom);
     }
 
     return null;
@@ -302,7 +295,7 @@ class MapView extends React.Component {
     }
 
     let markerImage = new google.maps.MarkerImage(
-      this.state.markerImageUrl,
+      imgSingleReportMarker,
       new google.maps.Size(50, 50)
     );
 
@@ -366,7 +359,7 @@ class MapView extends React.Component {
     }
 
     let markerImage = new google.maps.MarkerImage(
-      this.state.markerImageUrl,
+      imgSingleReportMarker,
       new google.maps.Size(50, 50)
     );
 

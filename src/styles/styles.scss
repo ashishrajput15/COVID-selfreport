@@ -268,7 +268,7 @@ $vin-red: #ff0000;
   padding-bottom: 12px;
   // margin-right: 12px;
 
-  max-width: 100px;
+  max-width: 130px;
 
   position: absolute !important;
   left: 50px !important;
@@ -292,10 +292,6 @@ $vin-red: #ff0000;
   display: flex;
   -webkit-flex-direction: column;
   flex-direction: column;
-  -webkit-justify-content: center;
-  justify-content: center;
-  -webkit-align-items: center;
-  align-items: center;
 }
 
 .legend-input {
@@ -303,11 +299,8 @@ $vin-red: #ff0000;
   display: flex;
   -webkit-flex-direction: row;
   flex-direction: row;
-  -webkit-justify-content: space-between;
-  justify-content: space-between;
   -webkit-align-items: center;
-  align-items: center;
-  width: 100px;
+  width: 130px;
 }
 
 .report-symptoms-modal {
