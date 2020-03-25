@@ -5,9 +5,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
+import * as helpRequestsActions from '../../actions/requestHelp';
 import * as patientsActions from '../../actions/patients';
 import * as reportsActions from '../../actions/reports';
 import MapControls from './MapControls';
+import { MapStyle1, MapStyle2, MarkerClusterStyles } from '../../../tools/constants';
+import imgSingleReportMarker from '../../assets/marker_single_case.png';
 
 const mapContainerHeight = `${window.innerHeight - 1}px`;
 
@@ -23,32 +26,14 @@ class MapView extends React.Component {
       errorAlertShown: false,
 
       mapCenter: {
-        lat: 21.125498,
-        lng: 81.914063,
+        lat: 23.259933,
+        lng: 77.412613,
       },
 
       mapAccuracy: 0,
       mapZoom: 5,
 
       viewType: 'reported',
-      markerStyles: [
-        {
-          width: 30,
-          height: 30,
-          className: 'reporter-custom-clustericon-1'
-        },
-        {
-          width: 40,
-          height: 40,
-          className: 'reporter-custom-clustericon-2'
-        },
-        {
-          width: 50,
-          height: 50,
-          className: 'reporter-custom-clustericon-3'
-        }
-      ],
-      markerImageUrl: "../../assets/marker1.png",
     };
 
     this.map = null;
@@ -79,18 +64,25 @@ class MapView extends React.Component {
   componentWillReceiveProps(nextProps) {   // eslint-disable-line react/no-deprecated
     const { viewType } = this.state;
 
-    if(viewType === 'confirmed') {
+    if (viewType === 'confirmed') {
       if (this.props.patientsData !== nextProps.patientsData) {
         if (this.props.patientsData.loading !== nextProps.patientsData.loading && nextProps.patientsData.loaded) {
           // data was reloaded
-          this.updatePatientsMarkersOnMap(nextProps.patientsData);
+          this.updateMarkersOnMap(nextProps.patientsData);
         }
       }
     } else if (viewType === 'reported') {
       if (this.props.reportsData !== nextProps.reportsData) {
         if (this.props.reportsData.loading !== nextProps.reportsData.loading && nextProps.reportsData.loaded) {
           // data was reloaded
-          this.updateReportsMarkersOnMap(nextProps.reportsData);
+          this.updateMarkersOnMap(nextProps.reportsData);
+        }
+      }
+    } else if (viewType === 'help_requests') {
+      if (this.props.helpRequests !== nextProps.helpRequests) {
+        if (this.props.helpRequests.loading !== nextProps.helpRequests.loading && nextProps.helpRequests.loaded) {
+          // data was reloaded
+          this.updateMarkersOnMap(nextProps.helpRequests);
         }
       }
     }
@@ -136,6 +128,9 @@ class MapView extends React.Component {
     } else if (viewType === 'reported') {
       this.props.actions.getReportsDataStarting();
       this.props.actions.getReportsData(mapCenter.lat, mapCenter.lng, 2000);
+    } else if (viewType === 'help_requests') {
+      this.props.actions.getHelpRequestsStarting();
+      this.props.actions.getHelpRequests(mapCenter.lat, mapCenter.lng, 2000);
     }
   }
 
@@ -195,6 +190,8 @@ class MapView extends React.Component {
           fullscreenControl: false,
         });
 
+        this.map.set('styles', MapStyle1);
+
         const pacContainer = document.getElementById('pac-container');
         this.pacInput = document.getElementById('pac-input');
         this.searchBox = new google.maps.places.SearchBox(this.pacInput);
@@ -210,6 +207,13 @@ class MapView extends React.Component {
               lng: mapCenter.lng(),
             }
           });
+
+          const currentZoom = this.map.getZoom();
+          if (currentZoom <= 15) {
+            this.map.set('styles', MapStyle1);
+          } else {
+            this.map.set('styles', MapStyle2);
+          }
         });
 
         const btnPlus = document.getElementById('btn-plus-container');
@@ -248,11 +252,6 @@ class MapView extends React.Component {
         //  this.getUserLocation();
         //}, 400);
       }, 400);
-    } else if (this.map !== null) {
-      // map init already done
-      const { mapCenter, mapZoom } = this.state;
-      this.map.setCenter(mapCenter);
-      this.map.setZoom(mapZoom);
     }
 
     return null;
@@ -263,11 +262,12 @@ class MapView extends React.Component {
     this.pacInput.focus();
   }
 
-  updatePatientsMarkersOnMap(patientsData) {
+  updateMarkersOnMap(data) {
     if (this.map === null) {
       setTimeout(() => {
-        this.updatePatientsMarkersOnMap(patientsData);
+        this.updateMarkersOnMap(data);
       }, 1000);
+
       return;
     }
 
@@ -283,25 +283,29 @@ class MapView extends React.Component {
       this.markers = [];
     }
 
-    const { ids, map } = patientsData;
+    const { ids, map } = data;
     if (!ids.length) {
       // TODO Delete any existing markers from before
       return;
     }
 
-    let markerImage = new google.maps.MarkerImage(
-      this.state.markerImageUrl,
+    const markerImage = new google.maps.MarkerImage(
+      imgSingleReportMarker,
       new google.maps.Size(50, 50)
     );
 
-    this.markers = ids.map((patientId) => {
-      const patient = map[patientId];
+    this.markers = ids.map((_id) => {
+      const obj = map[_id];
+
+      if (!obj.loc || !obj.loc.coordinates || !obj.loc.coordinates.length) {
+        return null;
+      }
 
       // TODO Handle marker on click
       return new google.maps.Marker({
         position: {
-          lat: patient.loc.coordinates[1],
-          lng: patient.loc.coordinates[0],
+          lat: obj.loc.coordinates[1],
+          lng: obj.loc.coordinates[0],
         },
         icon: markerImage,
       });
@@ -310,7 +314,7 @@ class MapView extends React.Component {
     // Add a marker clusterer to manage the markers.
     this.markerClusterer = new MarkerClusterer(this.map, this.markers,
       {
-        styles: this.state.markerStyles,
+        styles: MarkerClusterStyles,
         clusterClass: 'reporter-custom-clustericon',
       });
   }
@@ -321,63 +325,6 @@ class MapView extends React.Component {
       timeout: 60 * 1000,
       maximumAge: 0
     });
-  }
-
-  /**
-   * Update the markers for reports on the map when selected by the user
-   */
-
-  updateReportsMarkersOnMap(reportsData) {
-    if (this.map === null) {
-      setTimeout(() => {
-        this.updateReportsMarkersOnMap(reportsData);
-      }, 1000);
-      return;
-    }
-
-    if (this.markerClusterer !== null) {
-      this.markerClusterer.clearMarkers();
-    }
-
-    if (this.markers.length > 0) {
-      this.markers.forEach((marker) => {
-        marker.setMap(null);
-      });
-
-      this.markers = [];
-    }
-
-    const { ids, map } = reportsData;
-    if (!ids.length) {
-      // TODO Delete any existing markers from before
-      return;
-    }
-
-    let markerImage = new google.maps.MarkerImage(
-      this.state.markerImageUrl,
-      new google.maps.Size(50, 50)
-    );
-
-    this.markers = ids.map((reportId) => {
-      const report = map[reportId];
-
-      // TODO Handle marker on click
-      return new google.maps.Marker({
-        position: {
-          lat: report.loc.coordinates[1],
-          lng: report.loc.coordinates[0],
-        },
-        label: report.name,
-        icon: markerImage,
-      });
-    });
-
-    // Add a marker clusterer to manage the markers.
-    this.markerClusterer = new MarkerClusterer(this.map, this.markers,
-      {
-        styles: this.state.markerStyles,
-        clusterClass: 'reporter-custom-clustericon',
-      });
   }
 
   goToUserLocation() {
@@ -434,25 +381,28 @@ class MapView extends React.Component {
 
 MapView.defaultProps = {
   actions: {},
+  helpRequests: {},
   patientsData: {},
 };
 
 MapView.propTypes = {
   actions: PropTypes.object,
-  patientsData: PropTypes.object,
+  helpRequests: PropTypes.object,
   history: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
+  patientsData: PropTypes.object,
   reportsData: PropTypes.object,
 };
 
 const mapStateToProps = (state => ({
+  helpRequests: state.helpRequests,
   patientsData: state.patientsData,
   reportsData: state.reportsData,
 }));
 
 const mapDispatchToProps = (dispatch => ({
   actions: bindActionCreators(
-    Object.assign({}, patientsActions, reportsActions),
+    Object.assign({}, helpRequestsActions, patientsActions, reportsActions),
     dispatch,
   ),
 }));

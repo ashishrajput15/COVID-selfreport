@@ -39,7 +39,7 @@ class RequestHelp extends React.Component {
   }
 
   render() {
-    const { jumpToStep, helpRequests, onDetailRequestChanged } = this.props;
+    const { helpRequests, onDetailRequestChanged } = this.props;
 
     return (
       <div>

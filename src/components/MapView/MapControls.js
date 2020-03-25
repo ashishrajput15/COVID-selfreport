@@ -6,6 +6,9 @@ import { InfoCard } from "./InfoCard";
 import ReportSymptomsModal_V2 from './ReportSymptomsModal_V2';
 import RequestHelpModal from './RequestHelpModal';
 import { Form, FormGroup, Input, Label } from 'reactstrap';
+import marker1 from '../../assets/marker1.png';
+import marker2 from '../../assets/marker2.png';
+import marker3 from '../../assets/marker3.png';
 
 class MapControls extends React.Component {
   constructor(props) {
@@ -154,11 +157,17 @@ class MapControls extends React.Component {
               onClick={this.toggleRequestHelpModal}
             />
             <Button
-              className="fab-item btn btn-danger btn-link text-white"
+              // className="fab-item btn btn-danger btn-link text-white"
               tooltip="Report Symptoms"
+              icon="fa fa-exclamation-triangle"
+              // rotate={false}
+              onClick={this.toggleReportSymptomsModal}
+            />
+            <Button
+              className="fab-item btn btn-danger btn-link text-white"
+              tooltip="New Request"
               icon="fa fa-plus"
               rotate={false}
-              onClick={this.toggleReportSymptomsModal}
             />
           </Container>
         </div>
@@ -209,6 +218,22 @@ class MapControls extends React.Component {
                   </Label>
                 </FormGroup>
 
+                <FormGroup check title="Currently unavailable.">
+                  <Label check>
+                    <Input
+                      className="form-check-input"
+                      type="radio"
+                      name="rdoViewType"
+                      id="rdoViewTypeHelpRequests"
+                      value="help_requests"
+                      checked={viewType === 'help_requests'}
+                      onChange={onViewTypeChanged}
+                    />
+                    {' '}
+                    Help Requests
+                  </Label>
+                </FormGroup>
+
                 <FormGroup check>
                   <Label check>
                     <Input
@@ -224,45 +249,27 @@ class MapControls extends React.Component {
                     Confirmed Cases
                   </Label>
                 </FormGroup>
-
-                <FormGroup check title="Currently unavailable.">
-                  <Label check>
-                    <Input
-                      disabled
-                      className="form-check-input"
-                      type="radio"
-                      name="rdoViewType"
-                      id="rdoViewTypeHelpRequests"
-                      value="help_requests"
-                      checked={viewType === 'help_requests'}
-                      //onChange={onViewTypeChanged}
-                    />
-                    {' '}
-                    Help Requests
-                  </Label>
-                </FormGroup>
               </Form>
             </div>
           </div>
         </div>
 
         <div id="legend-container" className={classnames({ 'input-group mb-3': true, 'd-none': !isMapLoaded })}>
-          <div  id="legend-input">
-            <h6 className="tex-muted">Cases</h6>
+          <div id="legend-input" className="p-2">
+            <h6 className="text-muted">Legend</h6>
             <div className="legend-input clearfix">
-              <img className="float-left" src="../../assets/marker1.png" width="25" alt="Less than 10"></img>
-              <div className="badge text-wrap">Less than 10</div>
+              <img className="float-left" src={marker1} width="25" alt="Less than 10" />
+              <div className="badge text-wrap text-muted">Less than 10</div>
             </div>
             <div className="legend-input clearfix">
-              <img className="float-left" src="../../assets/marker2.png" width="25" alt="10 - 100"></img>
-              <div className="badge text-wrap">10 - 100</div>
+              <img className="float-left" src={marker2} width="25" alt="10 - 100" />
+              <div className="badge text-wrap text-muted">10 - 100</div>
             </div>
             <div className="legend-input clearfix">
-              <img className="float-left" src="../../assets/marker3.png" width="25" alt="Greater than 100"></img>
-              <div className="badge text-wrap">Greater than 100</div>
+              <img className="float-left" src={marker3} width="25" alt="Greater than 100" />
+              <div className="badge text-wrap text-muted">Greater than 100</div>
             </div>
           </div>
-
         </div>
 
         <div id="btn-gps-container" className={classnames({ 'd-none': !isMapLoaded })}>

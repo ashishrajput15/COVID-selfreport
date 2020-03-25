@@ -70,9 +70,9 @@ class RequestHelpModal extends React.Component {
     const { helpRequests, detailRequest } = this.state;
 
     // Show simple form
-    const steps = [
-      {
-        name: 'Intro', component: (
+    const steps = [{
+      name: 'Intro',
+      component: (
         <Intro
           helpRequests={helpRequests}
           detailRequest={detailRequest}
@@ -80,16 +80,24 @@ class RequestHelpModal extends React.Component {
           toggleReqHelp={this.toggleReqHelp}
         />
       )
-      },
-      { name: 'RequestHelp', component: (
+    }, {
+      name: 'RequestHelp',
+      component: (
         <RequestHelp1
           mapCenter={mapCenter}
           helpRequests={helpRequests}
           detailRequest={detailRequest}
         />
-      ) },
-      { name: 'ReportSubmitted', component: (<ReportSubmitted toggleModal={toggleModal} />) },
-    ];
+      ),
+    }, {
+      name: 'ReportSubmitted',
+      component: (
+        <ReportSubmitted
+          modalType="request_help"
+          toggleModal={toggleModal}
+        />
+      ),
+    }];
 
     return (
       <Modal isOpen={true} toggle={this.props.toggleModal} className="request-help-modal" backdrop="static">

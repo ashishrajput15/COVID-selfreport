@@ -7,7 +7,17 @@ export default {
     ids: [],
     map: {},
   },
+
   reportsData: {
+    loading: false,
+    loaded: false,
+    error: null,
+
+    ids: [],
+    map: {},
+  },
+
+  helpRequests: {
     loading: false,
     loaded: false,
     error: null,
@@ -24,11 +34,11 @@ export default {
     reportData: {},
   },
 
-  sendNewRequestHelp: {
+  sendNewReqHelp: {
     saving: false,
     saved: false,
     error: null,
 
-    reqHelpData: {},
+    helpRequestData: {},
   },
 };

@@ -6,7 +6,7 @@ import {
 } from '../actions/actionTypes';
 import initialState from './initialState';
 
-export default function sendNewReqHelp(state = initialState.sendNewRequestHelp, action) {
+export default function sendNewReqHelp(state = initialState.sendNewReqHelp, action) {
   switch (action.type) {
     case SEND_REQUEST_HELP_STARTING: {
       const newState = cloneDeep(state);
@@ -20,7 +20,7 @@ export default function sendNewReqHelp(state = initialState.sendNewRequestHelp, 
       const newState = cloneDeep(state);
       newState.saving = false;
       newState.saved = true;
-      newState.reqHelpData = data.report;
+      newState.helpRequestData = data.helpRequest;
       return newState;
     }
 
