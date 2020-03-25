@@ -4,7 +4,7 @@ import {
   GET_PATIENTS_DATA_ERROR,
 } from './actionTypes';
 import axios from "../api/axios";
-import { apiBaseUrl } from "../api/config";
+import { getApiUrl } from "../api/config";
 
 export function getPatientsDataStarting(query) {
   return { type: GET_PATIENTS_DATA_STARTING, query };
@@ -18,9 +18,9 @@ export function getPatientsDataFailed(err) {
   return { type: GET_PATIENTS_DATA_ERROR, err }
 }
 
-export function getPatientsData(lat, lng, radius, status, page=1, limit=800) {
+export function getPatientsData(stateName, lat, lng, radius, status, page=1, limit=800) {
   return dispatch => (
-    axios.get(`${apiBaseUrl}/patients`, {
+    axios.get(`${getApiUrl(stateName)}/patients`, {
       params: {
         lat,
         lng,

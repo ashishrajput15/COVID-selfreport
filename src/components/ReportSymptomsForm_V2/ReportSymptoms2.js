@@ -17,6 +17,8 @@ class ReportSymptoms2 extends React.Component {
 
       markedLat: '',
       markedLng: '',
+
+      stateName: '',
     };
 
 
@@ -42,9 +44,9 @@ class ReportSymptoms2 extends React.Component {
         this.props.jumpToStep(3);
 
         // Refresh Markers
-        const { markedLat, markedLng } = this.state;
+        const { markedLat, markedLng, stateName } = this.state;
         this.props.actions.getReportsDataStarting();
-        this.props.actions.getReportsData(markedLat, markedLng, 2000);
+        this.props.actions.getReportsData(stateName, markedLat, markedLng, 2000);
       } else if (!sendNewReport.saving && !sendNewReport.saved) {
         const errorMsg = sendNewReport.error ? sendNewReport.error :
           ('Your report could not be saved due to unforeseen errors. ' +
@@ -56,14 +58,14 @@ class ReportSymptoms2 extends React.Component {
     }
   }
 
-  setMarkedLatLng = (markedLat, markedLng) => {
-    this.setState({ markedLat, markedLng });
+  setPos = (markedLat, markedLng, stateName) => {
+    this.setState({ markedLat, markedLng, stateName });
   }
 
   sendReport = (mapState) => {
-    this.setMarkedLatLng(mapState.markedLat, mapState.markedLng);
+    this.setPos(mapState.markedLat, mapState.markedLng, mapState.state);
     this.props.actions.sendReportStarting();
-    this.props.actions.sendReport(Object.assign({}, this.state, mapState));
+    this.props.actions.sendReport(mapState.state, Object.assign({}, this.state, mapState));
     this.sendReportStarted = true;
   }
 
