@@ -7,9 +7,14 @@ import { HelplineInfoCard } from '../MapView/InfoCard';
 
 class ReportSubmitted extends React.Component {
   render() {
-    const { toggleModal, sendNewReport } = this.props;
+    const { toggleModal, sendNewReport, sendNewReqHelp, modalType } = this.props;
 
-    const stateName = (sendNewReport.reportData && sendNewReport.reportData.state) ? sendNewReport.reportData.state : '';
+    let stateName = '';
+    if (modalType === 'report_symptoms') {
+      stateName = (sendNewReport.reportData && sendNewReport.reportData.state) ? sendNewReport.reportData.state : '';
+    } else if (modalType === 'request_help') {
+      stateName = (sendNewReqHelp.helpRequestData && sendNewReqHelp.helpRequestData.state) ? sendNewReqHelp.helpRequestData.state : '';
+    }
 
     return (
       <div className="report-submitted">
@@ -37,16 +42,20 @@ ReportSubmitted.defaultProps = {
   jumpToStep: () => {
   },
   sendNewReport: {},
+  sendNewReqHelp: {},
 };
 
 ReportSubmitted.propTypes = {
   jumpToStep: PropTypes.func,
+  modalType: PropTypes.string.isRequired,
   sendNewReport: PropTypes.object,
+  sendNewReqHelp: PropTypes.object,
   toggleModal: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state => ({
   sendNewReport: state.sendNewReport,
+  sendNewReqHelp: state.sendNewReqHelp,
 }));
 
 const mapDispatchToProps = (dispatch => ({

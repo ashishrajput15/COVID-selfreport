@@ -156,7 +156,8 @@ export const parsedHelpline = StateName => {
     keys: ["stateName"]
   };
   const fuseS = new Fuse(STATE_HELPLINE_NUMBERS, options);
-  return fuseS.search(StateName)[0].item;
+  const matches = fuseS.search(StateName);
+  return (matches && matches[0]) ? matches[0].item : null;
 };
 
 InfoCard.propTypes = {

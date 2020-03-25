@@ -12,9 +12,9 @@ class RequestHelp1 extends React.Component {
     this.state = {
       errorAlertShown: false,
 
-      helpRequest: props.helpRequests,
-      detailRequest: props.detailRequest,
-    }
+      requestedItems: props.helpRequests,
+      requestDetails: props.detailRequest,
+    };
 
     this.sendRequestHelpStarted = false;
   }
@@ -31,12 +31,22 @@ class RequestHelp1 extends React.Component {
   }
 
   handleToasts(props) {
-    console.log('handling request help toasts');
     if (this.sendRequestHelpStarted) {
       const { sendNewReqHelp } = props;
       if (!sendNewReqHelp.saving && sendNewReqHelp.saved) {
         this.sendRequestHelpStarted = false;
         this.props.jumpToStep(2);
+
+        // Refresh Markers
+        this.props.actions.getHelpRequestsStarting();
+        this.props.actions.getHelpRequests(23.259933, 77.412613, 2000);
+      } else if (!sendNewReqHelp.saving && !sendNewReqHelp.saved) {
+        const errorMsg = sendNewReqHelp.error ? sendNewReqHelp.error :
+          ('Your report could not be saved due to unforeseen errors. ' +
+          'If this problem persists, please get in touch with us in our Telegram group.');
+
+        alert(errorMsg);
+        this.sendRequestHelpStarted = false;
       }
     }
   }

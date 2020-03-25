@@ -157,11 +157,17 @@ class MapControls extends React.Component {
               onClick={this.toggleRequestHelpModal}
             />
             <Button
-              className="fab-item btn btn-danger btn-link text-white"
+              // className="fab-item btn btn-danger btn-link text-white"
               tooltip="Report Symptoms"
+              icon="fa fa-exclamation-triangle"
+              // rotate={false}
+              onClick={this.toggleReportSymptomsModal}
+            />
+            <Button
+              className="fab-item btn btn-danger btn-link text-white"
+              tooltip="New Request"
               icon="fa fa-plus"
               rotate={false}
-              onClick={this.toggleReportSymptomsModal}
             />
           </Container>
         </div>
@@ -212,6 +218,22 @@ class MapControls extends React.Component {
                   </Label>
                 </FormGroup>
 
+                <FormGroup check title="Currently unavailable.">
+                  <Label check>
+                    <Input
+                      className="form-check-input"
+                      type="radio"
+                      name="rdoViewType"
+                      id="rdoViewTypeHelpRequests"
+                      value="help_requests"
+                      checked={viewType === 'help_requests'}
+                      onChange={onViewTypeChanged}
+                    />
+                    {' '}
+                    Help Requests
+                  </Label>
+                </FormGroup>
+
                 <FormGroup check>
                   <Label check>
                     <Input
@@ -225,23 +247,6 @@ class MapControls extends React.Component {
                     />
                     {' '}
                     Confirmed Cases
-                  </Label>
-                </FormGroup>
-
-                <FormGroup check title="Currently unavailable.">
-                  <Label check>
-                    <Input
-                      disabled
-                      className="form-check-input"
-                      type="radio"
-                      name="rdoViewType"
-                      id="rdoViewTypeHelpRequests"
-                      value="help_requests"
-                      checked={viewType === 'help_requests'}
-                      //onChange={onViewTypeChanged}
-                    />
-                    {' '}
-                    Help Requests
                   </Label>
                 </FormGroup>
               </Form>

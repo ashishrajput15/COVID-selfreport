@@ -70,36 +70,43 @@ class ReportSymptomsModal_V2 extends React.Component {
     const { symptoms, numDays } = this.state;
 
     // Show simple form
-    const steps = [
-      {
-        name: 'Intro',
-        component: (
-          <Intro
-            toggleHelplineBar={toggleHelplineBar}
-            toggleKeyInfoBar={toggleKeyInfoBar}
-            toggleModal={toggleModal}
-          />
-        )
-      },
-      {
-        name: 'ReportSymptoms1', component: (
+    const steps = [{
+      name: 'Intro',
+      component: (
+        <Intro
+          toggleHelplineBar={toggleHelplineBar}
+          toggleKeyInfoBar={toggleKeyInfoBar}
+          toggleModal={toggleModal}
+        />
+      )
+    }, {
+      name: 'ReportSymptoms1',
+      component: (
         <ReportSymptoms1
           symptoms={symptoms}
           numDays={numDays}
           onNumDaysChanged={this.onNumDaysChanged}
           toggleSymptom={this.toggleSymptom}
         />
-      )
-      },
-      { name: 'ReportSymptoms2', component: (
+      ),
+    }, {
+      name: 'ReportSymptoms2',
+      component: (
         <ReportSymptoms2
           mapCenter={mapCenter}
           symptoms={symptoms}
           numDays={numDays}
         />
-      ) },
-      { name: 'ReportSubmitted', component: (<ReportSubmitted toggleModal={toggleModal} />) },
-    ];
+      ),
+    }, {
+      name: 'ReportSubmitted',
+      component: (
+        <ReportSubmitted
+          modalType="report_symptoms"
+          toggleModal={toggleModal}
+        />
+      ),
+    }];
 
     return (
       <Modal isOpen={true} toggle={this.props.toggleModal} className="report-symptoms-modal" backdrop="static">

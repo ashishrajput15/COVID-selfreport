@@ -242,3 +242,21 @@ export const MapStyleDark = [
     stylers: [{ color: '#17263c' }]
   }
 ];
+
+export const MarkerClusterStyles = [
+  {
+    width: 30,
+    height: 30,
+    className: 'reporter-custom-clustericon-1'
+  },
+  {
+    width: 40,
+    height: 40,
+    className: 'reporter-custom-clustericon-2'
+  },
+  {
+    width: 50,
+    height: 50,
+    className: 'reporter-custom-clustericon-3'
+  }
+];
