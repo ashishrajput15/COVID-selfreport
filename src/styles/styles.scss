@@ -130,6 +130,31 @@ $vin-red: #ff0000;
   }
 }
 
+#btn-req-help-container {
+  border: 1px solid black;
+  position: absolute !important;
+  margin-bottom: 40px;
+  bottom: 40px;
+  right: 10px !important;
+
+  .fab-container {
+    bottom: 3vh;
+    margin: 1em;
+    right: 2vw;
+  }
+
+  .fab-item {
+    border-radius: 50%;
+
+    //width: 40px;
+    //height: 40px;
+  }
+}
+
+.req-help-container {
+  margin-bottom: 30px;
+}
+
 #btn-extras-container {
   margin-top: 5px;
   position: absolute !important;
@@ -286,6 +311,47 @@ $vin-red: #ff0000;
 }
 
 .report-symptoms-modal {
+  .modal-content {
+    border-color: #dc3545 !important;
+  }
+
+  &.modal-dialog {
+    max-width: 720px;
+  }
+
+  .symptom-card {
+    margin-bottom: 1.5rem;
+
+    img {
+      width: 150px;
+
+      @media (max-width: 576px) {
+        width: 75px;
+      }
+    }
+
+    &.symptom-present {
+      -webkit-box-shadow: 0px 0px 10px 1px rgba(201,78,78,0.73);
+      -moz-box-shadow: 0px 0px 10px 1px rgba(201,78,78,0.73);
+      box-shadow: 0px 0px 10px 1px rgba(201,78,78,0.73);
+
+      .check-icon {
+        position: absolute;
+        right: 1rem;
+      }
+    }
+  }
+
+  .report-submitted {
+    .card-body {
+      padding: 0 !important;
+      margin-top: 1rem;
+      margin-bottom: 2rem;
+    }
+  }
+}
+
+.request-help-modal {
   .modal-content {
     border-color: #dc3545 !important;
   }

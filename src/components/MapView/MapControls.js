@@ -4,6 +4,7 @@ import classnames from 'classnames';
 import { Container, Button } from 'react-floating-action-button';
 import { InfoCard } from "./InfoCard";
 import ReportSymptomsModal_V2 from './ReportSymptomsModal_V2';
+import RequestHelpModal from './RequestHelpModal';
 import { Form, FormGroup, Input, Label } from 'reactstrap';
 
 class MapControls extends React.Component {
@@ -14,10 +15,12 @@ class MapControls extends React.Component {
       showStateHelplineNumber: false,
       showKeyInfo: false,
       showReportSymptomsModal: false,
+      showRequestHelpModal: false,
     };
 
     this.hideAllCards = this.hideAllCards.bind(this);
     this.toggleReportSymptomsModal = this.toggleReportSymptomsModal.bind(this);
+    this.toggleRequestHelpModal = this.toggleRequestHelpModal.bind(this);
   }
 
   componentDidMount() {
@@ -48,6 +51,13 @@ class MapControls extends React.Component {
     this.setState({
       showReportSymptomsModal: !showReportSymptomsModal,
     });
+  }
+
+  toggleRequestHelpModal() {
+    const { showRequestHelpModal } = this.state;
+    this.setState({
+      showRequestHelpModal: !showRequestHelpModal,
+    })
   }
 
   getstateFromCordinates = (location) => {
@@ -83,6 +93,7 @@ class MapControls extends React.Component {
       showStateHelplineNumber: !this.state.showStateHelplineNumber,
       showKeyInfo: false,
       showReportSymptomsModal: false,
+      showRequestHelpModal: false,
     });
 
   toggleKeyInfoBar = () =>
@@ -90,13 +101,15 @@ class MapControls extends React.Component {
       showKeyInfo: !this.state.showKeyInfo,
       showStateHelplineNumber: false,
       showReportSymptomsModal: false,
+      showRequestHelpModal: false,
     });
 
   render() {
     const { isMapLoaded, clearSearchBox, goToUserLocation, mapCenter, onViewTypeChanged, viewType } = this.props;
-    const { stateName, showStateHelplineNumber, showKeyInfo, showReportSymptomsModal } = this.state;
+    const { stateName, showStateHelplineNumber, showKeyInfo, showReportSymptomsModal, showRequestHelpModal } = this.state;
 
     let reportSymptomsModal = null;
+    let requestHelpModal = null;
     if (showReportSymptomsModal) {
       reportSymptomsModal = (
         <ReportSymptomsModal_V2
@@ -106,6 +119,16 @@ class MapControls extends React.Component {
           toggleModal={this.toggleReportSymptomsModal}
         />
       );
+    }
+    if (showRequestHelpModal) {
+      requestHelpModal = (
+        <RequestHelpModal
+          mapCenter={mapCenter}
+          toggleHelplineBar={this.toggleHelplineBar}
+          toggleKeyInfoBar={this.toggleKeyInfoBar}
+          toggleModal={this.toggleRequestHelpModal}
+        />
+      )
     }
 
     return (
@@ -123,6 +146,13 @@ class MapControls extends React.Component {
 
         <div id="btn-plus-container" className={classnames({ 'd-none': !isMapLoaded })}>
           <Container>
+            <Button
+              // className="fab-item btn btn-danger btn-link text-white"
+              tooltip="Request Help"
+              icon="fa fa-ambulance"
+              // rotate={false}
+              onClick={this.toggleRequestHelpModal}
+            />
             <Button
               className="fab-item btn btn-danger btn-link text-white"
               tooltip="Report Symptoms"
@@ -242,6 +272,7 @@ class MapControls extends React.Component {
         </div>
 
         {reportSymptomsModal}
+        {requestHelpModal}
       </div>
     )
   }

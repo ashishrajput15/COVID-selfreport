@@ -65,7 +65,6 @@ class MapView extends React.Component {
   }
 
   componentDidMount() {
-    console.log(this.props);
     this.setState({
       showMap: true,
     });
