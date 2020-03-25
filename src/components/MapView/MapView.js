@@ -212,6 +212,13 @@ class MapView extends React.Component {
           });
         });
 
+				new google.maps.Marker({
+					position: this.map.center,
+					map: this.map,
+					animation:google.maps.Animation.DROP,
+					icon: 'http://maps.google.com/mapfiles/ms/icons/blue.png'
+				});
+
         const btnPlus = document.getElementById('btn-plus-container');
         this.map.controls[google.maps.ControlPosition.BOTTOM_RIGHT].push(btnPlus);
 
