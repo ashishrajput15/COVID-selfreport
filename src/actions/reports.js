@@ -8,7 +8,7 @@ import {
   SEND_REPORT_ERROR,
 } from './actionTypes';
 import axios from "../api/axios";
-import { apiBaseUrl } from "../api/config";
+import { getApiUrl } from "../api/config";
 
 export function getReportsDataStarting(query) {
   return { type: GET_REPORTS_DATA_STARTING, query };
@@ -22,9 +22,9 @@ export function getReportsDataFailed(err) {
   return { type: GET_REPORTS_DATA_ERROR, err }
 }
 
-export function getReportsData(lat, lng, radius, page = 1, limit = 800) {
+export function getReportsData(stateName, lat, lng, radius, page = 1, limit = 800) {
   return dispatch => (
-    axios.get(`${apiBaseUrl}/reports`, {
+    axios.get(`${getApiUrl(stateName)}/reports`, {
       params: {
         lat,
         lng,
@@ -59,9 +59,9 @@ export function sendReportFailed(err) {
   return { type: SEND_REPORT_ERROR, err }
 }
 
-export function sendReport(reportData) {
+export function sendReport(stateName, reportData) {
   return dispatch => (
-    axios.post(`${apiBaseUrl}/reports`, reportData).then((response) => {
+    axios.post(`${getApiUrl(stateName)}/reports`, reportData).then((response) => {
       if (response && response.status === 200 && response.data.success) {
         dispatch(sendReportSuccess(response.data));
         return;

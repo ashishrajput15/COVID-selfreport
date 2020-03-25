@@ -8,7 +8,7 @@ import {
   SEND_REQUEST_HELP_ERROR,
 } from './actionTypes';
 import axios from "../api/axios";
-import { apiBaseUrl } from "../api/config"
+import { getApiUrl } from "../api/config"
 
 export function getHelpRequestsStarting(query) {
   return { type: GET_HELP_REQUESTS_STARTING, query };
@@ -22,9 +22,9 @@ export function getHelpRequestsFailed(err) {
   return { type: GET_HELP_REQUESTS_ERROR, err }
 }
 
-export function getHelpRequests(lat, lng, radius, page = 1, limit = 800) {
+export function getHelpRequests(stateName, lat, lng, radius, page = 1, limit = 800) {
   return dispatch => (
-    axios.get(`${apiBaseUrl}/help_requests`, {
+    axios.get(`${getApiUrl(stateName)}/help_requests`, {
       params: {
         lat,
         lng,
@@ -59,9 +59,9 @@ export function sendRequestHelpFailed(err) {
   return { type: SEND_REQUEST_HELP_ERROR, err }
 }
 
-export function sendRequestHelp(reportData) {
+export function sendRequestHelp(stateName, reportData) {
   return dispatch => (
-    axios.post(`${apiBaseUrl}/help_requests`, reportData).then((response) => {
+    axios.post(`${getApiUrl(stateName)}/help_requests`, reportData).then((response) => {
       if (response && response.status === 200 && response.data.success) {
         dispatch(sendRequestHelpSuccess(response.data));
         return;

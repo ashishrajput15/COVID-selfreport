@@ -11,6 +11,7 @@ import * as reportsActions from '../../actions/reports';
 import MapControls from './MapControls';
 import { MapStyle1, MapStyle2, MarkerClusterStyles } from '../../../tools/constants';
 import imgSingleReportMarker from '../../assets/marker_single_case.png';
+import { getAddress } from '../../util';
 
 const mapContainerHeight = `${window.innerHeight - 1}px`;
 
@@ -34,6 +35,13 @@ class MapView extends React.Component {
       mapZoom: 5,
 
       viewType: 'reported',
+
+      address: '',
+      street: '',
+      state: '',
+      district: '',
+      city: '',
+      pincode: '',
     };
 
     this.map = null;
@@ -88,6 +96,35 @@ class MapView extends React.Component {
     }
   }
 
+  geocodeAddress(mapCenter) {
+    const { google } = window;
+    if (!google) {
+      setTimeout(() => {
+        this.geocodeAddress();
+      }, 400);
+      return;
+    }
+
+    const geocoder = new google.maps.Geocoder();
+
+    geocoder.geocode({
+      latLng: mapCenter,
+    }, (results, status) => {
+      if (status === google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
+        setTimeout(() => console.log('Preventing OVER_QUERY_LIMIT error'), 1000);
+      }
+      if (status === google.maps.GeocoderStatus.OK) {
+        //console.log('User moved marker to this place');
+        //console.log(results[0]);
+        const place = results[0];
+        this.setState({...getAddress(place)});
+        // this.setAddressComponents(place);
+      } else {
+        console.log('Failed to get the place at given latlng');
+      }
+    });
+  }
+
   onGeolocationSuccess(pos) {
     try {
       const { coords: crd } = pos;
@@ -121,16 +158,16 @@ class MapView extends React.Component {
   }
 
   refreshData() {
-    const { mapCenter, viewType } = this.state;
+    const { mapCenter, viewType, state } = this.state;
     if (viewType === 'confirmed') {
       this.props.actions.getPatientsDataStarting();
-      this.props.actions.getPatientsData(mapCenter.lat, mapCenter.lng, 2000, viewType);
+      this.props.actions.getPatientsData(state, mapCenter.lat, mapCenter.lng, 2000, viewType);
     } else if (viewType === 'reported') {
       this.props.actions.getReportsDataStarting();
-      this.props.actions.getReportsData(mapCenter.lat, mapCenter.lng, 2000);
+      this.props.actions.getReportsData(state, mapCenter.lat, mapCenter.lng, 2000);
     } else if (viewType === 'help_requests') {
       this.props.actions.getHelpRequestsStarting();
-      this.props.actions.getHelpRequests(mapCenter.lat, mapCenter.lng, 2000);
+      this.props.actions.getHelpRequests(state, mapCenter.lat, mapCenter.lng, 2000);
     }
   }
 
@@ -200,6 +237,9 @@ class MapView extends React.Component {
         this.map.addListener('bounds_changed', () => {
           this.searchBox.setBounds(this.map.getBounds());
           const mapCenter = this.map.getCenter();
+
+          // this.geocodeAddress(mapCenter);
+          this.geocodeAddress(mapCenter);
 
           this.setState({
             mapCenter: {
