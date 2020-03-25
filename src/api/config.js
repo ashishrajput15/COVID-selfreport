@@ -25,6 +25,7 @@ switch (env) {
   case 'production': {
     appUrl = 'https://reportcorona.live';
     apiBaseUrl = 'https://reportcorona.live';
+    appUrl = getApiUrl();
     googleAnalyticsId = 'UA-124346507-2';
     break;
   }
@@ -36,4 +37,21 @@ switch (env) {
     googleAnalyticsId = 'UA-129318919-1';
     break;
   }
+}
+
+export const getApiUrl = (stateName) => {
+  let url = '';
+  if(env === 'development') {
+    return 'http://localhost:3000';
+  }
+  switch(stateName.toLowerCase()){
+    case 'karnataka': {
+      url = 'https://reportcorona.live';
+      break;
+    }
+    default: {
+      url = 'https://reportcorona.live';
+    }
+  }
+  return url;
 }
