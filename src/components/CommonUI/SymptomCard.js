@@ -24,7 +24,7 @@ class SymptomCard extends React.Component {
                 <i className="fa fa-check-circle fa-2x" />
               </span>
             )}
-            <img src={image} alt="cough" />
+            <img src={image}  alt="cough" />
           </CardBody>
         </Card>
       </Col>

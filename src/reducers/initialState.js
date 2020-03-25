@@ -23,4 +23,12 @@ export default {
 
     reportData: {},
   },
+
+  sendNewRequestHelp: {
+    saving: false,
+    saved: false,
+    error: null,
+
+    reqHelpData: {},
+  },
 };

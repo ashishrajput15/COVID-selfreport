@@ -5,7 +5,7 @@ import cough from '../../assets/cough.png';
 import fever from '../../assets/fever.png';
 import soreThroat from '../../assets/soreThroat.png';
 import tired from '../../assets/tired.png';
-import SymptomCard from './SymptomCard';
+import SymptomCard from '../CommonUI/SymptomCard';
 
 class ReportSymptoms5 extends React.Component {
   constructor(props) {
