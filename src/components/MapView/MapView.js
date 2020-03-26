@@ -5,13 +5,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
+
 import * as helpRequestsActions from '../../actions/requestHelp';
 import * as patientsActions from '../../actions/patients';
 import * as reportsActions from '../../actions/reports';
+import * as languageActions from '../../actions/language';
 import MapControls from './MapControls';
 import { MapStyle1, MapStyle2, MarkerClusterStyles } from '../../../tools/constants';
 import imgSingleReportMarker from '../../assets/marker_single_case.png';
-import { getAddress } from '../../util';
+import { getAddress, cookie } from '../../util';
+import { messages } from '../../../tools/messages';
 
 const mapContainerHeight = `${window.innerHeight - 1}px`;
 
@@ -55,6 +58,11 @@ class MapView extends React.Component {
     this.onGeolocationSuccess = this.onGeolocationSuccess.bind(this);
     this.onGeolocationError = this.onGeolocationError.bind(this);
     this.onViewTypeChanged = this.onViewTypeChanged.bind(this);
+
+    let prefLng = cookie.getCookie('lng');
+    if (!(prefLng !== 'en' && prefLng !== '')) {
+      cookie.setCookie('lng', 'en');
+    }
   }
 
   componentDidMount() {
@@ -383,12 +391,15 @@ class MapView extends React.Component {
 
   render() {
     const { showMap, isMapLoaded, mapCenter, viewType } = this.state;
+    const { intl } = this.props;
 
     return (
       <div>
         {!showMap && (
           <div style={{ width: '100%', height: mapContainerHeight, textAlign: 'center', marginTop: '2rem' }}>
-            <h2>COVID 19 Self Reporting Tool</h2>
+            <h2>
+              {intl.formatMessage(messages.mapViewMainHeading)}
+            </h2>
 
             <p>Allow location access to load information at your current location.</p>
           </div>
@@ -396,7 +407,9 @@ class MapView extends React.Component {
 
         {(showMap && !isMapLoaded) && (
           <div style={{ width: '100%', height: mapContainerHeight, textAlign: 'center', marginTop: '2rem' }}>
-            <h2>COVID 19 Self Reporting Tool</h2>
+            <h2>
+              {intl.formatMessage(messages.mapViewMainHeading)}
+            </h2>
 
             <p>Fetching latest data...</p>
           </div>
@@ -413,6 +426,7 @@ class MapView extends React.Component {
           mapCenter={mapCenter}
           onViewTypeChanged={this.onViewTypeChanged}
           viewType={viewType}
+          intl={intl}
         />
       </div>
     );
@@ -432,17 +446,19 @@ MapView.propTypes = {
   location: PropTypes.object.isRequired,
   patientsData: PropTypes.object,
   reportsData: PropTypes.object,
+  intl: PropTypes.object,
 };
 
 const mapStateToProps = (state => ({
   helpRequests: state.helpRequests,
   patientsData: state.patientsData,
   reportsData: state.reportsData,
+  intl: state.language.intl,
 }));
 
 const mapDispatchToProps = (dispatch => ({
   actions: bindActionCreators(
-    Object.assign({}, helpRequestsActions, patientsActions, reportsActions),
+    Object.assign({}, helpRequestsActions, patientsActions, reportsActions, languageActions),
     dispatch,
   ),
 }));

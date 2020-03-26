@@ -1,3 +1,4 @@
+
 export const STATE_HELPLINE_NUMBERS = [
   { stateName: "Andhra Pradesh", phone1: `0866-2410978` },
   { stateName: "Arunachal Pradesh", phone1: `9536055743` },
@@ -38,15 +39,15 @@ export const STATE_HELPLINE_NUMBERS = [
 ];
 
 export const HELPLINE_CONTENT = [{
-  heading: `National Helpline Number`,
+  heading: 'National Helpline Number',
   phone1: '1075',
   phone2: '1800-112-545',
 }, {
-  heading: `Central Helpline Number`,
+  heading: 'Central Helpline Number',
   phone1: `+91-11-23978043`,
   phone2: `+91-11-23978046`,
 }, {
-  heading: `Central Helpline Email`,
+  heading: 'Central Helpling Email',
   email1: `ncov2019@gmail.com`,
 }];
 

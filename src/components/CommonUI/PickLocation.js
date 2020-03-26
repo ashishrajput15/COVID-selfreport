@@ -9,7 +9,9 @@ import {
   Row,
   Col,
 } from 'reactstrap';
+
 import { getAddress } from '../../util';
+import { messages } from '../../../tools/messages';
 
 class PickLocation extends React.Component {
   constructor(props) {
@@ -259,7 +261,7 @@ class PickLocation extends React.Component {
   }
 
   render() {
-    const { saving, goBackAction, confirmAction } = this.props;
+    const { saving, goBackAction, confirmAction, intl } = this.props;
     const { markedLat, markedLng, address } = this.state;
 
     let btnSave;
@@ -286,11 +288,11 @@ class PickLocation extends React.Component {
 
     return (
       <div>
-        <h5 className="mb-3">Confirm your location</h5>
+        <h5 className="mb-3">{intl.formatMessage(messages.confirm)}</h5>
 
         <InputGroup className="mb-3">
           <Input
-            placeholder="Search Location"
+            placeholder={intl.formatMessage(messages.searchLocation)}
             id="pac-input2"
             value={address}
             onChange={this.onAddressChanged}
@@ -319,7 +321,7 @@ class PickLocation extends React.Component {
                   goBackAction();
                 }}
               >
-                <i className="fa fa-arrow-left" />&nbsp;Back
+                <i className="fa fa-arrow-left" />&nbsp;{intl.formatMessage(messages.back)}
               </Button>
             </Col>
             <Col xs={6} className="text-right">
@@ -343,6 +345,7 @@ PickLocation.propTypes = {
   saving: PropTypes.bool,
   goBackAction: PropTypes.func,
   confirmAction: PropTypes.func,
+  intl: PropTypes.object.isRequired,
 };
 
 

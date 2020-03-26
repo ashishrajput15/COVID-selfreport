@@ -66,7 +66,7 @@ class RequestHelpModal extends React.Component {
   }
 
   render() {
-    const { toggleModal, mapCenter } = this.props;
+    const { toggleModal, mapCenter, intl } = this.props;
     const { helpRequests, detailRequest } = this.state;
 
     // Show simple form
@@ -84,6 +84,7 @@ class RequestHelpModal extends React.Component {
       name: 'RequestHelp',
       component: (
         <RequestHelp1
+          intl={intl}
           mapCenter={mapCenter}
           helpRequests={helpRequests}
           detailRequest={detailRequest}
@@ -119,7 +120,6 @@ class RequestHelpModal extends React.Component {
             </div>
           </Form>
         </ModalBody>
-
       </Modal>
     )
   }
@@ -135,10 +135,12 @@ RequestHelpModal.propTypes = {
   mapCenter: PropTypes.object.isRequired,
   reportReqHelp: PropTypes.object,
   toggleModal: PropTypes.func.isRequired,
+  intl: PropTypes.object
 };
 
 const mapStateToProps = (state => ({
   reportReqHelp: state.reportReqHelp,
+  intl: state.language.intl
 }));
 
 const mapDispatchToProps = (dispatch => ({

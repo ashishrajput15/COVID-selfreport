@@ -3,12 +3,15 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { Container, Button } from 'react-floating-action-button';
 import { InfoCard } from "./InfoCard";
+
 import ReportSymptomsModal_V2 from './ReportSymptomsModal_V2';
 import RequestHelpModal from './RequestHelpModal';
+import LanguageModal from './LanguageModal';
 import { Form, FormGroup, Input, Label } from 'reactstrap';
 import marker1 from '../../assets/marker1.png';
 import marker2 from '../../assets/marker2.png';
 import marker3 from '../../assets/marker3.png';
+import { messages } from '../../../tools/messages';
 
 class MapControls extends React.Component {
   constructor(props) {
@@ -19,11 +22,13 @@ class MapControls extends React.Component {
       showKeyInfo: false,
       showReportSymptomsModal: false,
       showRequestHelpModal: false,
+      showLanguageModal: false,
     };
 
     this.hideAllCards = this.hideAllCards.bind(this);
     this.toggleReportSymptomsModal = this.toggleReportSymptomsModal.bind(this);
     this.toggleRequestHelpModal = this.toggleRequestHelpModal.bind(this);
+    this.toggleLanguageModal = this.toggleLanguageModal.bind(this);
   }
 
   componentDidMount() {
@@ -60,6 +65,13 @@ class MapControls extends React.Component {
     const { showRequestHelpModal } = this.state;
     this.setState({
       showRequestHelpModal: !showRequestHelpModal,
+    })
+  }
+
+  toggleLanguageModal() {
+    const { showLanguageModal } = this.state;
+    this.setState({
+      showLanguageModal: !showLanguageModal,
     })
   }
 
@@ -108,11 +120,12 @@ class MapControls extends React.Component {
     });
 
   render() {
-    const { isMapLoaded, clearSearchBox, goToUserLocation, mapCenter, onViewTypeChanged, viewType } = this.props;
-    const { stateName, showStateHelplineNumber, showKeyInfo, showReportSymptomsModal, showRequestHelpModal } = this.state;
+    const { isMapLoaded, clearSearchBox, goToUserLocation, mapCenter, onViewTypeChanged, viewType, intl } = this.props;
+    const { stateName, showStateHelplineNumber, showKeyInfo, showReportSymptomsModal, showRequestHelpModal, showLanguageModal } = this.state;
 
     let reportSymptomsModal = null;
     let requestHelpModal = null;
+    let languageModal = null;
     if (showReportSymptomsModal) {
       reportSymptomsModal = (
         <ReportSymptomsModal_V2
@@ -133,6 +146,14 @@ class MapControls extends React.Component {
         />
       )
     }
+    if (showLanguageModal) {
+      languageModal = (
+        <LanguageModal
+        toggleModal={this.toggleLanguageModal}
+        />
+      )
+    }
+
 
     return (
       <div>
@@ -151,14 +172,14 @@ class MapControls extends React.Component {
           <Container>
             <Button
               // className="fab-item btn btn-danger btn-link text-white"
-              tooltip="Request Help"
+              tooltip={intl.formatMessage(messages.reqHelp)}
               icon="fa fa-ambulance"
               // rotate={false}
               onClick={this.toggleRequestHelpModal}
             />
             <Button
               // className="fab-item btn btn-danger btn-link text-white"
-              tooltip="Report Symptoms"
+              tooltip={intl.formatMessage(messages.reportSymptoms)}
               icon="fa fa-exclamation-triangle"
               // rotate={false}
               onClick={this.toggleReportSymptomsModal}
@@ -166,7 +187,7 @@ class MapControls extends React.Component {
             <Button
               className="fab-item btn btn-danger btn-link text-white"
               tooltip="New Request"
-              icon="fa fa-plus"
+              icon="fa fa-plus fa-1x"
               rotate={false}
             />
           </Container>
@@ -174,21 +195,23 @@ class MapControls extends React.Component {
 
         <div id="btn-extras-container" className={classnames({ 'd-none': !isMapLoaded })}>
           <button className="btn btn-primary" onClick={this.toggleKeyInfoBar}>
-            Key Info
+            {intl.formatMessage(messages.keyInfo)}
           </button>
           <span className="d=block d-sm-none"><br /></span>
           <button className="btn btn-primary ml-0 ml-sm-3 mt-2 mt-sm-0"
                   onClick={this.toggleHelplineBar}>
-            Helpline Nos
+            {intl.formatMessage(messages.helplineNumbers)}
           </button>
           {showKeyInfo &&
           <InfoCard
+            intl={intl}
             toggle={this.hideAllCards}
             cardType={InfoCard.cardTypes.KEY_INFO}
           />
           }
           {showStateHelplineNumber &&
           <InfoCard
+            intl={intl}
             stateName={stateName}
             cardType={InfoCard.cardTypes.HELPLINE}
             toggle={this.hideAllCards}
@@ -199,7 +222,7 @@ class MapControls extends React.Component {
         <div id="btn-select-container" className={classnames({ 'd-none': !isMapLoaded })}>
           <div className="card">
             <div className="card-body">
-              <h5 className="card-title">View</h5>
+              <h5 className="card-title">{intl.formatMessage(messages.view)}</h5>
 
               <Form>
                 <FormGroup check>
@@ -213,8 +236,7 @@ class MapControls extends React.Component {
                       checked={viewType === 'reported'}
                       onChange={onViewTypeChanged}
                     />
-                    {' '}
-                    Symptom Reports
+                    {' ' + intl.formatMessage(messages.symptomReports)}
                   </Label>
                 </FormGroup>
 
@@ -229,8 +251,7 @@ class MapControls extends React.Component {
                       checked={viewType === 'help_requests'}
                       onChange={onViewTypeChanged}
                     />
-                    {' '}
-                    Help Requests
+                    {' ' + intl.formatMessage(messages.helpRequests)}
                   </Label>
                 </FormGroup>
 
@@ -245,8 +266,7 @@ class MapControls extends React.Component {
                       checked={viewType === 'confirmed'}
                       onChange={onViewTypeChanged}
                     />
-                    {' '}
-                    Confirmed Cases
+                    {' ' + intl.formatMessage(messages.confirmedCases)}
                   </Label>
                 </FormGroup>
               </Form>
@@ -272,6 +292,17 @@ class MapControls extends React.Component {
           </div>
         </div>
 
+        <div id="lng-button-container" className={classnames({ 'input-group mb-3': true, 'd-none': !isMapLoaded })}>
+          <div id="button-input" className="p-2">
+            <Button
+              className="fa fa-language fa-2x"
+              onClick={() => {
+                this.toggleLanguageModal()
+              }}>
+            </Button>
+          </div>
+        </div>
+
         <div id="btn-gps-container" className={classnames({ 'd-none': !isMapLoaded })}>
           <button className="btn btn-light" onClick={goToUserLocation}>
             <i className="fa fa-compass" />
@@ -280,6 +311,7 @@ class MapControls extends React.Component {
 
         {reportSymptomsModal}
         {requestHelpModal}
+        {languageModal}
       </div>
     )
   }
@@ -292,6 +324,7 @@ MapControls.propTypes = {
   mapCenter: PropTypes.object.isRequired,
   onViewTypeChanged: PropTypes.func.isRequired,
   viewType: PropTypes.string.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 export default MapControls;

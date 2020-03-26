@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 import {
   Form, Modal, ModalBody, ModalHeader
 } from 'reactstrap';
+import { messages } from '../../../tools/messages';
+
 import * as reportsActions from '../../actions/reports';
 import StepZilla from 'react-stepzilla';
 import Intro from '../ReportSymptomsForm_V2/Intro';
@@ -66,7 +68,7 @@ class ReportSymptomsModal_V2 extends React.Component {
   }
 
   render() {
-    const { mapCenter, toggleHelplineBar, toggleKeyInfoBar, toggleModal } = this.props;
+    const { mapCenter, toggleHelplineBar, toggleKeyInfoBar, toggleModal, intl } = this.props;
     const { symptoms, numDays } = this.state;
 
     // Show simple form
@@ -74,6 +76,7 @@ class ReportSymptomsModal_V2 extends React.Component {
       name: 'Intro',
       component: (
         <Intro
+          intl={intl}
           toggleHelplineBar={toggleHelplineBar}
           toggleKeyInfoBar={toggleKeyInfoBar}
           toggleModal={toggleModal}
@@ -83,6 +86,7 @@ class ReportSymptomsModal_V2 extends React.Component {
       name: 'ReportSymptoms1',
       component: (
         <ReportSymptoms1
+          intl={intl}
           symptoms={symptoms}
           numDays={numDays}
           onNumDaysChanged={this.onNumDaysChanged}
@@ -111,7 +115,7 @@ class ReportSymptomsModal_V2 extends React.Component {
     return (
       <Modal isOpen={true} toggle={this.props.toggleModal} className="report-symptoms-modal" backdrop="static">
         <ModalHeader toggle={this.props.toggleModal} className="text-danger">
-          Help India Fight Corona
+          {intl.formatMessage(messages.helpIndiaFightCorona)}
         </ModalHeader>
 
         <ModalBody className="pb-4">
@@ -153,10 +157,12 @@ ReportSymptomsModal_V2.propTypes = {
   toggleHelplineBar: PropTypes.func.isRequired,
   toggleKeyInfoBar: PropTypes.func.isRequired,
   toggleModal: PropTypes.func.isRequired,
+  intl: PropTypes.object,
 };
 
 const mapStateToProps = (state => ({
   reportSymptoms: state.reportSymptoms,
+  intl: state.language.intl,
 }));
 
 const mapDispatchToProps = (dispatch => ({

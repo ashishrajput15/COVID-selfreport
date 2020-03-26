@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+
 import * as reportsActions from '../../actions/reports';
 import PickLocation from '../CommonUI/PickLocation';
 
@@ -298,9 +299,10 @@ class ReportSymptoms2 extends React.Component {
   }
 
   render() {
-    const { jumpToStep, sendNewReport, mapCenter } = this.props;
+    const { jumpToStep, sendNewReport, mapCenter, intl } = this.props;
     return (
       <PickLocation
+        intl={intl}
         saving={sendNewReport.saving}
         goBackAction={() => jumpToStep(1)}
         confirmAction={(mapState) => this.sendReport(mapState)}
@@ -324,10 +326,12 @@ ReportSymptoms2.propTypes = {
   numDays: PropTypes.string.isRequired,
   sendNewReport: PropTypes.object,
   symptoms: PropTypes.object.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state => ({
   sendNewReport: state.sendNewReport,
+  intl: state.language.intl,
 }));
 
 const mapDispatchToProps = (dispatch => ({

@@ -1,21 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Col, Row } from 'reactstrap';
+import { messages } from '../../../tools/messages';
 
 class Intro extends React.Component {
   render() {
-    const { toggleModal, jumpToStep } = this.props;
+    const { toggleModal, jumpToStep, intl } = this.props;
 
     return (
       <div>
         <Row>
           <Col xs={12} md={12} className="text-center">
             <p>
-              Let’s fight community spread by reporting symptoms.
+              {intl.formatMessage(messages.letsFightComSpread)}
             </p>
 
             <h5>
-              Do you or anyone you know have any symptoms?
+              {intl.formatMessage(messages.symptomsQuestion)}
             </h5>
 
             <br />
@@ -29,7 +30,7 @@ class Intro extends React.Component {
                   }}
                   size="lg"
                 >
-                  Yes
+                  {intl.formatMessage(messages.yes)}
                 </Button>
 
                 <Button
@@ -38,7 +39,7 @@ class Intro extends React.Component {
                   onClick={toggleModal}
                   size="lg"
                 >
-                  No
+                  {intl.formatMessage(messages.no)}
                 </Button>
               </Col>
             </Row>
@@ -86,6 +87,7 @@ Intro.propTypes = {
   toggleHelplineBar: PropTypes.func.isRequired,
   toggleKeyInfoBar: PropTypes.func.isRequired,
   toggleModal: PropTypes.func.isRequired,
+  intl: PropTypes.object.isRequired
 };
 
 export default Intro;

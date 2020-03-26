@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Col, FormGroup, Input, Row } from 'reactstrap';
+
+import { messages } from '../../../tools/messages';
 import cough from '../../assets/cough.png';
 import fever from '../../assets/fever.png';
 import soreThroat from '../../assets/soreThroat.png';
@@ -37,11 +39,11 @@ class ReportSymptoms5 extends React.Component {
   }
 
   render() {
-    const { jumpToStep, symptoms, numDays, onNumDaysChanged } = this.props;
+    const { jumpToStep, symptoms, numDays, onNumDaysChanged, intl } = this.props;
 
     return (
       <div>
-        <h5>How many days before did you first see any symptom?</h5>
+        <h5>{intl.formatMessage(messages.firstSymptomQuestion)}</h5>
 
         <FormGroup className="mt-3">
           <Input
@@ -55,33 +57,33 @@ class ReportSymptoms5 extends React.Component {
           />
         </FormGroup>
 
-        <h5>What are the symptoms?</h5>
+        <h5>{intl.formatMessage(messages.whatAreTheSymptoms)}</h5>
         <br />
         <Row>
           <SymptomCard
             image={cough}
-            label={'Cough'}
+            label={intl.formatMessage(messages.cough)}
             toggle={this.toggleCough}
             present={symptoms['Cough'] === true}
           />
 
           <SymptomCard
             image={fever}
-            label={'Fever'}
+            label={intl.formatMessage(messages.fever)}
             toggle={this.toggleFever}
             present={symptoms['Fever'] === true}
           />
 
           <SymptomCard
             image={soreThroat}
-            label={'Sore Throat'}
+            label={intl.formatMessage(messages.soreThroat)}
             toggle={this.toggleSoreThroat}
             present={symptoms['Sore Throat'] === true}
           />
 
           <SymptomCard
             image={tired}
-            label={'Shortness of Breath'}
+            label={intl.formatMessage(messages.breathingDiff)}
             toggle={this.toggleShortnessOfBreath}
             present={symptoms['Shortness of Breath'] === true}
           />
@@ -96,12 +98,12 @@ class ReportSymptoms5 extends React.Component {
                   jumpToStep(0);
                 }}
               >
-                <i className="fa fa-arrow-left" />&nbsp;Back
+                <i className="fa fa-arrow-left" />&nbsp;{intl.formatMessage(messages.back)}
               </Button>
             </Col>
             <Col xs={6} className="text-right">
               <Button color="primary" onClick={this.onNext}>
-                <i className="fa fa-arrow-right" />&nbsp;Next
+                <i className="fa fa-arrow-right" />&nbsp;{intl.formatMessage(messages.next)}
               </Button>
             </Col>
           </Row>
@@ -123,6 +125,7 @@ ReportSymptoms5.propTypes = {
   onNumDaysChanged: PropTypes.func.isRequired,
   toggleSymptom: PropTypes.func.isRequired,
   symptoms: PropTypes.object.isRequired,
+  intl: PropTypes.object.intl,
 };
 
 export default ReportSymptoms5;
