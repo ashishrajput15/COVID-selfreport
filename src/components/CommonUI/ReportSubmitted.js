@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+
 import { HelplineInfoCard } from '../MapView/InfoCard';
 
 class ReportSubmitted extends React.Component {

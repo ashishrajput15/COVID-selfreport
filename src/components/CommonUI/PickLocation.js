@@ -10,6 +10,9 @@ import {
   Col,
 } from 'reactstrap';
 
+import { getAddress } from '../../util';
+import { messages } from '../../../tools/messages';
+
 class PickLocation extends React.Component {
   constructor(props) {
     super(props);
@@ -45,7 +48,7 @@ class PickLocation extends React.Component {
     this.onAutocompletePlaceChanged = this.onAutocompletePlaceChanged.bind(this);
     this.fixMapZoom = this.fixMapZoom.bind(this);
     this.geocodeAddress = this.geocodeAddress.bind(this);
-    this.setAddressComponents = this.setAddressComponents.bind(this);
+    // this.setAddressComponents = this.setAddressComponents.bind(this);
     this.goToUserLocation = this.goToUserLocation.bind(this);
     this.onGeolocationSuccess = this.onGeolocationSuccess.bind(this);
     this.onGeolocationError = this.onGeolocationError.bind(this);
@@ -193,60 +196,11 @@ class PickLocation extends React.Component {
         //console.log('User moved marker to this place');
         //console.log(results[0]);
         const place = results[0];
-        this.setAddressComponents(place);
+        this.setState({...getAddress(place)});
+        // this.setAddressComponents(place);
       } else {
         console.log('Failed to get the place at given latlng');
       }
-    });
-  }
-
-  setAddressComponents(place) {
-    let address = '', street = '', state = '',
-      district = '', city = '', pincode = '';
-
-    if (place.address_components) {
-      place.address_components.forEach((component) => {
-        if (component.types.indexOf('street_address') !== -1) {
-          street = component.long_name;
-        }
-
-        if (component.types.indexOf('route') !== -1 && street === '') {
-          street = component.long_name;
-        }
-
-        if (component.types.indexOf('administrative_area_level_1') !== -1) {
-          state = component.long_name;
-        }
-
-        if (component.types.indexOf('administrative_area_level_2') !== -1) {
-          district = component.long_name;
-        }
-
-        if (
-          (component.types.indexOf('locality') !== -1) ||
-          (component.types.indexOf('sublocality') !== -1) ||
-          (component.types.indexOf('administrative_area_level_3') !== -1)
-        ) {
-          city = component.long_name;
-        }
-
-        if (component.types.indexOf('postal_code') !== -1) {
-          pincode = component.short_name;
-        }
-      });
-    }
-
-    if (place.formatted_address) {
-      address = place.formatted_address;
-    }
-
-    this.setState({
-      address,
-      street,
-      state,
-      district,
-      city,
-      pincode,
     });
   }
 
@@ -302,11 +256,12 @@ class PickLocation extends React.Component {
     const pos = place.geometry.location;
     this.marker.setPosition(pos);
     this.afterMarkerChanged(pos.lat(), pos.lng());
-    this.setAddressComponents(place);
+    // this.setAddressComponents(place);
+    this.setState({...getAddress(place)});
   }
 
   render() {
-    const { saving, goBackAction, confirmAction } = this.props;
+    const { saving, goBackAction, confirmAction, intl } = this.props;
     const { markedLat, markedLng, address } = this.state;
 
     let btnSave;
@@ -333,11 +288,11 @@ class PickLocation extends React.Component {
 
     return (
       <div>
-        <h5 className="mb-3">Confirm your location</h5>
+        <h5 className="mb-3">{intl.formatMessage(messages.confirm)}</h5>
 
         <InputGroup className="mb-3">
           <Input
-            placeholder="Search Location"
+            placeholder={intl.formatMessage(messages.searchLocation)}
             id="pac-input2"
             value={address}
             onChange={this.onAddressChanged}
@@ -366,7 +321,7 @@ class PickLocation extends React.Component {
                   goBackAction();
                 }}
               >
-                <i className="fa fa-arrow-left" />&nbsp;Back
+                <i className="fa fa-arrow-left" />&nbsp;{intl.formatMessage(messages.back)}
               </Button>
             </Col>
             <Col xs={6} className="text-right">
@@ -390,6 +345,7 @@ PickLocation.propTypes = {
   saving: PropTypes.bool,
   goBackAction: PropTypes.func,
   confirmAction: PropTypes.func,
+  intl: PropTypes.object.isRequired,
 };
 
 

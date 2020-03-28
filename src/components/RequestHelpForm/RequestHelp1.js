@@ -14,6 +14,8 @@ class RequestHelp1 extends React.Component {
 
       requestedItems: props.helpRequests,
       requestDetails: props.detailRequest,
+
+      stateName: '',
     };
 
     this.sendRequestHelpStarted = false;
@@ -31,6 +33,7 @@ class RequestHelp1 extends React.Component {
   }
 
   handleToasts(props) {
+    const { stateName } = this.state;
     if (this.sendRequestHelpStarted) {
       const { sendNewReqHelp } = props;
       if (!sendNewReqHelp.saving && sendNewReqHelp.saved) {
@@ -39,7 +42,7 @@ class RequestHelp1 extends React.Component {
 
         // Refresh Markers
         this.props.actions.getHelpRequestsStarting();
-        this.props.actions.getHelpRequests(23.259933, 77.412613, 2000);
+        this.props.actions.getHelpRequests(stateName, 23.259933, 77.412613, 2000);
       } else if (!sendNewReqHelp.saving && !sendNewReqHelp.saved) {
         const errorMsg = sendNewReqHelp.error ? sendNewReqHelp.error :
           ('Your report could not be saved due to unforeseen errors. ' +
@@ -51,18 +54,24 @@ class RequestHelp1 extends React.Component {
     }
   }
 
+  setState = (stateName) => {
+    this.setState({stateName})
+  }
+
   sendRequestHelp = (mapState) => {
+    this.setState(mapState.state);
     this.props.actions.sendRequestHelpStarting();
-    this.props.actions.sendRequestHelp(Object.assign({}, this.state, mapState));
+    this.props.actions.sendRequestHelp(mapState.state, Object.assign({}, this.state, mapState));
     this.sendRequestHelpStarted = true;
   }
 
 
   render() {
-    const { jumpToStep, sendNewReqHelp, mapCenter } = this.props;
+    const { jumpToStep, sendNewReqHelp, mapCenter, intl } = this.props;
 
     return (
       <PickLocation
+        intl={intl}
         goBackAction={() => jumpToStep(0)}
         saving={sendNewReqHelp.saving}
         confirmAction={(curState) => {
@@ -88,6 +97,7 @@ RequestHelp1.propTypes = {
   detailRequest: PropTypes.string.isRequired,
   sendNewReqHelp: PropTypes.object,
   helpRequests: PropTypes.object.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state => ({

@@ -5,12 +5,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
+
 import * as helpRequestsActions from '../../actions/requestHelp';
 import * as patientsActions from '../../actions/patients';
 import * as reportsActions from '../../actions/reports';
+import * as languageActions from '../../actions/language';
 import MapControls from './MapControls';
 import { MapStyle1, MapStyle2, MarkerClusterStyles } from '../../../tools/constants';
 import imgSingleReportMarker from '../../assets/marker_single_case.png';
+import { getAddress, cookie } from '../../util';
+import { messages } from '../../../tools/messages';
 
 const mapContainerHeight = `${window.innerHeight - 1}px`;
 
@@ -34,6 +38,13 @@ class MapView extends React.Component {
       mapZoom: 5,
 
       viewType: 'reported',
+
+      address: '',
+      street: '',
+      state: '',
+      district: '',
+      city: '',
+      pincode: '',
     };
 
     this.map = null;
@@ -47,6 +58,11 @@ class MapView extends React.Component {
     this.onGeolocationSuccess = this.onGeolocationSuccess.bind(this);
     this.onGeolocationError = this.onGeolocationError.bind(this);
     this.onViewTypeChanged = this.onViewTypeChanged.bind(this);
+
+    let prefLng = cookie.getCookie('lng');
+    if (!(prefLng !== 'en' && prefLng !== '')) {
+      cookie.setCookie('lng', 'en');
+    }
   }
 
   componentDidMount() {
@@ -88,6 +104,35 @@ class MapView extends React.Component {
     }
   }
 
+  geocodeAddress(mapCenter) {
+    const { google } = window;
+    if (!google) {
+      setTimeout(() => {
+        this.geocodeAddress();
+      }, 400);
+      return;
+    }
+
+    const geocoder = new google.maps.Geocoder();
+
+    geocoder.geocode({
+      latLng: mapCenter,
+    }, (results, status) => {
+      if (status === google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
+        setTimeout(() => console.log('Preventing OVER_QUERY_LIMIT error'), 1000);
+      }
+      if (status === google.maps.GeocoderStatus.OK) {
+        //console.log('User moved marker to this place');
+        //console.log(results[0]);
+        const place = results[0];
+        this.setState({...getAddress(place)});
+        // this.setAddressComponents(place);
+      } else {
+        console.log('Failed to get the place at given latlng');
+      }
+    });
+  }
+
   onGeolocationSuccess(pos) {
     try {
       const { coords: crd } = pos;
@@ -121,16 +166,16 @@ class MapView extends React.Component {
   }
 
   refreshData() {
-    const { mapCenter, viewType } = this.state;
+    const { mapCenter, viewType, state } = this.state;
     if (viewType === 'confirmed') {
       this.props.actions.getPatientsDataStarting();
-      this.props.actions.getPatientsData(mapCenter.lat, mapCenter.lng, 2000, viewType);
+      this.props.actions.getPatientsData(state, mapCenter.lat, mapCenter.lng, 2000, viewType);
     } else if (viewType === 'reported') {
       this.props.actions.getReportsDataStarting();
-      this.props.actions.getReportsData(mapCenter.lat, mapCenter.lng, 2000);
+      this.props.actions.getReportsData(state, mapCenter.lat, mapCenter.lng, 2000);
     } else if (viewType === 'help_requests') {
       this.props.actions.getHelpRequestsStarting();
-      this.props.actions.getHelpRequests(mapCenter.lat, mapCenter.lng, 2000);
+      this.props.actions.getHelpRequests(state, mapCenter.lat, mapCenter.lng, 2000);
     }
   }
 
@@ -200,6 +245,9 @@ class MapView extends React.Component {
         this.map.addListener('bounds_changed', () => {
           this.searchBox.setBounds(this.map.getBounds());
           const mapCenter = this.map.getCenter();
+
+          // this.geocodeAddress(mapCenter);
+          this.geocodeAddress(mapCenter);
 
           this.setState({
             mapCenter: {
@@ -343,12 +391,15 @@ class MapView extends React.Component {
 
   render() {
     const { showMap, isMapLoaded, mapCenter, viewType } = this.state;
+    const { intl } = this.props;
 
     return (
       <div>
         {!showMap && (
           <div style={{ width: '100%', height: mapContainerHeight, textAlign: 'center', marginTop: '2rem' }}>
-            <h2>COVID 19 Self Reporting Tool</h2>
+            <h2>
+              {intl.formatMessage(messages.mapViewMainHeading)}
+            </h2>
 
             <p>Allow location access to load information at your current location.</p>
           </div>
@@ -356,7 +407,9 @@ class MapView extends React.Component {
 
         {(showMap && !isMapLoaded) && (
           <div style={{ width: '100%', height: mapContainerHeight, textAlign: 'center', marginTop: '2rem' }}>
-            <h2>COVID 19 Self Reporting Tool</h2>
+            <h2>
+              {intl.formatMessage(messages.mapViewMainHeading)}
+            </h2>
 
             <p>Fetching latest data...</p>
           </div>
@@ -373,6 +426,7 @@ class MapView extends React.Component {
           mapCenter={mapCenter}
           onViewTypeChanged={this.onViewTypeChanged}
           viewType={viewType}
+          intl={intl}
         />
       </div>
     );
@@ -392,17 +446,19 @@ MapView.propTypes = {
   location: PropTypes.object.isRequired,
   patientsData: PropTypes.object,
   reportsData: PropTypes.object,
+  intl: PropTypes.object,
 };
 
 const mapStateToProps = (state => ({
   helpRequests: state.helpRequests,
   patientsData: state.patientsData,
   reportsData: state.reportsData,
+  intl: state.language.intl,
 }));
 
 const mapDispatchToProps = (dispatch => ({
   actions: bindActionCreators(
-    Object.assign({}, helpRequestsActions, patientsActions, reportsActions),
+    Object.assign({}, helpRequestsActions, patientsActions, reportsActions, languageActions),
     dispatch,
   ),
 }));

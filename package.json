@@ -26,7 +26,8 @@
     "test:cover:CI": "npm run test:CI -- --coverage && cat ./coverage/lcov.info | node_modules/coveralls/bin/coveralls.js",
     "test:watch": "jest --watchAll",
     "open:cover": "npm run test:cover && open-cli ./coverage/lcov-report/index.html",
-    "analyze-bundle": "babel-node ./tools/analyzeBundle.js"
+    "analyze-bundle": "babel-node ./tools/analyzeBundle.js",
+    "extract-messages": "NODE_ENV=production babel ./src  --out-file /dev/null"
   },
   "author": "Cory House",
   "license": "MIT",
@@ -44,6 +45,7 @@
     "react-dom": "16.11.0",
     "react-floating-action-button": "1.0.5",
     "react-google-maps": "9.4.5",
+    "react-intl": "4.2.2",
     "react-redux": "7.1.1",
     "react-router-dom": "5.1.2",
     "reactstrap": "8.4.1",
@@ -68,6 +70,7 @@
     "babel-eslint": "10.0.3",
     "babel-jest": "24.9.0",
     "babel-loader": "8.0.6",
+    "babel-plugin-react-intl": "7.0.0",
     "babel-plugin-transform-react-remove-prop-types": "0.4.24",
     "browser-sync": "2.26.7",
     "chalk": "2.4.2",
@@ -152,7 +155,13 @@
         "plugins": [
           "@babel/plugin-transform-runtime",
           "@babel/plugin-proposal-class-properties",
-          "react-hot-loader/babel"
+          "react-hot-loader/babel",
+          [
+            "react-intl", {
+              "messagesDir": "./build/messages",
+              "extractSourceLocation": true
+            }
+          ]
         ]
       },
       "production": {
@@ -164,7 +173,13 @@
           "@babel/plugin-transform-runtime",
           "@babel/plugin-proposal-class-properties",
           "@babel/plugin-transform-react-constant-elements",
-          "transform-react-remove-prop-types"
+          "transform-react-remove-prop-types",
+          [
+            "react-intl", {
+              "messagesDir": "./build/messages",
+              "extractSourceLocation": true
+            }
+          ]
         ]
       },
       "test": {

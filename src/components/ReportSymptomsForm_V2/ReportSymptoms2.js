@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+
 import * as reportsActions from '../../actions/reports';
 import PickLocation from '../CommonUI/PickLocation';
 
@@ -17,6 +18,8 @@ class ReportSymptoms2 extends React.Component {
 
       markedLat: '',
       markedLng: '',
+
+      stateName: '',
     };
 
 
@@ -42,9 +45,9 @@ class ReportSymptoms2 extends React.Component {
         this.props.jumpToStep(3);
 
         // Refresh Markers
-        const { markedLat, markedLng } = this.state;
+        const { markedLat, markedLng, stateName } = this.state;
         this.props.actions.getReportsDataStarting();
-        this.props.actions.getReportsData(markedLat, markedLng, 2000);
+        this.props.actions.getReportsData(stateName, markedLat, markedLng, 2000);
       } else if (!sendNewReport.saving && !sendNewReport.saved) {
         const errorMsg = sendNewReport.error ? sendNewReport.error :
           ('Your report could not be saved due to unforeseen errors. ' +
@@ -56,14 +59,14 @@ class ReportSymptoms2 extends React.Component {
     }
   }
 
-  setMarkedLatLng = (markedLat, markedLng) => {
-    this.setState({ markedLat, markedLng });
+  setPos = (markedLat, markedLng, stateName) => {
+    this.setState({ markedLat, markedLng, stateName });
   }
 
   sendReport = (mapState) => {
-    this.setMarkedLatLng(mapState.markedLat, mapState.markedLng);
+    this.setPos(mapState.markedLat, mapState.markedLng, mapState.state);
     this.props.actions.sendReportStarting();
-    this.props.actions.sendReport(Object.assign({}, this.state, mapState));
+    this.props.actions.sendReport(mapState.state, Object.assign({}, this.state, mapState));
     this.sendReportStarted = true;
   }
 
@@ -296,9 +299,10 @@ class ReportSymptoms2 extends React.Component {
   }
 
   render() {
-    const { jumpToStep, sendNewReport, mapCenter } = this.props;
+    const { jumpToStep, sendNewReport, mapCenter, intl } = this.props;
     return (
       <PickLocation
+        intl={intl}
         saving={sendNewReport.saving}
         goBackAction={() => jumpToStep(1)}
         confirmAction={(mapState) => this.sendReport(mapState)}
@@ -322,10 +326,12 @@ ReportSymptoms2.propTypes = {
   numDays: PropTypes.string.isRequired,
   sendNewReport: PropTypes.object,
   symptoms: PropTypes.object.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state => ({
   sendNewReport: state.sendNewReport,
+  intl: state.language.intl,
 }));
 
 const mapDispatchToProps = (dispatch => ({

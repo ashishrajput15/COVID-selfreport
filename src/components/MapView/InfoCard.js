@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Fuse from "fuse.js";
 import classnames from 'classnames';
 import { STATE_HELPLINE_NUMBERS, HELPLINE_CONTENT, KEY_INFO_CONTENT } from "../../../tools/constants";
+import { messages } from '../../../tools/messages';
 
 export class InfoCard extends React.PureComponent {
   static cardTypes = {
@@ -11,21 +12,21 @@ export class InfoCard extends React.PureComponent {
   };
 
   render() {
-    const { cardType, toggle, ...restProps } = this.props;
+    const { cardType, toggle, intl, ...restProps } = this.props;
     return (
-      cardType === InfoCard.cardTypes.HELPLINE ? <HelplineInfoCard toggle={toggle} {...restProps} /> :
+      cardType === InfoCard.cardTypes.HELPLINE ? <HelplineInfoCard intl={intl} toggle={toggle} {...restProps} /> :
         <KeyInfoCard toggle={toggle} />
     )
   }
 }
 
-export const HelplineInfoCard = ({ stateName, toggle }) => {
+export const HelplineInfoCard = ({ stateName, toggle, intl }) => {
   const helpline = parsedHelpline(stateName);
 
   return (
     <div className={classnames({ "card info-card helpline-info-card": toggle !== null })}>
       {toggle !== null && (
-        <CardHeading onClose={toggle} heading={`Helpline Numbers`} />
+        <CardHeading onClose={toggle} heading={intl.formatMessage(messages.helplineNumbers)} />
       )}
 
       {stateName && helpline && (
@@ -86,6 +87,7 @@ export const HelplineInfoCard = ({ stateName, toggle }) => {
 HelplineInfoCard.defaultProps = {
   stateName: '',
   toggle: null,
+  intl: PropTypes.object.isRequired
 };
 
 HelplineInfoCard.propTypes = {
@@ -163,6 +165,7 @@ export const parsedHelpline = StateName => {
 InfoCard.propTypes = {
   cardType: PropTypes.string.isRequired,
   toggle: PropTypes.func.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 
