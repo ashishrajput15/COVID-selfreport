@@ -261,3 +261,10 @@ export const MarkerClusterStyles = [
     className: 'reporter-custom-clustericon-3'
   }
 ];
+
+export function preventFormSubmit(event) {
+  event.stopPropagation();
+  event.preventDefault();
+  return false;
+}
+

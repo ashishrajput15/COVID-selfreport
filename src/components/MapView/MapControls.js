@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { Container, Button } from 'react-floating-action-button';
 import { InfoCard } from "./InfoCard";
-
 import ReportSymptomsModal_V2 from './ReportSymptomsModal_V2';
 import RequestHelpModal from './RequestHelpModal';
 import LanguageModal from './LanguageModal';
@@ -12,6 +11,7 @@ import marker1 from '../../assets/marker1.png';
 import marker2 from '../../assets/marker2.png';
 import marker3 from '../../assets/marker3.png';
 import { messages } from '../../../tools/messages';
+import { preventFormSubmit } from '../../../tools/constants';
 
 class MapControls extends React.Component {
   constructor(props) {
@@ -224,7 +224,7 @@ class MapControls extends React.Component {
             <div className="card-body">
               <h5 className="card-title">{intl.formatMessage(messages.view)}</h5>
 
-              <Form>
+              <Form onSubmit={preventFormSubmit}>
                 <FormGroup check>
                   <Label check>
                     <Input
