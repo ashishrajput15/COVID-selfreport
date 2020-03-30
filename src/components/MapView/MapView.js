@@ -36,6 +36,7 @@ class MapView extends React.Component {
 
       mapAccuracy: 0,
       mapZoom: 5,
+      mapZoomErrorNotif: true,
 
       viewType: 'reported',
 
@@ -119,12 +120,13 @@ class MapView extends React.Component {
       latLng: mapCenter,
     }, (results, status) => {
       if (status === google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
-        setTimeout(() => console.log('Preventing OVER_QUERY_LIMIT error'), 1000);
+        setTimeout(() => console.log('Preventing OVER_QUERY_LIMIT error'), 5000);
       }
       if (status === google.maps.GeocoderStatus.OK) {
         //console.log('User moved marker to this place');
         //console.log(results[0]);
         const place = results[0];
+        this.refreshData();
         this.setState({...getAddress(place)});
         // this.setAddressComponents(place);
       } else {
@@ -166,16 +168,18 @@ class MapView extends React.Component {
   }
 
   refreshData() {
-    const { mapCenter, viewType, state } = this.state;
-    if (viewType === 'confirmed') {
-      this.props.actions.getPatientsDataStarting();
-      this.props.actions.getPatientsData(state, mapCenter.lat, mapCenter.lng, 2000, viewType);
-    } else if (viewType === 'reported') {
-      this.props.actions.getReportsDataStarting();
-      this.props.actions.getReportsData(state, mapCenter.lat, mapCenter.lng, 2000);
-    } else if (viewType === 'help_requests') {
-      this.props.actions.getHelpRequestsStarting();
-      this.props.actions.getHelpRequests(state, mapCenter.lat, mapCenter.lng, 2000);
+    const { mapCenter, viewType, state, mapZoomErrorNotif } = this.state;
+    if(!mapZoomErrorNotif) {
+      if (viewType === 'confirmed') {
+        this.props.actions.getPatientsDataStarting();
+        this.props.actions.getPatientsData(state, mapCenter.lat, mapCenter.lng, 2000, viewType);
+      } else if (viewType === 'reported') {
+        this.props.actions.getReportsDataStarting();
+        this.props.actions.getReportsData(state, mapCenter.lat, mapCenter.lng, 2000);
+      } else if (viewType === 'help_requests') {
+        this.props.actions.getHelpRequestsStarting();
+        this.props.actions.getHelpRequests(state, mapCenter.lat, mapCenter.lng, 2000);
+      }
     }
   }
 
@@ -253,7 +257,8 @@ class MapView extends React.Component {
             mapCenter: {
               lat: mapCenter.lat(),
               lng: mapCenter.lng(),
-            }
+            },
+            mapZoomErrorNotif: this.map.getZoom() < 10 ? true : false,
           });
 
           const currentZoom = this.map.getZoom();
@@ -390,7 +395,7 @@ class MapView extends React.Component {
   }
 
   render() {
-    const { showMap, isMapLoaded, mapCenter, viewType } = this.state;
+    const { showMap, isMapLoaded, mapCenter, viewType, mapZoomErrorNotif } = this.state;
     const { intl } = this.props;
 
     return (
@@ -427,6 +432,7 @@ class MapView extends React.Component {
           onViewTypeChanged={this.onViewTypeChanged}
           viewType={viewType}
           intl={intl}
+          mapZoomErrorNotif={mapZoomErrorNotif}
         />
       </div>
     );
