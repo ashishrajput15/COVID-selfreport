@@ -75,6 +75,7 @@ class RequestHelpModal extends React.Component {
       name: 'Intro',
       component: (
         <Intro
+          intl={intl}
           helpRequests={helpRequests}
           detailRequest={detailRequest}
           onDetailRequestChanged={this.onDetailRequestChanged}

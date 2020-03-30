@@ -67,11 +67,10 @@ class RequestHelp1 extends React.Component {
 
 
   render() {
-    const { jumpToStep, sendNewReqHelp, mapCenter, intl } = this.props;
+    const { jumpToStep, sendNewReqHelp, mapCenter } = this.props;
 
     return (
       <PickLocation
-        intl={intl}
         goBackAction={() => jumpToStep(0)}
         saving={sendNewReqHelp.saving}
         confirmAction={(curState) => {
@@ -97,7 +96,6 @@ RequestHelp1.propTypes = {
   detailRequest: PropTypes.string.isRequired,
   sendNewReqHelp: PropTypes.object,
   helpRequests: PropTypes.object.isRequired,
-  intl: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state => ({

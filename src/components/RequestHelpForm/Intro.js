@@ -7,6 +7,7 @@ import medicalHelp from '../../assets/medicalHelp.png';
 import surgicalMask from '../../assets/surgicalMask.jpg';
 import sanitizer from '../../assets/sanitizer.jpg';
 import SymptomCard from '../CommonUI/SymptomCard';
+import { messages } from '../../../tools/messages';
 
 class RequestHelp extends React.Component {
   constructor(props) {
@@ -39,46 +40,46 @@ class RequestHelp extends React.Component {
   }
 
   render() {
-    const { helpRequests, onDetailRequestChanged } = this.props;
+    const { helpRequests, onDetailRequestChanged, intl } = this.props;
 
     return (
       <div>
         {/* <h5>What help do you need?</h5> */}
 
-        <h5>What equipment do you need?</h5>
+        {/* <h5>{intl.formatMessage(messages.whatEquipmentRequired)}</h5> */}
         <br />
         <Row>
           <SymptomCard
             image={medicalHelp}
-            label={'Medical Help'}
+            label={intl.formatMessage(messages.medicalHelp)}
             toggle={this.toggleMedicalHelp}
             present={helpRequests['Medical Help'] === true}
           />
 
           <SymptomCard
             image={surgicalMask}
-            label={'Surgical Mask'}
+            label={intl.formatMessage(messages.surgicalMasks)}
             toggle={this.toggleMasks}
             present={helpRequests['Masks'] === true}
           />
 
           <SymptomCard
             image={sanitizer}
-            label={'Sanitizer'}
+            label={intl.formatMessage(messages.sanitizer)}
             toggle={this.toggleSanitizer}
             present={helpRequests['Sanitizer'] === true}
           />
 
           <SymptomCard
             image={ppe}
-            label={'Personal Protective Equipment'}
+            label={intl.formatMessage(messages.ppe)}
             toggle={this.togglePPE}
             present={helpRequests['PPE'] === true}
           />
 
           <SymptomCard
             image={medicines}
-            label={'Medicines'}
+            label={intl.formatMessage(messages.medicines)}
             toggle={this.toggleMedicines}
             present={helpRequests['Medicines'] === true}
           />
@@ -88,7 +89,7 @@ class RequestHelp extends React.Component {
 
         <FormGroup className="mt-3">
           <h5>
-          Please write in detail about your request, No. of people and quantity required.
+            {intl.formatMessage(messages.writeDetailRequest)}
           </h5>
           <Input
             type="text"
@@ -104,7 +105,7 @@ class RequestHelp extends React.Component {
           <Row>
             <Col xs={12} className="text-right">
               <Button color="primary" onClick={this.onNext}>
-                <i className="fa fa-arrow-right" />&nbsp;Next
+                <i className="fa fa-arrow-right" />&nbsp;{intl.formatMessage(messages.next)}
               </Button>
             </Col>
           </Row>
@@ -126,6 +127,7 @@ RequestHelp.propTypes = {
   onDetailRequestChanged: PropTypes.func.isRequired,
   toggleReqHelp: PropTypes.func.isRequired,
   helpRequests: PropTypes.object.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 export default RequestHelp;

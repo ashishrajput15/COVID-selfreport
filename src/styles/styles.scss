@@ -274,7 +274,7 @@ $vin-red: #ff0000;
   padding-bottom: 12px;
   // margin-right: 12px;
 
-  max-width: 130px;
+  max-width: 110px;
 
   position: absolute !important;
   left: 50px !important;
@@ -287,21 +287,57 @@ $vin-red: #ff0000;
   }
 }
 
-#legend-input {
-  // border: 1px solid black;
+#map-zoom-error-container {
+  padding-bottom: 12px;
+  margin-right: 12px;
+
+  max-width: 400px;
+
+  position: absolute !important;
+  left: 50% !important;
+  top: 50px !important;
+  margin-left: -200px !important;
+  margin-top: 10px !important;
+
+  @media (max-width: 960px) {
+    max-width: 300px;
+    margin-left: -150px !important;
+  }
+
+  @media (max-width: 767px) {
+    max-width: 220px;
+    margin-left: -110px !important;
+  }
+
+  @media (max-width: 675px) {
+    max-width: 180px;
+    margin-left: -90px !important;
+  }
+
+  @media (max-width: 576px) {
+    max-width: 30vw;
+    left: 88% !important;
+    top: 130px !important;
+    float: right;
+  }
+}
+
+.white-component-container {
   background-color: #fff;
   font-family: Roboto;
   font-size: 15px;
   font-weight: 300;
-  margin-left: 11px;
   // padding: 5px 11px 5px 11px;
   display: flex;
   -webkit-flex-direction: column;
   flex-direction: column;
 }
 
+#legend-input {
+  margin-left: 11px;
+}
+
 .legend-input {
-  // border: 1px solid black;
   display: flex;
   -webkit-flex-direction: row;
   flex-direction: row;
