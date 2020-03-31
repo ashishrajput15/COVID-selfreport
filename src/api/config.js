@@ -26,7 +26,6 @@ switch (env) {
   case 'production': {
     appUrl = 'https://reportcorona.live';
     apiBaseUrl = 'https://reportcorona.live';
-    appUrl = getApiUrl();
     break;
   }
 
