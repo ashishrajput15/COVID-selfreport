@@ -10,6 +10,7 @@ import StepZilla from 'react-stepzilla';
 import Intro from '../RequestHelpForm/Intro';
 import RequestHelp1 from '../RequestHelpForm/RequestHelp1';
 import ReportSubmitted from '../CommonUI/ReportSubmitted';
+import { preventFormSubmit } from '../../../tools/constants';
 
 class RequestHelpModal extends React.Component {
   constructor(props) {
@@ -74,6 +75,7 @@ class RequestHelpModal extends React.Component {
       name: 'Intro',
       component: (
         <Intro
+          intl={intl}
           helpRequests={helpRequests}
           detailRequest={detailRequest}
           onDetailRequestChanged={this.onDetailRequestChanged}
@@ -107,8 +109,7 @@ class RequestHelpModal extends React.Component {
         </ModalHeader>
 
         <ModalBody className="pb-4">
-          <Form autoComplete="off" action="" method="post" onSubmit={() => {
-          }}>
+          <Form autoComplete="off" action="" method="post" onSubmit={preventFormSubmit}>
             <div className='step-progress'>
               <StepZilla
                 steps={steps}

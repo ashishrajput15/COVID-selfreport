@@ -15,6 +15,7 @@ import ReportSymptoms3 from '../ReportSymptomsForm/ReportSymptoms3';
 import ReportSymptoms5 from '../ReportSymptomsForm/ReportSymptoms5';
 import ReportSymptoms4 from '../ReportSymptomsForm/ReportSymptoms4';
 import ReportSymptoms6 from '../ReportSymptomsForm/ReportSymptoms6';
+import { preventFormSubmit } from '../../../tools/constants';
 
 class ReportSymptomsModal extends React.Component {
   constructor(props) {
@@ -62,8 +63,7 @@ class ReportSymptomsModal extends React.Component {
       ];
 
       content = (
-        <Form autoComplete="off" action="" method="post" onSubmit={() => {
-        }}>
+        <Form autoComplete="off" action="" method="post" onSubmit={preventFormSubmit}>
           <div className='step-progress'>
             <StepZilla
               steps={steps}

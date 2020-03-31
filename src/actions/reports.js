@@ -1,4 +1,6 @@
 import {
+  CLEAR_ALL_REPORTS,
+
   GET_REPORTS_DATA_STARTING,
   GET_REPORTS_DATA_SUCCESS,
   GET_REPORTS_DATA_ERROR,
@@ -10,19 +12,23 @@ import {
 import axios from "../api/axios";
 import { getApiUrl } from "../api/config";
 
-export function getReportsDataStarting(query) {
-  return { type: GET_REPORTS_DATA_STARTING, query };
+export function clearAllReports() {
+  return { type: CLEAR_ALL_REPORTS };
 }
 
-export function getReportsDataSuccess(data) {
-  return { type: GET_REPORTS_DATA_SUCCESS, data }
+export function getReportsDataStarting(lat, lng, radius, status) {
+  return { type: GET_REPORTS_DATA_STARTING, lat, lng, radius, status, };
 }
 
-export function getReportsDataFailed(err) {
-  return { type: GET_REPORTS_DATA_ERROR, err }
+export function getReportsDataSuccess(lat, lng, radius, status, data) {
+  return { type: GET_REPORTS_DATA_SUCCESS, lat, lng, radius, status, data }
 }
 
-export function getReportsData(stateName, lat, lng, radius, page = 1, limit = 800) {
+export function getReportsDataFailed(lat, lng, radius, status, err) {
+  return { type: GET_REPORTS_DATA_ERROR, lat, lng, radius, status, err }
+}
+
+export function getReportsData(stateName, lat, lng, radius, status, page = 1, limit = 100000) {
   return dispatch => (
     axios.get(`${getApiUrl(stateName)}/reports`, {
       params: {
@@ -34,16 +40,16 @@ export function getReportsData(stateName, lat, lng, radius, page = 1, limit = 80
       },
     }).then((response) => {
       if (response && response.status === 200 && response.data.success) {
-        dispatch(getReportsDataSuccess(response.data));
+        dispatch(getReportsDataSuccess(lat, lng, radius, status, response.data));
         return;
       }
       const err = (response && response.data && response.data.error) ?
         new Error(response.data.error) : new Error('Failed to fetch reports data');
-      dispatch(getReportsDataFailed(err));
+      dispatch(getReportsDataFailed(lat, lng, radius, status, err));
     }).catch((err) => {
       const error = (err.response && err.response.data && err.response.data.error) ?
         new Error(err.response.data.error) : err;
-      dispatch(getReportsDataFailed(error));
+      dispatch(getReportsDataFailed(lat, lng, radius, status, error));
     }));
 }
 

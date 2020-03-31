@@ -1,4 +1,3 @@
-
 export const STATE_HELPLINE_NUMBERS = [
   { stateName: "Andhra Pradesh", phone1: `0866-2410978` },
   { stateName: "Arunachal Pradesh", phone1: `9536055743` },
@@ -10,16 +9,16 @@ export const STATE_HELPLINE_NUMBERS = [
   { stateName: "Haryana", phone1: `8558893911` },
   { stateName: "Himachal Pradesh", phone1: `104` },
   { stateName: "Jharkhand", phone1: `104` },
-  { stateName: "Karnataka", phone1: `080-46848600`, phone2: `080-66692000`, phone3: `104` },
+  { stateName: "Karnataka", phone1: `080-46848600`, phone2: `080-66692000`, phone3: `104`, phone4: `9745697456`, },
   { stateName: "Kerala", phone1: `0471-2552056` },
   { stateName: "Madhya Pradesh", phone1: `0755-2527177` },
-  { stateName: "Maharashtra", phone1: `020-26127394` },
+  { stateName: "Maharashtra", phone1: `020-26127394`, phone2: `9513615550`, },
   { stateName: "Manipur", phone1: `3852411668` },
   { stateName: "Meghalaya", phone1: `9366090748` },
   { stateName: "Mizoram", phone1: `102` },
   { stateName: "Nagaland", phone1: `7005539653` },
   { stateName: "Odisha", phone1: `9439994859` },
-  { stateName: "Punjab", phone1: `104` },
+  { stateName: "Punjab", phone1: `104`, phone2: `18001804104`, },
   { stateName: "Rajasthan", phone1: `0141-2225624` },
   { stateName: "Sikkim", phone1: `104` },
   { stateName: "Tamil Nadu", phone1: `044-29510500` },
@@ -95,6 +94,16 @@ export const MapStyle1 = [{
     { visibility: "off" }
   ]
 }, {
+  featureType: "road.highway",
+  stylers: [
+    { visibility: "on" }
+  ]
+}, {
+  featureType: "road.arterial",
+  stylers: [
+    { visibility: "on" }
+  ]
+}, {
   featureType: "transit",
   stylers: [
     { visibility: "off" }
@@ -135,11 +144,6 @@ export const MapStyle2 = [{
   featureType: "poi.sports_complex",
   stylers: [
     { visibility: "off" }
-  ],
-}, {
-  featureType: "poi.meal_takeaway",
-  stylers: [
-    { visibility: "on" }
   ],
 }, {
   featureType: 'poi.medical',
@@ -261,3 +265,10 @@ export const MarkerClusterStyles = [
     className: 'reporter-custom-clustericon-3'
   }
 ];
+
+export function preventFormSubmit(event) {
+  event.stopPropagation();
+  event.preventDefault();
+  return false;
+}
+

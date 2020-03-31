@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 
 import * as reportsActions from '../../actions/reports';
 import PickLocation from '../CommonUI/PickLocation';
+import { defaultRadius } from '../../api/config';
 
 class ReportSymptoms2 extends React.Component {
   constructor(props) {
@@ -46,8 +47,9 @@ class ReportSymptoms2 extends React.Component {
 
         // Refresh Markers
         const { markedLat, markedLng, stateName } = this.state;
-        this.props.actions.getReportsDataStarting();
-        this.props.actions.getReportsData(stateName, markedLat, markedLng, 2000);
+        this.props.actions.clearAllReports();
+        this.props.actions.getReportsDataStarting(markedLat, markedLng, defaultRadius, 'reported');
+        this.props.actions.getReportsData(stateName, markedLat, markedLng, defaultRadius, 'reported');
       } else if (!sendNewReport.saving && !sendNewReport.saved) {
         const errorMsg = sendNewReport.error ? sendNewReport.error :
           ('Your report could not be saved due to unforeseen errors. ' +
@@ -299,10 +301,9 @@ class ReportSymptoms2 extends React.Component {
   }
 
   render() {
-    const { jumpToStep, sendNewReport, mapCenter, intl } = this.props;
+    const { jumpToStep, sendNewReport, mapCenter } = this.props;
     return (
       <PickLocation
-        intl={intl}
         saving={sendNewReport.saving}
         goBackAction={() => jumpToStep(1)}
         confirmAction={(mapState) => this.sendReport(mapState)}
@@ -316,6 +317,7 @@ ReportSymptoms2.defaultProps = {
   actions: {},
   jumpToStep: () => {
   },
+  intl: {},
   sendNewReport: {},
 };
 
@@ -326,7 +328,7 @@ ReportSymptoms2.propTypes = {
   numDays: PropTypes.string.isRequired,
   sendNewReport: PropTypes.object,
   symptoms: PropTypes.object.isRequired,
-  intl: PropTypes.object.isRequired,
+  intl: PropTypes.object,
 };
 
 const mapStateToProps = (state => ({

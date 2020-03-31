@@ -6,8 +6,6 @@ import { connect } from 'react-redux';
 import {
   Form, Modal, ModalBody, ModalHeader, FormGroup, Label, Input
 } from 'reactstrap';
-
-import { messages } from '../../../tools/messages';
 import * as languageActions from '../../actions/language';
 import { cookie } from '../../util';
 
@@ -32,7 +30,6 @@ class LanguageModal extends React.Component {
 
   render() {
     let { language } = this.props;
-    const intl = language.intl;
     const lngList = cloneDeep(language);
     delete lngList.intl;
 

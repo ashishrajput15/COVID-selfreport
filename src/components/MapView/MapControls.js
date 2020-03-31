@@ -3,15 +3,15 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { Container, Button } from 'react-floating-action-button';
 import { InfoCard } from "./InfoCard";
-
 import ReportSymptomsModal_V2 from './ReportSymptomsModal_V2';
 import RequestHelpModal from './RequestHelpModal';
 import LanguageModal from './LanguageModal';
-import { Form, FormGroup, Input, Label } from 'reactstrap';
+import { Form, FormGroup, Input, Label, Alert } from 'reactstrap';
 import marker1 from '../../assets/marker1.png';
 import marker2 from '../../assets/marker2.png';
 import marker3 from '../../assets/marker3.png';
 import { messages } from '../../../tools/messages';
+import { preventFormSubmit } from '../../../tools/constants';
 
 class MapControls extends React.Component {
   constructor(props) {
@@ -120,8 +120,24 @@ class MapControls extends React.Component {
     });
 
   render() {
-    const { isMapLoaded, clearSearchBox, goToUserLocation, mapCenter, onViewTypeChanged, viewType, intl } = this.props;
-    const { stateName, showStateHelplineNumber, showKeyInfo, showReportSymptomsModal, showRequestHelpModal, showLanguageModal } = this.state;
+    const {
+      isMapLoaded,
+      clearSearchBox,
+      goToUserLocation,
+      mapCenter,
+      onViewTypeChanged,
+      viewType,
+      intl,
+      mapZoomErrorNotif
+    } = this.props;
+    const {
+      stateName,
+      showStateHelplineNumber,
+      showKeyInfo,
+      showReportSymptomsModal,
+      showRequestHelpModal,
+      showLanguageModal
+    } = this.state;
 
     let reportSymptomsModal = null;
     let requestHelpModal = null;
@@ -186,7 +202,7 @@ class MapControls extends React.Component {
             />
             <Button
               className="fab-item btn btn-danger btn-link text-white"
-              tooltip="New Request"
+              tooltip={intl.formatMessage(messages.newRequest)}
               icon="fa fa-plus fa-1x"
               rotate={false}
             />
@@ -224,7 +240,7 @@ class MapControls extends React.Component {
             <div className="card-body">
               <h5 className="card-title">{intl.formatMessage(messages.view)}</h5>
 
-              <Form>
+              <Form onSubmit={preventFormSubmit}>
                 <FormGroup check>
                   <Label check>
                     <Input
@@ -275,22 +291,45 @@ class MapControls extends React.Component {
         </div>
 
         <div id="legend-container" className={classnames({ 'input-group mb-3': true, 'd-none': !isMapLoaded })}>
-          <div id="legend-input" className="p-2">
-            <h6 className="text-muted">Legend</h6>
+          <div id="legend-input" className={classnames({"p-2": true, "white-component-container": true})}>
             <div className="legend-input clearfix">
               <img className="float-left" src={marker1} width="25" alt="Less than 10" />
-              <div className="badge text-wrap text-muted">Less than 10</div>
+              <div className="badge text-wrap text-muted">
+                {intl.formatMessage(messages.lessThanTen)}
+              </div>
             </div>
             <div className="legend-input clearfix">
               <img className="float-left" src={marker2} width="25" alt="10 - 100" />
-              <div className="badge text-wrap text-muted">10 - 100</div>
+              <div className="badge text-wrap text-muted">
+                {intl.formatMessage(messages.tenToHundred)}
+              </div>
             </div>
             <div className="legend-input clearfix">
               <img className="float-left" src={marker3} width="25" alt="Greater than 100" />
-              <div className="badge text-wrap text-muted">Greater than 100</div>
+              <div className="badge text-wrap text-muted">
+                {intl.formatMessage(messages.greaterThanHundred)}
+              </div>
             </div>
           </div>
         </div>
+
+        {mapZoomErrorNotif &&
+          (
+          <div id="map-zoom-error-container" className={classnames({ 'input-group mb-3': true, 'd-none': !isMapLoaded })}>
+            <div id="map-zoom-error" className={classnames({"p-2": true, "white-component-container": false})}>
+              <Alert color="danger">
+                {
+                  `Please zoom in more to view ${
+                    viewType === 'reported' ? 'Symptom Reports'
+                    : viewType === 'help_requests' ? 'Help Requests'
+                    : 'Confirmed Cases'
+                  }`
+                }
+              </Alert>
+            </div>
+          </div>
+          )
+        }
 
         <div id="lng-button-container" className={classnames({ 'input-group mb-3': true, 'd-none': !isMapLoaded })}>
           <div id="button-input" className="p-2">
@@ -325,6 +364,7 @@ MapControls.propTypes = {
   onViewTypeChanged: PropTypes.func.isRequired,
   viewType: PropTypes.string.isRequired,
   intl: PropTypes.object.isRequired,
+  mapZoomErrorNotif: PropTypes.bool.isRequired,
 };
 
 export default MapControls;

@@ -8,8 +8,9 @@ import fever from '../../assets/fever.png';
 import soreThroat from '../../assets/soreThroat.png';
 import tired from '../../assets/tired.png';
 import SymptomCard from '../CommonUI/SymptomCard';
+import { connect } from 'react-redux';
 
-class ReportSymptoms5 extends React.Component {
+class ReportSymptoms1 extends React.Component {
   constructor(props) {
     super(props);
 
@@ -113,19 +114,24 @@ class ReportSymptoms5 extends React.Component {
   }
 }
 
-ReportSymptoms5.defaultProps = {
+ReportSymptoms1.defaultProps = {
+  intl: {},
   jumpToStep: () => {
   },
   numDays: '',
 };
 
-ReportSymptoms5.propTypes = {
+ReportSymptoms1.propTypes = {
   jumpToStep: PropTypes.func,
   numDays: PropTypes.string.isRequired,
   onNumDaysChanged: PropTypes.func.isRequired,
   toggleSymptom: PropTypes.func.isRequired,
   symptoms: PropTypes.object.isRequired,
-  intl: PropTypes.object.intl,
+  intl: PropTypes.object,
 };
 
-export default ReportSymptoms5;
+const mapStateToProps = (state => ({
+  intl: state.language.intl,
+}));
+
+export default connect(mapStateToProps)(ReportSymptoms1);

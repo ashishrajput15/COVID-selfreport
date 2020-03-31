@@ -136,4 +136,94 @@ export const messages = defineMessages({
     defaultMessage: 'COVID 19 Self Reporting Tool',
     description: 'The main heading of the web view',
   },
+  newRequest: {
+    id: 'submitReport.newRequest',
+    defaultMessage: 'New Request',
+    description: 'NewRequest',
+  },
+  lessThanTen: {
+    id: 'legend.lessThanTen',
+    defaultMessage: 'Less than 10',
+    description: 'Less than 10',
+  },
+  tenToHundred: {
+    id: 'legend.tenToHundred',
+    defaultMessage: '10 - 100',
+    description: '10 - 100',
+  },
+  greaterThanHundred: {
+    id: 'legend.greaterThanHundred',
+    defaultMessage: 'Greater than 100',
+    description: 'Greater than 100',
+  },
+  pleaseWait: {
+    id: 'loading.pleaseWait',
+    defaultMessage: 'Please Wait',
+    description: 'Please Wait',
+  },
+  dragMarker: {
+    id: 'map.dragMarker',
+    defaultMessage: 'Drag the marker to pin-point to the desired location on the map below.',
+    description: 'Drag the marker to pin-point to the desired location on the map below.',
+  },
+  thankYou: {
+    id: 'thankYou',
+    defaultMessage: 'Thank You',
+    description: 'Thank You',
+  },
+  fightCommunitySpread: {
+    id: 'fightCommunitySpread',
+    defaultMessage: 'Your information will help us fight community spread.',
+    description: 'Your information will help us fight community spread.',
+  },
+  reachOutToHelpLine: {
+    id: 'reachOutToHelpLineNumbers',
+    defaultMessage: 'Please reach out to Helpline Numbers shown below.',
+    description: 'Please reach out to Helpline Numbers shown below.',
+  },
+  close: {
+    id: 'close',
+    defaultMessage: 'Close',
+    description: 'Close',
+  },
+  medicalHelp: {
+    id: 'medicalHelp',
+    defaultMessage: 'Medical Help',
+    description: 'Medical Help',
+  },
+  surgicalMasks: {
+    id: 'surgicalMaskes',
+    defaultMessage: 'Surgical Masks',
+    description: 'Surgical Masks',
+  },
+  sanitizer: {
+    id: 'sanitizer',
+    defaultMessage: 'Sanitizer',
+    description: 'Sanitizer',
+  },
+  ppe: {
+    id: 'ppe',
+    defaultMessage: 'Personal Protective Equipment',
+    description: 'Personal Protective Equipment',
+  },
+  medicines: {
+    id: 'medicines',
+    defaultMessage: 'Medicines',
+    description: 'Medicines',
+  },
+  writeDetailRequest: {
+    id: 'requestHelp.writeDetailRequest',
+    defaultMessage: 'Please write in detail about your request, No. of people and quantity required.',
+    description: 'Please write in detail about your request, No. of people and quantity required.',
+  },
+  preferredLang: {
+    id: 'preferredLanguage',
+    defaultMessage: 'Choose your preferred language',
+    description: 'Choose your preferred language',
+  },
+  whatEquipmentRequired: {
+    id: 'whatEquipmentRequired',
+    defaultMessage: 'What equipment do you need?',
+    description: 'What equipment do you need?',
+  },
 })

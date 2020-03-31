@@ -1,4 +1,5 @@
 import {
+  CLEAR_ALL_HELP_REQUESTS,
   GET_HELP_REQUESTS_STARTING,
   GET_HELP_REQUESTS_SUCCESS,
   GET_HELP_REQUESTS_ERROR,
@@ -10,19 +11,23 @@ import {
 import axios from "../api/axios";
 import { getApiUrl } from "../api/config"
 
-export function getHelpRequestsStarting(query) {
-  return { type: GET_HELP_REQUESTS_STARTING, query };
+export function clearAllHelpRequests() {
+  return { type: CLEAR_ALL_HELP_REQUESTS };
 }
 
-export function getHelpRequestsSuccess(data) {
-  return { type: GET_HELP_REQUESTS_SUCCESS, data }
+export function getHelpRequestsStarting(lat, lng, radius, status) {
+  return { type: GET_HELP_REQUESTS_STARTING, lat, lng, radius, status };
 }
 
-export function getHelpRequestsFailed(err) {
-  return { type: GET_HELP_REQUESTS_ERROR, err }
+export function getHelpRequestsSuccess(lat, lng, radius, status, data) {
+  return { type: GET_HELP_REQUESTS_SUCCESS, lat, lng, radius, status, data }
 }
 
-export function getHelpRequests(stateName, lat, lng, radius, page = 1, limit = 800) {
+export function getHelpRequestsFailed(lat, lng, radius, status, err) {
+  return { type: GET_HELP_REQUESTS_ERROR, lat, lng, radius, status, err }
+}
+
+export function getHelpRequests(stateName, lat, lng, radius, status, page = 1, limit = 100000) {
   return dispatch => (
     axios.get(`${getApiUrl(stateName)}/help_requests`, {
       params: {
@@ -34,16 +39,16 @@ export function getHelpRequests(stateName, lat, lng, radius, page = 1, limit = 8
       },
     }).then((response) => {
       if (response && response.status === 200 && response.data.success) {
-        dispatch(getHelpRequestsSuccess(response.data));
+        dispatch(getHelpRequestsSuccess(lat, lng, radius, status, response.data));
         return;
       }
       const err = (response && response.data && response.data.error) ?
         new Error(response.data.error) : new Error('Failed to fetch help requests');
-      dispatch(getHelpRequestsFailed(err));
+      dispatch(getHelpRequestsFailed(lat, lng, radius, status, err));
     }).catch((err) => {
       const error = (err.response && err.response.data && err.response.data.error) ?
         new Error(err.response.data.error) : err;
-      dispatch(getHelpRequestsFailed(error));
+      dispatch(getHelpRequestsFailed(lat, lng, radius, status, error));
     }));
 }
 
