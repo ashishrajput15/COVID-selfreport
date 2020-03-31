@@ -10,7 +10,7 @@ export const STATE_HELPLINE_NUMBERS = [
   { stateName: "Haryana", phone1: `8558893911` },
   { stateName: "Himachal Pradesh", phone1: `104` },
   { stateName: "Jharkhand", phone1: `104` },
-  { stateName: "Karnataka", phone1: `080-46848600`, phone2: `080-66692000`, phone3: `104` },
+  { stateName: "Karnataka", phone1: `080-46848600`, phone2: `080-66692000`, phone3: `104`, phone4: `9745697456`, },
   { stateName: "Kerala", phone1: `0471-2552056` },
   { stateName: "Madhya Pradesh", phone1: `0755-2527177` },
   { stateName: "Maharashtra", phone1: `020-26127394` },
@@ -95,6 +95,16 @@ export const MapStyle1 = [{
     { visibility: "off" }
   ]
 }, {
+  featureType: "road.highway",
+  stylers: [
+    { visibility: "on" }
+  ]
+},{
+  featureType: "road.arterial",
+  stylers: [
+    { visibility: "on" }
+  ]
+}, {
   featureType: "transit",
   stylers: [
     { visibility: "off" }
@@ -135,11 +145,6 @@ export const MapStyle2 = [{
   featureType: "poi.sports_complex",
   stylers: [
     { visibility: "off" }
-  ],
-}, {
-  featureType: "poi.meal_takeaway",
-  stylers: [
-    { visibility: "on" }
   ],
 }, {
   featureType: 'poi.medical',

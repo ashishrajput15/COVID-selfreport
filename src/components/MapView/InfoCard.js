@@ -4,6 +4,7 @@ import Fuse from "fuse.js";
 import classnames from 'classnames';
 import { STATE_HELPLINE_NUMBERS, HELPLINE_CONTENT, KEY_INFO_CONTENT } from "../../../tools/constants";
 import { messages } from '../../../tools/messages';
+import { connect } from 'react-redux';
 
 export class InfoCard extends React.PureComponent {
   static cardTypes = {
@@ -20,7 +21,7 @@ export class InfoCard extends React.PureComponent {
   }
 }
 
-export const HelplineInfoCard = ({ stateName, toggle, intl }) => {
+export const HelplineInfoCardComponent = ({ stateName, toggle, intl }) => {
   const helpline = parsedHelpline(stateName);
 
   return (
@@ -47,6 +48,10 @@ export const HelplineInfoCard = ({ stateName, toggle, intl }) => {
 
               {helpline.phone3 && (
                 <span> | <a href={`tel:${helpline.phone3}`}>{helpline.phone3}</a></span>
+              )}
+
+              {helpline.phone4 && (
+                <span> | <a href={`tel:${helpline.phone4}`}>{helpline.phone4}</a></span>
               )}
             </p>
           )}
@@ -84,16 +89,23 @@ export const HelplineInfoCard = ({ stateName, toggle, intl }) => {
   );
 };
 
-HelplineInfoCard.defaultProps = {
+HelplineInfoCardComponent.defaultProps = {
+  intl: {},
   stateName: '',
   toggle: null,
-  intl: PropTypes.object.isRequired
 };
 
-HelplineInfoCard.propTypes = {
+HelplineInfoCardComponent.propTypes = {
+  intl: PropTypes.object,
   stateName: PropTypes.string,
   toggle: PropTypes.func,
 };
+
+const mapStateToProps = (state => ({
+  intl: state.language.intl,
+}));
+
+export const HelplineInfoCard = connect(mapStateToProps)(HelplineInfoCardComponent);
 
 const KeyInfoCard = ({ toggle }) => (
   <div className="card info-card key-info-card">

@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as requestHelpActions from '../../actions/requestHelp';
 import PickLocation from '../CommonUI/PickLocation';
+import { defaultRadius } from '../../api/config';
 
 class RequestHelp1 extends React.Component {
   constructor(props) {
@@ -16,6 +17,8 @@ class RequestHelp1 extends React.Component {
       requestDetails: props.detailRequest,
 
       stateName: '',
+      markedLat: '',
+      markedLng: '',
     };
 
     this.sendRequestHelpStarted = false;
@@ -40,9 +43,11 @@ class RequestHelp1 extends React.Component {
         this.sendRequestHelpStarted = false;
         this.props.jumpToStep(2);
 
-        // Refresh Markers
-        this.props.actions.getHelpRequestsStarting();
-        this.props.actions.getHelpRequests(stateName, 23.259933, 77.412613, 2000);
+        // TODO Refresh Markers
+        const { markedLat, markedLng } = this.state;
+        this.props.actions.clearAllHelpRequests();
+        this.props.actions.getHelpRequestsStarting(markedLat, markedLng, defaultRadius, 'help_requests');
+        this.props.actions.getHelpRequests(stateName, markedLat, markedLng, defaultRadius, 'help_requests');
       } else if (!sendNewReqHelp.saving && !sendNewReqHelp.saved) {
         const errorMsg = sendNewReqHelp.error ? sendNewReqHelp.error :
           ('Your report could not be saved due to unforeseen errors. ' +
@@ -54,17 +59,16 @@ class RequestHelp1 extends React.Component {
     }
   }
 
-  setState = (stateName) => {
-    this.setState({stateName})
+  setPos = (markedLat, markedLng, stateName) => {
+    this.setState({ markedLat, markedLng, stateName });
   }
 
   sendRequestHelp = (mapState) => {
-    this.setState(mapState.state);
+    this.setPos(mapState.markedLat, mapState.markedLng, mapState.state);
     this.props.actions.sendRequestHelpStarting();
     this.props.actions.sendRequestHelp(mapState.state, Object.assign({}, this.state, mapState));
     this.sendRequestHelpStarted = true;
   }
-
 
   render() {
     const { jumpToStep, sendNewReqHelp, mapCenter } = this.props;

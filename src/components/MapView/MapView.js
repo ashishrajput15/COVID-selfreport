@@ -15,6 +15,8 @@ import { MapStyle1, MapStyle2, MarkerClusterStyles } from '../../../tools/consta
 import imgSingleReportMarker from '../../assets/marker_single_case.png';
 import { getAddress, cookie } from '../../util';
 import { messages } from '../../../tools/messages';
+import { round } from 'lodash';
+import { defaultRadius, minZoom } from '../../api/config';
 
 const mapContainerHeight = `${window.innerHeight - 1}px`;
 
@@ -30,13 +32,13 @@ class MapView extends React.Component {
       errorAlertShown: false,
 
       mapCenter: {
-        lat: 23.259933,
-        lng: 77.412613,
+        lat: 12.972442,
+        lng: 77.580643,
       },
 
       mapAccuracy: 0,
-      mapZoom: 5,
-      mapZoomErrorNotif: true,
+      mapZoom: minZoom,
+      mapZoomErrorNotif: false,
 
       viewType: 'reported',
 
@@ -80,36 +82,54 @@ class MapView extends React.Component {
 
   componentWillReceiveProps(nextProps) {   // eslint-disable-line react/no-deprecated
     const { viewType } = this.state;
+    const latlngKey = this.getLatLngKey();
 
     if (viewType === 'confirmed') {
-      if (this.props.patientsData !== nextProps.patientsData) {
-        if (this.props.patientsData.loading !== nextProps.patientsData.loading && nextProps.patientsData.loaded) {
+      if (this.props.patientsData !== nextProps.patientsData && this.props.patientsData[latlngKey] && nextProps.patientsData[latlngKey]) {
+        if (this.props.patientsData[latlngKey].loading !== nextProps.patientsData[latlngKey].loading && nextProps.patientsData[latlngKey].loaded) {
           // data was reloaded
           this.updateMarkersOnMap(nextProps.patientsData);
         }
       }
     } else if (viewType === 'reported') {
-      if (this.props.reportsData !== nextProps.reportsData) {
-        if (this.props.reportsData.loading !== nextProps.reportsData.loading && nextProps.reportsData.loaded) {
+      if (this.props.reportsData !== nextProps.reportsData && this.props.reportsData[latlngKey] && nextProps.reportsData[latlngKey]) {
+        if (this.props.reportsData[latlngKey].loading !== nextProps.reportsData[latlngKey].loading && nextProps.reportsData[latlngKey].loaded) {
           // data was reloaded
           this.updateMarkersOnMap(nextProps.reportsData);
         }
       }
+
+      if (this.props.sendNewReport.saving !== nextProps.sendNewReport.saving && nextProps.sendNewReport.saved) {
+        this.refreshData();
+      }
     } else if (viewType === 'help_requests') {
-      if (this.props.helpRequests !== nextProps.helpRequests) {
-        if (this.props.helpRequests.loading !== nextProps.helpRequests.loading && nextProps.helpRequests.loaded) {
+      if (this.props.helpRequests !== nextProps.helpRequests && this.props.helpRequests[latlngKey] && nextProps.helpRequests[latlngKey]) {
+        if (this.props.helpRequests[latlngKey].loading !== nextProps.helpRequests[latlngKey].loading && nextProps.helpRequests[latlngKey].loaded) {
           // data was reloaded
           this.updateMarkersOnMap(nextProps.helpRequests);
         }
       }
+
+      if (this.props.sendNewReqHelp.saving !== nextProps.sendNewReqHelp.saving && nextProps.sendNewReqHelp.saved) {
+        this.refreshData();
+      }
     }
+  }
+
+  getLatLngKey() {
+    const { mapCenter, viewType } = this.state;
+    let { lat, lng } = mapCenter;
+    lat = round(lat, 1);
+    lng = round(lng, 1);
+    return `${viewType}-${lat}-${lng}-${defaultRadius}`;
   }
 
   geocodeAddress(mapCenter) {
     const { google } = window;
+
     if (!google) {
       setTimeout(() => {
-        this.geocodeAddress();
+        this.geocodeAddress(mapCenter);
       }, 400);
       return;
     }
@@ -127,7 +147,7 @@ class MapView extends React.Component {
         //console.log(results[0]);
         const place = results[0];
         this.refreshData();
-        this.setState({...getAddress(place)});
+        this.setState({ ...getAddress(place) });
         // this.setAddressComponents(place);
       } else {
         console.log('Failed to get the place at given latlng');
@@ -169,16 +189,31 @@ class MapView extends React.Component {
 
   refreshData() {
     const { mapCenter, viewType, state, mapZoomErrorNotif } = this.state;
-    if(!mapZoomErrorNotif) {
-      if (viewType === 'confirmed') {
-        this.props.actions.getPatientsDataStarting();
-        this.props.actions.getPatientsData(state, mapCenter.lat, mapCenter.lng, 2000, viewType);
-      } else if (viewType === 'reported') {
-        this.props.actions.getReportsDataStarting();
-        this.props.actions.getReportsData(state, mapCenter.lat, mapCenter.lng, 2000);
-      } else if (viewType === 'help_requests') {
-        this.props.actions.getHelpRequestsStarting();
-        this.props.actions.getHelpRequests(state, mapCenter.lat, mapCenter.lng, 2000);
+    const latlngKey = this.getLatLngKey();
+
+    if (viewType === 'confirmed') {
+      const { patientsData } = this.props;
+      if (!mapZoomErrorNotif && (!patientsData[latlngKey] || (!patientsData[latlngKey].loading && !patientsData[latlngKey].loaded))) {
+        this.props.actions.getPatientsDataStarting(mapCenter.lat, mapCenter.lng, defaultRadius, viewType);
+        this.props.actions.getPatientsData(state, mapCenter.lat, mapCenter.lng, defaultRadius, viewType);
+      } else {
+        this.updateMarkersOnMap(patientsData);
+      }
+    } else if (viewType === 'reported') {
+      const { reportsData } = this.props;
+      if (!mapZoomErrorNotif && (!reportsData[latlngKey] || (!reportsData[latlngKey].loading && !reportsData[latlngKey].loaded))) {
+        this.props.actions.getReportsDataStarting(mapCenter.lat, mapCenter.lng, defaultRadius, viewType);
+        this.props.actions.getReportsData(state, mapCenter.lat, mapCenter.lng, defaultRadius, viewType);
+      } else {
+        this.updateMarkersOnMap(reportsData);
+      }
+    } else if (viewType === 'help_requests') {
+      const { helpRequests } = this.props;
+      if (!mapZoomErrorNotif && (!helpRequests[latlngKey] || (!helpRequests[latlngKey].loading && !helpRequests[latlngKey].loaded))) {
+        this.props.actions.getHelpRequestsStarting(mapCenter.lat, mapCenter.lng, defaultRadius, viewType);
+        this.props.actions.getHelpRequests(state, mapCenter.lat, mapCenter.lng, defaultRadius, viewType);
+      } else {
+        this.updateMarkersOnMap(helpRequests);
       }
     }
   }
@@ -250,23 +285,26 @@ class MapView extends React.Component {
           this.searchBox.setBounds(this.map.getBounds());
           const mapCenter = this.map.getCenter();
 
-          // this.geocodeAddress(mapCenter);
-          this.geocodeAddress(mapCenter);
-
-          this.setState({
-            mapCenter: {
-              lat: mapCenter.lat(),
-              lng: mapCenter.lng(),
-            },
-            mapZoomErrorNotif: this.map.getZoom() < 10 ? true : false,
-          });
-
           const currentZoom = this.map.getZoom();
           if (currentZoom <= 15) {
             this.map.set('styles', MapStyle1);
           } else {
             this.map.set('styles', MapStyle2);
           }
+
+          this.setState({
+            mapCenter: {
+              lat: mapCenter.lat(),
+              lng: mapCenter.lng(),
+            },
+
+            mapZoomErrorNotif: currentZoom < minZoom,
+          });
+
+          setTimeout(() => {
+            // this.geocodeAddress(mapCenter);
+            this.refreshData();
+          }, 100);
         });
 
         const btnPlus = document.getElementById('btn-plus-container');
@@ -336,9 +374,14 @@ class MapView extends React.Component {
       this.markers = [];
     }
 
-    const { ids, map } = data;
-    if (!ids.length) {
-      // TODO Delete any existing markers from before
+    const latlngKey = this.getLatLngKey();
+    if (!data[latlngKey]) {
+      return;
+    }
+
+    const latlngData = data[latlngKey];
+    const { ids, map } = latlngData;
+    if (!ids || !ids.length) {
       return;
     }
 
@@ -442,7 +485,10 @@ class MapView extends React.Component {
 MapView.defaultProps = {
   actions: {},
   helpRequests: {},
+  intl: {},
   patientsData: {},
+  sendNewReport: {},
+  sendNewReqHelp: {},
 };
 
 MapView.propTypes = {
@@ -453,6 +499,8 @@ MapView.propTypes = {
   patientsData: PropTypes.object,
   reportsData: PropTypes.object,
   intl: PropTypes.object,
+  sendNewReport: PropTypes.object,
+  sendNewReqHelp: PropTypes.object,
 };
 
 const mapStateToProps = (state => ({
@@ -460,6 +508,8 @@ const mapStateToProps = (state => ({
   patientsData: state.patientsData,
   reportsData: state.reportsData,
   intl: state.language.intl,
+  sendNewReport: state.sendNewReport,
+  sendNewReqHelp: state.sendNewReqHelp,
 }));
 
 const mapDispatchToProps = (dispatch => ({

@@ -54,30 +54,36 @@ const language = {
 
 export default {
   patientsData: {
-    loading: false,
-    loaded: false,
-    error: null,
+    latlngKey: {
+      loading: false,
+      loaded: false,
+      error: null,
 
-    ids: [],
-    map: {},
+      ids: [],
+      map: {},
+    },
   },
 
   reportsData: {
-    loading: false,
-    loaded: false,
-    error: null,
+    latlngKey: {
+      loading: false,
+      loaded: false,
+      error: null,
 
-    ids: [],
-    map: {},
+      ids: [],
+      map: {},
+    },
   },
 
   helpRequests: {
-    loading: false,
-    loaded: false,
-    error: null,
+    latlngKey: {
+      loading: false,
+      loaded: false,
+      error: null,
 
-    ids: [],
-    map: {},
+      ids: [],
+      map: {},
+    },
   },
 
   sendNewReport: {

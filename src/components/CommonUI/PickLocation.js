@@ -12,6 +12,7 @@ import {
 
 import { getAddress } from '../../util';
 import { messages } from '../../../tools/messages';
+import { connect } from 'react-redux';
 
 class PickLocation extends React.Component {
   constructor(props) {
@@ -52,12 +53,11 @@ class PickLocation extends React.Component {
     this.goToUserLocation = this.goToUserLocation.bind(this);
     this.onGeolocationSuccess = this.onGeolocationSuccess.bind(this);
     this.onGeolocationError = this.onGeolocationError.bind(this);
-
+    this.onConfirm = this.onConfirm.bind(this);
 
     this.autocomplete = null;
     this.map = null;
     this.marker = null;
-
   }
 
   componentDidMount() {
@@ -130,7 +130,9 @@ class PickLocation extends React.Component {
         const btnGps = document.getElementById('btn-gps-container2');
         this.map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(btnGps);
 
-        this.goToUserLocation();
+        setTimeout(() => {
+          this.goToUserLocation();
+        }, 100);
       }, 100);
     }
   }
@@ -145,6 +147,7 @@ class PickLocation extends React.Component {
       lat,
       lng,
     });
+
     this.fixMapZoom();
 
     this.setState({
@@ -152,6 +155,7 @@ class PickLocation extends React.Component {
         lat,
         lng,
       },
+
       mapZoom: this.map.getZoom(),
 
       markedLat: lat,
@@ -196,7 +200,7 @@ class PickLocation extends React.Component {
         //console.log('User moved marker to this place');
         //console.log(results[0]);
         const place = results[0];
-        this.setState({...getAddress(place)});
+        this.setState({ ...getAddress(place) });
         // this.setAddressComponents(place);
       } else {
         console.log('Failed to get the place at given latlng');
@@ -224,6 +228,7 @@ class PickLocation extends React.Component {
         lat: crd.latitude,
         lng: crd.longitude,
       });
+
       this.afterMarkerChanged(crd.latitude, crd.longitude, true);
     } catch (err) {
       console.error('Failed to get geolocation');
@@ -255,13 +260,17 @@ class PickLocation extends React.Component {
 
     const pos = place.geometry.location;
     this.marker.setPosition(pos);
-    this.afterMarkerChanged(pos.lat(), pos.lng());
+    this.afterMarkerChanged(pos.lat(), pos.lng(), false);
     // this.setAddressComponents(place);
-    this.setState({...getAddress(place)});
+    this.setState({ ...getAddress(place) });
+  }
+
+  onConfirm() {
+    this.props.confirmAction(this.state);
   }
 
   render() {
-    const { saving, goBackAction, confirmAction, intl } = this.props;
+    const { saving, goBackAction, intl } = this.props;
     const { markedLat, markedLng, address } = this.state;
 
     let btnSave;
@@ -278,7 +287,7 @@ class PickLocation extends React.Component {
       btnSave = (
         <Button
           color="danger"
-          onClick={() => confirmAction(this.state)}
+          onClick={this.onConfirm}
           disabled={markedLat === null || markedLng === null}
         >
           &nbsp;Confirm
@@ -340,13 +349,20 @@ class PickLocation extends React.Component {
   }
 }
 
+PickLocation.defaultProps = {
+  intl: {},
+};
+
 PickLocation.propTypes = {
   mapCenter: PropTypes.object.isRequired,
   saving: PropTypes.bool,
   goBackAction: PropTypes.func,
   confirmAction: PropTypes.func,
-  intl: PropTypes.object.isRequired,
+  intl: PropTypes.object,
 };
 
+const mapStateToProps = (state => ({
+  intl: state.language.intl,
+}));
 
-export default PickLocation;
+export default connect(mapStateToProps)(PickLocation);

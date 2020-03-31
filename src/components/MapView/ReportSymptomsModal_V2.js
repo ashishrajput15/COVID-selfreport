@@ -6,7 +6,6 @@ import {
   Form, Modal, ModalBody, ModalHeader
 } from 'reactstrap';
 import { messages } from '../../../tools/messages';
-
 import * as reportsActions from '../../actions/reports';
 import StepZilla from 'react-stepzilla';
 import Intro from '../ReportSymptomsForm_V2/Intro';
@@ -148,6 +147,7 @@ class ReportSymptomsModal_V2 extends React.Component {
 ReportSymptomsModal_V2.defaultProps = {
   actions: {},
   reportSymptoms: {},
+  intl: {},
 };
 
 ReportSymptomsModal_V2.propTypes = {

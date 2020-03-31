@@ -1,6 +1,7 @@
 export let env = process.env.REACT_APP_HOST_ENV || process.env.NODE_ENV;
 export let appUrl, apiBaseUrl;
-export let googleAnalyticsId;
+export let defaultRadius = 100;
+export let minZoom = 10;
 
 export const randomColors = [
   "#287E45",
@@ -26,7 +27,6 @@ switch (env) {
     appUrl = 'https://reportcorona.live';
     apiBaseUrl = 'https://reportcorona.live';
     appUrl = getApiUrl();
-    googleAnalyticsId = 'UA-124346507-2';
     break;
   }
 
@@ -34,24 +34,26 @@ switch (env) {
     env = 'development';
     appUrl = 'http://localhost:3000';
     apiBaseUrl = 'http://localhost:9192';
-    googleAnalyticsId = 'UA-129318919-1';
     break;
   }
 }
 
-export const getApiUrl = (stateName) => {
-  let url = '';
+export const getApiUrl = (/* stateName */) => {
+  let url = apiBaseUrl;
+
   if(env === 'development') {
-    return 'http://localhost:3000';
+    return 'http://localhost:9192';
   }
-  switch(stateName.toLowerCase()){
-    case 'karnataka': {
-      url = 'https://reportcorona.live';
-      break;
-    }
-    default: {
-      url = 'https://reportcorona.live';
-    }
-  }
+
+  //switch(stateName.toLowerCase()){
+  //  case 'karnataka': {
+  //    url = 'https://reportcorona.live';
+  //    break;
+  //  }
+  //  default: {
+  //    url = 'https://reportcorona.live';
+  //  }
+  //}
+
   return url;
-}
+};
